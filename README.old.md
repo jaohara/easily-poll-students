@@ -11,7 +11,3 @@ Use this approach when sitting down to work on the project:
 5. Commit your finalized changes and push your branch to Github.
 6. If your feature branch is finished and works as expected, create a Pull Request on Github to merge your feature branch into `main`.
 
-## Resources
-- [React Docs (modern beta)](https://beta.reactjs.org/)
-- [AWS Amplify Docs](https://docs.amplify.aws/)
-- [SASS Documentation](https://sass-lang.com/documentation/)
