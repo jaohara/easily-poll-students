@@ -1,4 +1,5 @@
-
+@import "./variables.scss";
+@import "./mixins.scss";
 
 
 // =================================================================
@@ -28,4 +29,8 @@ code {
 // TODO: Remove this styling
 .hello-world {
   font-size: 1.4rem;
+}
+
+.apply-test-color {
+  color: $test-color;
 }
