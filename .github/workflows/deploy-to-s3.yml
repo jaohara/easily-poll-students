@@ -8,6 +8,7 @@ on:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    environment: development
     steps:
     - uses: actions/checkout@main
     - uses: jeanlescure/react-deploy-to-s3-action@main
