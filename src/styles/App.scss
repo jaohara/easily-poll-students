@@ -1,0 +1,41 @@
+// mixins
+@mixin responsive-widths {
+  //375px
+  width: 100%;
+
+  //768px
+  @media (min-width: 768px) {
+    // margin: 0 auto;
+    width: 768px;
+  }
+  //1280px
+  @media (min-width: 1280px) {
+    width: 1024px;
+  }
+  //1920px
+  @media (min-width: 1920px) {
+    width: 1440px;
+  }
+}
+
+// styling
+body {
+  align-items: center;
+  display: flex;
+  font-family: "DM Sans", "Helvetica Neue", "Inter", sans-serif;
+  justify-content: center;
+  margin: 0;
+  -moz-osx-font-smoothing: grayscale;
+  -webkit-font-smoothing: antialiased;
+}
+
+code {
+  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
+    monospace;
+}
+
+// main div wrapping entire app
+.App {
+  // text-align: center;
+  @include responsive-widths();
+}
