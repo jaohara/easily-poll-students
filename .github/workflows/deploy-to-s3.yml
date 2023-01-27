@@ -6,22 +6,49 @@ on:
     - main
 
 jobs:
-  deploy:
+  build-and-deploy:
+    name: Build and Deploy
     runs-on: ubuntu-latest
-    container: node:18
     environment: development
+    
+    env:
+      AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
+      AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+      AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+      AWS_REGION: us-west-1 # optional: defaults to us-east-1
+      SOURCE_DIR: bundle # optional: defaults to public
+      REGION: us-west-2
+      DIST: build
+      DIST_ID: E1NMTPPSQDW8BT
+    
     steps:
     - uses: actions/setup-node@v3
       with:
         node-version: 'lts/*'
+    
     - uses: actions/checkout@main
-    - uses: jeanlescure/react-deploy-to-s3-action@main
-      with:
-        args: --acl public-read --follow-symlinks --delete
-      env:
-        # NODE_ENV: development # optional: defaults to production
-        AWS_S3_BUCKET: ${{ secrets.AWS_S3_BUCKET }}
-        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
-        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
-        AWS_REGION: us-west-1 # optional: defaults to us-east-1
-        SOURCE_DIR: bundle # optional: defaults to public
+    
+    - uses: aws-actions/configure-aws-credentials@v1
+      with: 
+        aws-access-key-id: ${{ env.AWS_ACCESS_KEY_ID }}
+        aws-secret-access-key: ${{ env.AWS_SECRET_ACCESS_KEY }}
+        aws-region: ${{ env.REGION }}
+        
+    - name: Install Dependencies
+      run: |
+        node --version
+        npm ci --production
+        
+    - name: Build static website
+      run: npm run build
+      
+    - name: Copy files to the production website via AWS CLI
+      run: |
+        aws s3 sync --delete ${{ env.DIST }} s3://${{ env.BUCKET }}
+        
+    - name: Invalidate CloudFront cache
+      run: |
+        aws cloudfront create-invalidation \
+          --distribution-id ${{ env.DIST_ID }} \
+          --paths "/*"
+
