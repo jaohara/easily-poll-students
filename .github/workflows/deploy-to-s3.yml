@@ -19,7 +19,7 @@ jobs:
       SOURCE_DIR: bundle # optional: defaults to public
       REGION: us-west-2
       DIST: build
-      DIST_ID: E1NMTPPSQDW8BT
+      DIST_ID: ${{ secrets.DIST_ID }}
     
     steps:
     - uses: actions/setup-node@v3
@@ -44,7 +44,7 @@ jobs:
       
     - name: Copy files to the production website via AWS CLI
       run: |
-        aws s3 sync --delete ${{ env.DIST }} s3://${{ env.BUCKET }}
+        aws s3 sync --delete ${{ env.DIST }} s3://${{ env.AWS_S3_BUCKET }}
         
     - name: Invalidate CloudFront cache
       run: |
