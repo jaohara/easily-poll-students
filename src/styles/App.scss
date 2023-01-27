@@ -39,8 +39,3 @@ code {
   // text-align: center;
   @include responsive-widths();
 }
-
-// TODO: Remove this styling
-.hello-world {
-  font-size: 1.4rem;
-}

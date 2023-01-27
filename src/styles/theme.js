@@ -1,6 +1,7 @@
 import { createTheme } from "@mui/material";
-import { deepPurple, amber } from "@mui/material/colors";
 import "@fontsource/dm-sans";
+
+// TODO: Export sizes/colors so other components can reference them
 
 // reusable sizes for consistency
 const sizes = {
@@ -14,16 +15,17 @@ const sizes = {
   },
 };
 
+const colors = { 
+  deepSpaceSparkle: "#476A6F",
+  polishedPine: "#519E8A",
+}
+
 const theme = createTheme({
   // project color pallete settings
   palette: { 
     primary: {
-      main: deepPurple[500]
+      main: colors.polishedPine,
     },
-    secondary: { 
-      main: amber[500],
-      contrastText: deepPurple[900]
-    }
   },
   // project typography settings
   typography: { 
@@ -36,14 +38,16 @@ const theme = createTheme({
   components: {
     MuiButton: {
       defaultProps: {
-        variant: "outlined"
+        variant: "contained"
       },
       styleOverrides: {
         root: {
+          // borderWidth: "2px",
           borderRadius: sizes.borderRadius,
           marginRight: sizes.margin.buttonRight,
           textTransform: "none",
         }
+        
       }
     },
     MuiCard: {
