@@ -7,7 +7,10 @@ import theme from './styles/theme';
 
 
 // imported to test Material UI Elements
-import MaterialUISwatch from './components/MaterialUISwatch/MaterialUISwatch';
+// import MaterialUISwatch from './components/MaterialUISwatch/MaterialUISwatch';
+
+// imported to test AppSync setup
+import ColorSwatchTest from './components/ColorSwatchTest/ColorSwatchTest';
 
 function App() {
   return (
@@ -15,7 +18,7 @@ function App() {
       <div className="App">
         <h1>Easy Poll App!</h1>
 
-        <MaterialUISwatch />
+        <ColorSwatchTest />
       </div>
     </ThemeProvider>
   );

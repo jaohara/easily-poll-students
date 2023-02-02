@@ -1,0 +1,11 @@
+.color-swatch-button-container {
+  display: flex;
+}
+
+.color-swatch {
+  border-radius: 128px;
+  margin: 3rem auto;
+  height: 256px;
+  transition: background-color 250ms ease-in-out;
+  width: 256px;
+}
