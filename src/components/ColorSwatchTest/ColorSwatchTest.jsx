@@ -1,11 +1,19 @@
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
 import './ColorSwatchTest.scss';
 
 import Button from '@mui/material/Button';
 
+
 // AWS AppSync related stuff
 import { API } from "@aws-amplify/api";
 import config from '../../aws-exports';
+// automatically created query in graphql schema
+import { getColorSwatch } from '../../graphql/queries';
+import { updateColorSwatch } from '../../graphql/mutations';
+
+API.configure(config);
+
+const COLOR_SWATCH_ID = 1;
 
 // color string literals as an array
 const colorPalette = [
@@ -38,21 +46,61 @@ const ColorSwatchTestButton = ({color, onClick}) => (
 )
 
 // component for the swatch display, assumes color is a valid color string
-const ColorSwatch = ({color}) => (
-  <div className="color-swatch" style={{backgroundColor: color}}></div>
+const ColorSwatch = ({color, isLoaded}) => (
+  <div className={`color-swatch ${isLoaded ? "loaded" : ""}`} style={{backgroundColor: color}}></div>
 );
 
 const ColorSwatchTest = () => {
-  // hardcoded ID to one specific ColorSwatchTable doc for this example
-  const [ colorID, setColorID ] = useState(1);
+  const [ isLoaded, setIsLoaded ] = useState(false); 
+  // const [ colorID, setColorID ] = useState(0);
+  const [ currentColor, setCurrentColor ] = useState("#F4B942");
 
-  // store subscribed DynamoDB thing here
-  // right now it's hardcoded garbage
-  const currentColor = colorPalette[colorID]; 
+  // handle initial data load
+  useEffect(() => {
+    const fetchData = async () => {
+      // not sure about this
+      const initialColorResponse = await API.graphql({
+        query: getColorSwatch,
+        variables: {
+          id: COLOR_SWATCH_ID
+        }
+      });
+
+      // check to see data shape
+      console.log(initialColorResponse);
+      // test log color
+      console.log(initialColorResponse.data.getColorSwatch.color);
+
+      setIsLoaded(true);
+      setCurrentColor(initialColorResponse.data.getColorSwatch.color);
+    }
+
+    fetchData();    
+  }, []);
+
+  // handle button press
+  const handleButtonPress = (color) => {
+    const submitData = async () => {
+      await API.graphql({
+        mutation: updateColorSwatch,
+        variables: {
+          id: COLOR_SWATCH_ID,
+          color: color,
+        }
+      });
+    };
+
+    submitData();
+    setCurrentColor(color);
+  };
 
   return ( 
     <div className="color-swatch-test">
-      <ColorSwatch color={currentColor}/>
+      <ColorSwatch color={currentColor} isLoaded={isLoaded}/>
+
+      <div className="loading-status">
+        {!isLoaded ? "Loading..." : "Loaded."}
+      </div>
 
       <div className="color-swatch-button-container">
         {
@@ -60,7 +108,9 @@ const ColorSwatchTest = () => {
             <ColorSwatchTestButton 
               color={color} 
               key={`button-${index}`}
-              onClick={() => setColorID(index)}
+              // onClick={() => setColorID(index)}
+              // onClick={() => setCurrentColor(color)}
+              onClick={() => handleButtonPress(color)}
           />))
         }
       </div>
