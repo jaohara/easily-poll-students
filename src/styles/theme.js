@@ -16,12 +16,17 @@ const sizes = {
 };
 
 const colors = { 
+  brightYellow: "#F4B942",
   deepSpaceSparkle: "#476A6F",
+  emeraldGreen: "#45CB85",
+  pastelBlue: "#6A7FDB",
   polishedPine: "#519E8A",
+  redCrayola: "#EC0B43",
+  softOrange: "#FF785A",
 }
 
 const theme = createTheme({
-  // project color pallete settings
+  // project color palette settings
   palette: { 
     primary: {
       main: colors.polishedPine,

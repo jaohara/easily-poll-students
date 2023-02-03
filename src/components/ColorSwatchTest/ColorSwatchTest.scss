@@ -1,0 +1,24 @@
+.color-swatch-button-container {
+  display: flex;
+}
+
+.color-swatch {
+  border-radius: 128px;
+  height: 256px;
+  margin: 3rem auto;
+  opacity: 0;
+  transition: 
+    background-color 250ms ease-in-out,
+    opacity 250ms ease-in-out;
+  width: 256px;
+
+  &.loaded {
+    opacity: 1;
+  }
+}
+
+.loading-status {
+  margin: 1rem 0;
+  font-size: .8rem;
+  font-weight: bold;
+}

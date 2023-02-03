@@ -1,0 +1,15 @@
+{
+  "dev": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-easilypollstudents-dev-142055-authRole",
+      "UnauthRoleArn": "arn:aws:iam::971359340948:role/amplify-easilypollstudents-dev-142055-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::971359340948:role/amplify-easilypollstudents-dev-142055-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-easilypollstudents-dev-142055-deployment",
+      "UnauthRoleName": "amplify-easilypollstudents-dev-142055-unauthRole",
+      "StackName": "amplify-easilypollstudents-dev-142055",
+      "StackId": "arn:aws:cloudformation:us-west-2:971359340948:stack/amplify-easilypollstudents-dev-142055/dd64f520-a347-11ed-8925-02cd0f40211b",
+      "AmplifyAppId": "dx7q7mtp16p43"
+    }
+  }
+}

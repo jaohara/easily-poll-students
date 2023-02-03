@@ -13,5 +13,6 @@ Use this approach when sitting down to work on the project:
 
 ## Resources
 - [React Docs (modern beta)](https://beta.reactjs.org/)
-- [AWS Amplify Docs](https://docs.amplify.aws/)
 - [SASS Documentation](https://sass-lang.com/documentation/)
+- [Material UI Docs](https://mui.com/material-ui/getting-started/overview/)
+- [aws-appsync npm package Docs](https://github.com/awslabs/aws-mobile-appsync-sdk-js#readme)
