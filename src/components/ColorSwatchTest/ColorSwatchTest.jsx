@@ -3,6 +3,11 @@ import './ColorSwatchTest.scss';
 
 import Button from '@mui/material/Button';
 
+// AWS AppSync related stuff
+import { API } from "@aws-amplify/api";
+import config from '../../aws-exports';
+
+// color string literals as an array
 const colorPalette = [
   "#F4B942",
   "#45CB85",
