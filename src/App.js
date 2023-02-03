@@ -5,22 +5,42 @@ import { ThemeProvider } from '@mui/material';
 import './styles/App.scss';
 import theme from './styles/theme';
 
+// router-related imports
+import { 
+  BrowserRouter, 
+  // RouterProvider
+  Route,
+  Routes 
+} from "react-router-dom";
+import { 
+  // router,
+  routes
+} from './routes';
 
-// imported to test Material UI Elements
-// import MaterialUISwatch from './components/MaterialUISwatch/MaterialUISwatch';
 
-// imported to test AppSync setup
-import ColorSwatchTest from './components/ColorSwatchTest/ColorSwatchTest';
+import NavBar from './components/NavBar/NavBar';
 
 function App() {
   return (
-    <ThemeProvider theme={theme}>
-      <div className="App">
-        <h1>Easy Poll App!</h1>
+    // <RouterProvider router={router}>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <div className="App">
+          <h1>Easy Poll App!</h1>
+          <NavBar />
 
-        <ColorSwatchTest />
-      </div>
-    </ThemeProvider>
+          <Routes>
+            {
+              routes.map((route, index) => (
+                <Route path={route.path} element={route.element} key={`route-${index}`}/>
+              ))
+            }
+          </Routes>
+          {/* <RouterProvider router={router} /> */}
+        </div>
+      </ThemeProvider>
+    </BrowserRouter>
+    // </RouterProvider>
   );
 }
 
