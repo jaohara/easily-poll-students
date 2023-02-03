@@ -5,7 +5,7 @@ import Button from '@mui/material/Button';
 
 
 // AWS AppSync related stuff
-import { API } from "@aws-amplify/api";
+import { API, graphqlOperation } from "@aws-amplify/api";
 import config from '../../aws-exports';
 // automatically created query in graphql schema
 import { getColorSwatch } from '../../graphql/queries';
@@ -58,7 +58,7 @@ const ColorSwatchTest = () => {
   // handle initial data load
   useEffect(() => {
     const fetchData = async () => {
-      // not sure about this
+      // not sure about this approach
       const initialColorResponse = await API.graphql({
         query: getColorSwatch,
         variables: {
@@ -81,13 +81,8 @@ const ColorSwatchTest = () => {
   // handle button press
   const handleButtonPress = (color) => {
     const submitData = async () => {
-      await API.graphql({
-        mutation: updateColorSwatch,
-        variables: {
-          id: COLOR_SWATCH_ID,
-          color: color,
-        }
-      });
+      // also not sure how this approach is different
+      await API.graphql(graphqlOperation(updateColorSwatch, { input: {id: COLOR_SWATCH_ID, color: color}}));
     };
 
     submitData();
