@@ -20,6 +20,13 @@ import {
 
 import NavBar from './components/NavBar/NavBar';
 
+
+// adding some bad JS to App.js
+const const = const;
+
+
+
+
 function App() {
   return (
     // <RouterProvider router={router}>
