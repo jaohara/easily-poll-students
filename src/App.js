@@ -17,10 +17,9 @@ import {
   routes
 } from './routes';
 
-
 import NavBar from './components/NavBar/NavBar';
 
-function App() {
+function App () {
   return (
     // <RouterProvider router={router}>
     <BrowserRouter>
@@ -28,6 +27,8 @@ function App() {
         <div className="App">
           <h1>Easy Poll App!</h1>
           <NavBar />
+
+          <p>This is <strong>another test</strong> of the new CI/CD approach.</p>
 
           <Routes>
             {
