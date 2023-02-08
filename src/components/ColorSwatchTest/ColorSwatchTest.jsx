@@ -53,31 +53,7 @@ const ColorSwatch = ({color, isLoaded}) => (
 
 const ColorSwatchTest = () => {
   const [ isLoaded, setIsLoaded ] = useState(false); 
-  // const [ colorID, setColorID ] = useState(0);
   const [ currentColor, setCurrentColor ] = useState("#F4B942");
-
-  // handle initial data load
-  // useEffect(() => {
-    // const fetchData = async () => {
-    //   // not sure about this approach
-    //   const initialColorResponse = await API.graphql({
-    //     query: getColorSwatch,
-    //     variables: {
-    //       id: COLOR_SWATCH_ID
-    //     }
-    //   });
-
-    //   // check to see data shape
-    //   console.log(initialColorResponse);
-    //   // test log color
-    //   console.log(initialColorResponse.data.getColorSwatch.color);
-
-    //   setIsLoaded(true);
-    //   setCurrentColor(initialColorResponse.data.getColorSwatch.color);
-    // }
-
-    // fetchData();    
-  // }, []);
 
   // subscribes to color swatch updates and returns the subscription
   //    TODO: abstract similar behavior to a hook
@@ -129,7 +105,6 @@ const ColorSwatchTest = () => {
     };
 
     submitData();
-    // setCurrentColor(color);
   };
 
   return ( 
@@ -146,8 +121,6 @@ const ColorSwatchTest = () => {
             <ColorSwatchTestButton 
               color={color} 
               key={`button-${index}`}
-              // onClick={() => setColorID(index)}
-              // onClick={() => setCurrentColor(color)}
               onClick={() => handleButtonPress(color)}
           />))
         }
