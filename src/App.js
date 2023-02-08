@@ -19,7 +19,7 @@ import {
 
 import NavBar from './components/NavBar/NavBar';
 
-function App() {
+function App () {
   return (
     // <RouterProvider router={router}>
     <BrowserRouter>
