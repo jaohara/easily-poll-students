@@ -29,7 +29,7 @@ function App() {
           <h1>Easy Poll App!</h1>
           <NavBar />
 
-          <p>This is a test of the new CI/CD approach.</p>
+          <p>This is <strong>another test</strong> of the new CI/CD approach.</p>
 
           <Routes>
             {
