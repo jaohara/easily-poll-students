@@ -17,7 +17,6 @@ import {
   routes
 } from './routes';
 
-
 import NavBar from './components/NavBar/NavBar';
 
 function App() {
