@@ -6,12 +6,14 @@ export const getColorSwatch = /* GraphQL */ `
     getColorSwatch(id: $id) {
       id
       color
+      createdAt
+      updatedAt
     }
   }
 `;
 export const listColorSwatches = /* GraphQL */ `
   query ListColorSwatches(
-    $filter: TableColorSwatchFilterInput
+    $filter: ModelColorSwatchFilterInput
     $limit: Int
     $nextToken: String
   ) {
@@ -19,6 +21,8 @@ export const listColorSwatches = /* GraphQL */ `
       items {
         id
         color
+        createdAt
+        updatedAt
       }
       nextToken
     }
