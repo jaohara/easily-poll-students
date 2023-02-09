@@ -1,0 +1,38 @@
+name: Deploy DynamoDB CRUD API
+
+on:
+  push:
+    branches: [ main ]
+
+jobs:
+
+  deploy:
+
+    name: deploy
+
+    runs-on: ubuntu-latest
+
+    steps:
+ 
+    - uses: actions/checkout@v2
+
+    - uses: actions/cache@v2
+      with:
+        path: '**/node_modules'
+        key: ${{ runner.os }}-modules-${{ hashFiles('**/yarn.lock') }}
+
+    - name: Use Node.js 16.x
+      uses: actions/setup-node@v1
+      with:
+        node-version: 16.x
+
+    - name: Install dependencies
+      run: yarn install
+
+    - name: serverless deploy
+      uses: serverless/github-action@master
+      with:
+        args: deploy
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}

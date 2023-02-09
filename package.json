@@ -4,6 +4,8 @@
   "private": true,
   "dependencies": {
     "@aws-amplify/api": "^5.0.12",
+    "@aws-sdk/client-dynamodb": "^3.267.0",
+    "@aws-sdk/util-dynamodb": "^3.267.0",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/dm-sans": "^4.5.9",
@@ -16,6 +18,7 @@
     "aws-api-gateway-client": "^0.3.7",
     "aws-appsync": "^4.1.9",
     "aws-appsync-auth-link": "^3.0.7",
+    "dotenv": "^16.0.3",
     "graphql": "^14.7.0",
     "react": "^18.2.0",
     "react-dom": "^18.2.0",
@@ -23,6 +26,7 @@
     "react-router-dom": "^6.8.0",
     "react-scripts": "5.0.1",
     "sass": "^1.57.1",
+    "serverless-iam-roles-per-function": "^3.2.0",
     "web-vitals": "^2.1.4"
   },
   "scripts": {
