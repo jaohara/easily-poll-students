@@ -1,0 +1,103 @@
+service: dynamodb-crud-api
+
+provider:
+  name: aws
+  runtime: nodejs16.x
+  stage: dev
+  region: us-west-2
+  environment:
+    DYNAMODB_TABLE_NAME: ${self:custom.pollsTableName}
+
+custom:
+  pollsTableName: polls-table-${self:provider.stage}
+
+plugins:
+  - serverless-iam-roles-per-function
+
+functions:
+  getPoll:
+    handler: api.getPoll
+    name: get-poll
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: poll/{pollId}
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:GetItem"
+        Resource: !GetAtt PollsTable.Arn
+  createPoll:
+    handler: api.createPoll
+    name: create-poll
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: poll
+          method: POST
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:PutItem"
+        Resource: !GetAtt PollsTable.Arn
+  updatePoll:
+    handler: api.updatePoll
+    name: update-poll
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: poll/{pollId}
+          method: PUT
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:UpdateItem"
+        Resource: !GetAtt PollsTable.Arn
+  deletePoll:
+    handler: api.deletePoll
+    name: delete-poll
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: poll/{pollId}
+          method: DELETE
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:DeleteItem"
+        Resource: !GetAtt PollsTable.Arn
+  getAllPolls:
+    handler: api.getAllPolls
+    name: get-all-polls
+    memorySize: 128 # mb
+    timeout: 5 # seconds
+    events:
+      - http:
+          path: polls
+          method: GET
+    iamRoleStatements:
+      - Effect: "Allow"
+        Action:
+          - "dynamodb:Scan"
+        Resource: !GetAtt PollsTable.Arn
+
+resources:
+  Resources:
+    PollsTable:
+      Type: AWS::DynamoDB::Table
+      Properties:
+        TableName: ${self:custom.pollsTableName}
+        AttributeDefinitions:
+          - AttributeName: pollId
+            AttributeType: S
+        KeySchema:
+          - AttributeName: pollId
+            KeyType: HASH
+        ProvisionedThroughput:
+          ReadCapacityUnits: 1
+          WriteCapacityUnits: 1 
