@@ -1,19 +1,5 @@
 {
   "api": {
-    "apicreator": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "easilypollstudents7e1a4448"
-        }
-      ],
-      "providerPlugin": "awscloudformation",
-      "service": "API Gateway"
-    },
     "easilypollstudents": {
       "dependsOn": [],
       "output": {
