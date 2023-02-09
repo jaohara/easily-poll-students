@@ -1,15 +1,39 @@
 {
-  "dev": {
+  "staging": {
     "awscloudformation": {
-      "AuthRoleName": "amplify-easilypollstudents-dev-142055-authRole",
-      "UnauthRoleArn": "arn:aws:iam::971359340948:role/amplify-easilypollstudents-dev-142055-unauthRole",
-      "AuthRoleArn": "arn:aws:iam::971359340948:role/amplify-easilypollstudents-dev-142055-authRole",
+      "AuthRoleName": "amplify-amplifya3ad9333421a4-staging-163121-authRole",
+      "UnauthRoleArn": "arn:aws:iam::971359340948:role/amplify-amplifya3ad9333421a4-staging-163121-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::971359340948:role/amplify-amplifya3ad9333421a4-staging-163121-authRole",
       "Region": "us-west-2",
-      "DeploymentBucketName": "amplify-easilypollstudents-dev-142055-deployment",
-      "UnauthRoleName": "amplify-easilypollstudents-dev-142055-unauthRole",
-      "StackName": "amplify-easilypollstudents-dev-142055",
-      "StackId": "arn:aws:cloudformation:us-west-2:971359340948:stack/amplify-easilypollstudents-dev-142055/dd64f520-a347-11ed-8925-02cd0f40211b",
-      "AmplifyAppId": "dx7q7mtp16p43"
+      "DeploymentBucketName": "amplify-amplifya3ad9333421a4-staging-163121-deployment",
+      "UnauthRoleName": "amplify-amplifya3ad9333421a4-staging-163121-unauthRole",
+      "StackName": "amplify-amplifya3ad9333421a4-staging-163121",
+      "StackId": "arn:aws:cloudformation:us-west-2:971359340948:stack/amplify-amplifya3ad9333421a4-staging-163121/302dcf30-a897-11ed-8836-0abadda20251",
+      "AmplifyAppId": "d352xi8ppdghfe",
+      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
+    },
+    "categories": {
+      "function": {
+        "easilypollstudents7e1a4448": {
+          "deploymentBucketName": "amplify-amplifya3ad9333421a4-staging-163121-deployment",
+          "s3Key": "amplify-builds/easilypollstudents7e1a4448-336d6539773831663757-build.zip"
+        },
+        "easilypollstudentsCustomMessage": {
+          "REDIRECTURL": "http://localhost:3000/",
+          "EMAILSUBJECT": "",
+          "EMAILMESSAGE": "",
+          "deploymentBucketName": "amplify-amplifya3ad9333421a4-staging-163121-deployment",
+          "s3Key": "amplify-builds/easilypollstudentsCustomMessage-59714b6e4d65325a544e-build.zip"
+        }
+      },
+      "auth": {
+        "easilypollstudents": {}
+      },
+      "api": {
+        "easilypollstudents": {},
+        "apicreator": {}
+      }
     }
   }
 }

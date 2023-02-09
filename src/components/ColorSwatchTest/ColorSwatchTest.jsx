@@ -1,32 +1,25 @@
-import { React, useState, useEffect } from 'react';
-import './ColorSwatchTest.scss';
+import { React, useState, useEffect } from "react";
+import "./ColorSwatchTest.scss";
 
-import Button from '@mui/material/Button';
-
+import Button from "@mui/material/Button";
 
 // AWS AppSync related stuff
 import { API, graphqlOperation } from "@aws-amplify/api";
-import config from '../../aws-exports';
+import config from "../../aws-exports";
 // automatically created query in graphql schema
-import { getColorSwatch } from '../../graphql/queries';
-import { updateColorSwatch } from '../../graphql/mutations';
-import { onUpdateColorSwatch } from '../../graphql/subscriptions';
+import { getColorSwatch } from "../../graphql/queries";
+import { updateColorSwatch } from "../../graphql/mutations";
+import { onUpdateColorSwatch } from "../../graphql/subscriptions";
 
 API.configure(config);
 
 const COLOR_SWATCH_ID = 1;
 
 // color string literals as an array
-const colorPalette = [
-  "#F4B942",
-  "#45CB85",
-  "#6A7FDB",
-  "#EC0B43",
-  "#FF785A",
-];
+const colorPalette = ["#F4B942", "#45CB85", "#6A7FDB", "#EC0B43", "#FF785A"];
 
 // component for swatch changing buttons
-const ColorSwatchTestButton = ({color, onClick}) => (
+const ColorSwatchTestButton = ({ color, onClick }) => (
   <Button
     onClick={onClick}
     // super hacky - I don't like this approach
@@ -39,21 +32,24 @@ const ColorSwatchTestButton = ({color, onClick}) => (
       "&:hover": {
         backgroundColor: color,
         transform: "scale(1.02)",
-      }
+      },
     }}
   >
     {color}
   </Button>
-)
+);
 
 // component for the swatch display, assumes color is a valid color string
-const ColorSwatch = ({color, isLoaded}) => (
-  <div className={`color-swatch ${isLoaded ? "loaded" : ""}`} style={{backgroundColor: color}}></div>
+const ColorSwatch = ({ color, isLoaded }) => (
+  <div
+    className={`color-swatch ${isLoaded ? "loaded" : ""}`}
+    style={{ backgroundColor: color }}
+  ></div>
 );
 
 const ColorSwatchTest = () => {
-  const [ isLoaded, setIsLoaded ] = useState(false); 
-  const [ currentColor, setCurrentColor ] = useState("#F4B942");
+  const [isLoaded, setIsLoaded] = useState(false);
+  const [currentColor, setCurrentColor] = useState("#F4B942");
 
   // subscribes to color swatch updates and returns the subscription
   //    TODO: abstract similar behavior to a hook
@@ -61,16 +57,15 @@ const ColorSwatchTest = () => {
     return API.graphql({
       query: onUpdateColorSwatch,
       variables: {
-        id: COLOR_SWATCH_ID
-      }
-    })
-    .subscribe({
-      next: colorData => {
+        id: COLOR_SWATCH_ID,
+      },
+    }).subscribe({
+      next: (colorData) => {
         console.log(`recieved new colorData from subscription:`);
         console.log(colorData);
         // data lives at colorData.value.data.onUpdateColorSwatch.color
         setCurrentColor(colorData.value.data.onUpdateColorSwatch.color);
-      }
+      },
     });
   };
 
@@ -79,16 +74,18 @@ const ColorSwatchTest = () => {
       const initialColorResponse = await API.graphql({
         query: getColorSwatch,
         variables: {
-          id: COLOR_SWATCH_ID
-        }
+          id: COLOR_SWATCH_ID,
+        },
       });
+
+      console.log(initialColorResponse);
 
       setIsLoaded(true);
       setCurrentColor(initialColorResponse.data.getColorSwatch.color);
-    }
+    };
 
     // fetch initial data
-    fetchData();  
+    fetchData();
 
     // use graphql subscription
     const colorSubscription = subscribe();
@@ -101,32 +98,35 @@ const ColorSwatchTest = () => {
   const handleButtonPress = (color) => {
     const submitData = async () => {
       // also not sure how this approach is different
-      await API.graphql(graphqlOperation(updateColorSwatch, { input: {id: COLOR_SWATCH_ID, color: color}}));
+      await API.graphql(
+        graphqlOperation(updateColorSwatch, {
+          input: { id: COLOR_SWATCH_ID, color: color },
+        })
+      );
     };
 
     submitData();
   };
 
-  return ( 
+  return (
     <div className="color-swatch-test">
-      <ColorSwatch color={currentColor} isLoaded={isLoaded}/>
+      <ColorSwatch color={currentColor} isLoaded={isLoaded} />
 
       <div className="loading-status">
         {!isLoaded ? "Loading..." : "Loaded."}
       </div>
 
       <div className="color-swatch-button-container">
-        {
-          colorPalette.map((color, index) => (
-            <ColorSwatchTestButton 
-              color={color} 
-              key={`button-${index}`}
-              onClick={() => handleButtonPress(color)}
-          />))
-        }
+        {colorPalette.map((color, index) => (
+          <ColorSwatchTestButton
+            color={color}
+            key={`button-${index}`}
+            onClick={() => handleButtonPress(color)}
+          />
+        ))}
       </div>
-    </div> 
+    </div>
   );
-}
- 
+};
+
 export default ColorSwatchTest;

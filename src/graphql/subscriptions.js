@@ -2,26 +2,38 @@
 // this is an auto generated file. This will be overwritten
 
 export const onCreateColorSwatch = /* GraphQL */ `
-  subscription OnCreateColorSwatch($id: ID, $color: String) {
-    onCreateColorSwatch(id: $id, color: $color) {
+  subscription OnCreateColorSwatch(
+    $filter: ModelSubscriptionColorSwatchFilterInput
+  ) {
+    onCreateColorSwatch(filter: $filter) {
       id
       color
+      createdAt
+      updatedAt
     }
   }
 `;
 export const onUpdateColorSwatch = /* GraphQL */ `
-  subscription OnUpdateColorSwatch($id: ID, $color: String) {
-    onUpdateColorSwatch(id: $id, color: $color) {
+  subscription OnUpdateColorSwatch(
+    $filter: ModelSubscriptionColorSwatchFilterInput
+  ) {
+    onUpdateColorSwatch(filter: $filter) {
       id
       color
+      createdAt
+      updatedAt
     }
   }
 `;
 export const onDeleteColorSwatch = /* GraphQL */ `
-  subscription OnDeleteColorSwatch($id: ID, $color: String) {
-    onDeleteColorSwatch(id: $id, color: $color) {
+  subscription OnDeleteColorSwatch(
+    $filter: ModelSubscriptionColorSwatchFilterInput
+  ) {
+    onDeleteColorSwatch(filter: $filter) {
       id
       color
+      createdAt
+      updatedAt
     }
   }
 `;
