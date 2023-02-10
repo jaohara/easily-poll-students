@@ -26,7 +26,14 @@
               "apiKeyExpirationDays": 7
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "autheasilypollstudents"
+              }
+            }
+          ]
         },
         "GraphQLAPIIdOutput": "sc4yazbmkbaz7kzuxmddbzulcu",
         "GraphQLAPIEndpointOutput": "https://mnfs3vzscjbpvpjci2u45xkjiu.appsync-api.us-west-2.amazonaws.com/graphql",
@@ -36,8 +43,8 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apieasilypollstudents"
       },
-      "lastPushTimeStamp": "2023-02-09T19:42:30.448Z",
-      "lastPushDirHash": "bgEz9XJfwQjeKaiqzWGwmFlBdA8="
+      "lastPushTimeStamp": "2023-02-10T04:00:20.625Z",
+      "lastPushDirHash": "QhRx+HYVT8Fh4ITO2wOlt3ruRfQ="
     }
   },
   "function": {
@@ -57,7 +64,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/function/easilypollstudents7e1a4448-cloudformation-template.json",
         "logicalId": "functioneasilypollstudents7e1a4448"
       },
-      "lastPushTimeStamp": "2023-02-09T19:42:30.451Z",
+      "lastPushTimeStamp": "2023-02-10T04:00:17.370Z",
       "output": {
         "LambdaExecutionRoleArn": "arn:aws:iam::971359340948:role/easilypollstudentsLambdaRole245a9d39-staging",
         "Region": "us-west-2",
@@ -83,7 +90,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/function/easilypollstudentsCustomMessage-cloudformation-template.json",
         "logicalId": "functioneasilypollstudentsCustomMessage"
       },
-      "lastPushTimeStamp": "2023-02-09T19:42:30.453Z",
+      "lastPushTimeStamp": "2023-02-10T04:00:17.373Z",
       "output": {
         "LambdaExecutionRoleArn": "arn:aws:iam::971359340948:role/easilypollstudentsCustomMessage-staging",
         "Region": "us-west-2",
@@ -128,7 +135,7 @@
           "EMAIL"
         ]
       },
-      "lastPushTimeStamp": "2023-02-09T19:42:30.456Z",
+      "lastPushTimeStamp": "2023-02-10T04:00:17.376Z",
       "customAuth": false,
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/auth/easilypollstudents-cloudformation-template.json",
