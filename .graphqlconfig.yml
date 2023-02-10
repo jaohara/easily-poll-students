@@ -1,5 +1,5 @@
 projects:
-  JohnColorSwatchTest:
+  poll-question-api:
     schemaPath: src/graphql/schema.json
     includes:
       - src/graphql/**/*.js
@@ -11,7 +11,7 @@ projects:
         generatedFileName: ''
         docsFilePath: src/graphql
         region: us-west-2
-        apiId: amxggpzox5bkrabrgqc3atai4q
+        apiId: ms3wx7p73nejhankfejffurlf4
         maxDepth: 2
 extensions:
   amplify:

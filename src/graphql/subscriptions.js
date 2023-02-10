@@ -1,27 +1,75 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const onCreateColorSwatch = /* GraphQL */ `
-  subscription OnCreateColorSwatch($id: ID, $color: String) {
-    onCreateColorSwatch(id: $id, color: $color) {
+export const onCreateQuestion = /* GraphQL */ `
+  subscription OnCreateQuestion(
+    $id: ID
+    $prompt: String
+    $answer_options: String
+    $answers: AWSJSON
+    $is_active: Boolean
+  ) {
+    onCreateQuestion(
+      id: $id
+      prompt: $prompt
+      answer_options: $answer_options
+      answers: $answers
+      is_active: $is_active
+    ) {
       id
-      color
+      prompt
+      answer_options
+      answers
+      is_active
+      answer_type
     }
   }
 `;
-export const onUpdateColorSwatch = /* GraphQL */ `
-  subscription OnUpdateColorSwatch($id: ID, $color: String) {
-    onUpdateColorSwatch(id: $id, color: $color) {
+export const onUpdateQuestion = /* GraphQL */ `
+  subscription OnUpdateQuestion(
+    $id: ID
+    $prompt: String
+    $answer_options: String
+    $answers: AWSJSON
+    $is_active: Boolean
+  ) {
+    onUpdateQuestion(
+      id: $id
+      prompt: $prompt
+      answer_options: $answer_options
+      answers: $answers
+      is_active: $is_active
+    ) {
       id
-      color
+      prompt
+      answer_options
+      answers
+      is_active
+      answer_type
     }
   }
 `;
-export const onDeleteColorSwatch = /* GraphQL */ `
-  subscription OnDeleteColorSwatch($id: ID, $color: String) {
-    onDeleteColorSwatch(id: $id, color: $color) {
+export const onDeleteQuestion = /* GraphQL */ `
+  subscription OnDeleteQuestion(
+    $id: ID
+    $prompt: String
+    $answer_options: String
+    $answers: AWSJSON
+    $is_active: Boolean
+  ) {
+    onDeleteQuestion(
+      id: $id
+      prompt: $prompt
+      answer_options: $answer_options
+      answers: $answers
+      is_active: $is_active
+    ) {
       id
-      color
+      prompt
+      answer_options
+      answers
+      is_active
+      answer_type
     }
   }
 `;

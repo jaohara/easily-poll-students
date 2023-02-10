@@ -13,7 +13,7 @@
         }
     },
     "api": {
-        "JohnColorSwatchTest": {
+        "poll-question-api": {
             "service": "AppSync",
             "output": {
                 "authConfig": {
@@ -22,13 +22,13 @@
                     },
                     "additionalAuthenticationProviders": null
                 },
-                "GraphQLAPIIdOutput": "amxggpzox5bkrabrgqc3atai4q",
-                "GraphQLAPIEndpointOutput": "https://pdbft6pxs5g2vhbu26cgghoj4u.appsync-api.us-west-2.amazonaws.com/graphql",
-                "name": "JohnColorSwatchTest",
+                "GraphQLAPIIdOutput": "ms3wx7p73nejhankfejffurlf4",
+                "GraphQLAPIEndpointOutput": "https://mulwu2xwrbfujedrqkk4c4vnx4.appsync-api.us-west-2.amazonaws.com/graphql",
+                "name": "poll-question-api",
                 "region": "us-west-2",
-                "GraphQLAPIKeyOutput": "da2-p36cwmdobvaxtlhzrzlolz7tqa"
+                "GraphQLAPIKeyOutput": "da2-gsuu5mdyrrfjxalcm2icvsg2wi"
             },
-            "lastPushTimeStamp": "2023-02-02T22:23:27.569Z"
+            "lastPushTimeStamp": "2023-02-08T22:48:24.163Z"
         }
     }
 }

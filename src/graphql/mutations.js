@@ -1,27 +1,39 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const createColorSwatch = /* GraphQL */ `
-  mutation CreateColorSwatch($input: CreateColorSwatchInput!) {
-    createColorSwatch(input: $input) {
+export const createQuestion = /* GraphQL */ `
+  mutation CreateQuestion($input: CreateQuestionInput!) {
+    createQuestion(input: $input) {
       id
-      color
+      prompt
+      answer_options
+      answers
+      is_active
+      answer_type
     }
   }
 `;
-export const updateColorSwatch = /* GraphQL */ `
-  mutation UpdateColorSwatch($input: UpdateColorSwatchInput!) {
-    updateColorSwatch(input: $input) {
+export const updateQuestion = /* GraphQL */ `
+  mutation UpdateQuestion($input: UpdateQuestionInput!) {
+    updateQuestion(input: $input) {
       id
-      color
+      prompt
+      answer_options
+      answers
+      is_active
+      answer_type
     }
   }
 `;
-export const deleteColorSwatch = /* GraphQL */ `
-  mutation DeleteColorSwatch($input: DeleteColorSwatchInput!) {
-    deleteColorSwatch(input: $input) {
+export const deleteQuestion = /* GraphQL */ `
+  mutation DeleteQuestion($input: DeleteQuestionInput!) {
+    deleteQuestion(input: $input) {
       id
-      color
+      prompt
+      answer_options
+      answers
+      is_active
+      answer_type
     }
   }
 `;

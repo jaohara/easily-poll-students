@@ -1,24 +1,32 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
-export const getColorSwatch = /* GraphQL */ `
-  query GetColorSwatch($id: ID!) {
-    getColorSwatch(id: $id) {
+export const getQuestion = /* GraphQL */ `
+  query GetQuestion($id: ID!) {
+    getQuestion(id: $id) {
       id
-      color
+      prompt
+      answer_options
+      answers
+      is_active
+      answer_type
     }
   }
 `;
-export const listColorSwatches = /* GraphQL */ `
-  query ListColorSwatches(
-    $filter: TableColorSwatchFilterInput
+export const listQuestions = /* GraphQL */ `
+  query ListQuestions(
+    $filter: TableQuestionFilterInput
     $limit: Int
     $nextToken: String
   ) {
-    listColorSwatches(filter: $filter, limit: $limit, nextToken: $nextToken) {
+    listQuestions(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
-        color
+        prompt
+        answer_options
+        answers
+        is_active
+        answer_type
       }
       nextToken
     }

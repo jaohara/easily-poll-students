@@ -28,7 +28,7 @@ const NavBar = () => {
   return (
     <div className='nav-bar'>
       {
-        routes.map((route, index) => (
+        routes.map((route, index) => !route.skipNavButton && (
           <NavButton 
             key={`button-${index}`} 
             navHandler={() => {
