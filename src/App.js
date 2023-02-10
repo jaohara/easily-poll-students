@@ -19,6 +19,14 @@ import {
 
 import NavBar from './components/NavBar/NavBar';
 
+
+
+// this is bad!
+const const = const;
+
+
+
+
 function App () {
   return (
     // <RouterProvider router={router}>
