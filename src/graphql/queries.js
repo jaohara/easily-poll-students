@@ -28,3 +28,70 @@ export const listColorSwatches = /* GraphQL */ `
     }
   }
 `;
+export const getSession = /* GraphQL */ `
+  query GetSession($id: ID!) {
+    getSession(id: $id) {
+      id
+      questions {
+        items {
+          id
+          prompt
+          createdAt
+          updatedAt
+          sessionQuestionsId
+        }
+        nextToken
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listSessions = /* GraphQL */ `
+  query ListSessions(
+    $filter: ModelSessionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listSessions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        questions {
+          nextToken
+        }
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getQuestion = /* GraphQL */ `
+  query GetQuestion($id: ID!) {
+    getQuestion(id: $id) {
+      id
+      prompt
+      createdAt
+      updatedAt
+      sessionQuestionsId
+    }
+  }
+`;
+export const listQuestions = /* GraphQL */ `
+  query ListQuestions(
+    $filter: ModelQuestionFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listQuestions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        prompt
+        createdAt
+        updatedAt
+        sessionQuestionsId
+      }
+      nextToken
+    }
+  }
+`;

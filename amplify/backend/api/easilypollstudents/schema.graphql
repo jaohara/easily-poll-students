@@ -7,3 +7,48 @@ type ColorSwatch @model {
   id: ID!
   color: String!
 }
+
+type Session @model {
+  id: ID!
+  questions: [Question] @hasMany
+}
+
+type Question @model {
+  id: ID!
+  prompt: String
+}
+
+# type ColorSwatch @model @auth(rules: [{ allow: public }]) {
+#   id: ID!
+#   color: String!
+# }
+
+# type Session
+#   @model
+#   @auth(
+#     rules: [
+#       { allow: public }
+#       # { allow: public, operations: [read] }
+#       # { allow: owner, operations: [update, delete] }
+#       # { allow: public, operations: [create] }
+#       # { allow: private, operations: [create] } ### restrict in the future
+#     ]
+#   ) {
+#   id: ID!
+#   questions: [Question] @hasMany
+# }
+
+# type Question
+#   @model
+#   @auth(
+#     rules: [
+#       { allow: public }
+#       # { allow: public, operations: [read] }
+#       # { allow: owner, operations: [update, delete] }
+#       # { allow: public, operations: [create] }
+#       # { allow: private, operations: [create] } ### restrict in the future
+#     ]
+#   ) {
+#   id: ID!
+#   prompt: String
+# }

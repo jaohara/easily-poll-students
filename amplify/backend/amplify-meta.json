@@ -10,7 +10,6 @@
       "StackName": "amplify-amplifya3ad9333421a4-staging-163121",
       "StackId": "arn:aws:cloudformation:us-west-2:971359340948:stack/amplify-amplifya3ad9333421a4-staging-163121/302dcf30-a897-11ed-8836-0abadda20251",
       "AmplifyAppId": "d352xi8ppdghfe",
-      "APIGatewayAuthURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json",
       "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     }
   },
@@ -27,7 +26,14 @@
               "apiKeyExpirationDays": 7
             }
           },
-          "additionalAuthenticationProviders": []
+          "additionalAuthenticationProviders": [
+            {
+              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
+              "userPoolConfig": {
+                "userPoolId": "autheasilypollstudents"
+              }
+            }
+          ]
         },
         "GraphQLAPIIdOutput": "sc4yazbmkbaz7kzuxmddbzulcu",
         "GraphQLAPIEndpointOutput": "https://mnfs3vzscjbpvpjci2u45xkjiu.appsync-api.us-west-2.amazonaws.com/graphql",
@@ -37,33 +43,8 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apieasilypollstudents"
       },
-      "lastPushTimeStamp": "2023-02-09T17:12:25.176Z",
-      "lastPushDirHash": "bgEz9XJfwQjeKaiqzWGwmFlBdA8="
-    },
-    "apicreator": {
-      "service": "API Gateway",
-      "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudents7e1a4448",
-          "attributes": [
-            "Name",
-            "Arn"
-          ]
-        }
-      ],
-      "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/api/apicreator-cloudformation-template.json",
-        "logicalId": "apiapicreator"
-      },
-      "lastPushTimeStamp": "2023-02-09T17:12:21.254Z",
-      "output": {
-        "ApiName": "apicreator",
-        "RootUrl": "https://905xrxsc9a.execute-api.us-west-2.amazonaws.com/staging",
-        "ApiId": "905xrxsc9a"
-      },
-      "lastPushDirHash": "ttmJHKyPpjZrHx/JyY9LBNe5auI="
+      "lastPushTimeStamp": "2023-02-10T04:05:42.110Z",
+      "lastPushDirHash": "QhRx+HYVT8Fh4ITO2wOlt3ruRfQ="
     }
   },
   "function": {
@@ -83,7 +64,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/function/easilypollstudents7e1a4448-cloudformation-template.json",
         "logicalId": "functioneasilypollstudents7e1a4448"
       },
-      "lastPushTimeStamp": "2023-02-09T17:12:21.255Z",
+      "lastPushTimeStamp": "2023-02-10T04:05:42.112Z",
       "output": {
         "LambdaExecutionRoleArn": "arn:aws:iam::971359340948:role/easilypollstudentsLambdaRole245a9d39-staging",
         "Region": "us-west-2",
@@ -109,7 +90,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/function/easilypollstudentsCustomMessage-cloudformation-template.json",
         "logicalId": "functioneasilypollstudentsCustomMessage"
       },
-      "lastPushTimeStamp": "2023-02-09T17:12:21.256Z",
+      "lastPushTimeStamp": "2023-02-10T04:05:42.113Z",
       "output": {
         "LambdaExecutionRoleArn": "arn:aws:iam::971359340948:role/easilypollstudentsCustomMessage-staging",
         "Region": "us-west-2",
@@ -154,7 +135,7 @@
           "EMAIL"
         ]
       },
-      "lastPushTimeStamp": "2023-02-09T17:12:21.258Z",
+      "lastPushTimeStamp": "2023-02-10T04:05:42.114Z",
       "customAuth": false,
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/auth/easilypollstudents-cloudformation-template.json",

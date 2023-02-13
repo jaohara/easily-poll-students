@@ -152,27 +152,6 @@
         }
       }
     },
-    "APIGatewayAuthStack": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/api/APIGatewayAuthStack.json",
-        "Parameters": {
-          "authRoleName": {
-            "Ref": "AuthRoleName"
-          },
-          "unauthRoleName": {
-            "Ref": "UnauthRoleName"
-          },
-          "env": "staging",
-          "apicreator": {
-            "Fn::GetAtt": [
-              "apiapicreator",
-              "Outputs.ApiId"
-            ]
-          }
-        }
-      }
-    },
     "AuthTriggerCustomLambdaStack": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
@@ -225,28 +204,7 @@
           "DynamoDBBillingMode": "PAY_PER_REQUEST",
           "DynamoDBEnableServerSideEncryption": false,
           "S3DeploymentBucket": "amplify-amplifya3ad9333421a4-staging-163121-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/85c656744955f9f47a4153db461e413ce4d85cfe",
-          "env": "staging"
-        }
-      }
-    },
-    "apiapicreator": {
-      "Type": "AWS::CloudFormation::Stack",
-      "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/api/apicreator-cloudformation-template.json",
-        "Parameters": {
-          "functioneasilypollstudents7e1a4448Name": {
-            "Fn::GetAtt": [
-              "functioneasilypollstudents7e1a4448",
-              "Outputs.Name"
-            ]
-          },
-          "functioneasilypollstudents7e1a4448Arn": {
-            "Fn::GetAtt": [
-              "functioneasilypollstudents7e1a4448",
-              "Outputs.Arn"
-            ]
-          },
+          "S3DeploymentRootKey": "amplify-appsync-files/4a4e071c14f71526d8400847eb349d484cd8d633",
           "env": "staging"
         }
       }
