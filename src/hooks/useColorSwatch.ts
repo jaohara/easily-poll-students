@@ -1,5 +1,7 @@
 import { useState, useEffect } from "react";
-import useApi from "./useApi";
+//@ts-ignore
+import useApi from "./useApi.ts";
+import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { getColorSwatch } from "../graphql/queries";
 import { updateColorSwatch } from "../graphql/mutations";
 import { onUpdateColorSwatch } from "../graphql/subscriptions";
@@ -20,17 +22,13 @@ function useColorSwatch (subscribeToChanges = false) {
   const API = useApi();
 
   const updateColor = (newColor: string) => {
-    // console.log(`Hey, I'm currently useless!`);
     const submitData = async () => {
-      await API.graphql({
-        query: updateColorSwatch,
-        variables: {
-          id: COLOR_SWATCH_ID,
-          input: {
-            color: newColor
-          }
-        }
-      });
+      await API.graphql(graphqlOperation(updateColorSwatch, {
+        input: { 
+          id: COLOR_SWATCH_ID, 
+          color: newColor,
+        }})
+      );
     };
 
     submitData();
@@ -41,7 +39,8 @@ function useColorSwatch (subscribeToChanges = false) {
       query: onUpdateColorSwatch,
       ...colorSwatchVariablesObject,
     }).subscribe({
-      next: (colorData) => setCurrentColor(colorData)
+      next: (colorData) => 
+        setCurrentColor(colorData.value.data.onUpdateColorSwatch.color)
     });
   };
 
@@ -69,6 +68,6 @@ function useColorSwatch (subscribeToChanges = false) {
     currentColor, 
     updateColor,
   };
-};
+}
 
 export default useColorSwatch;
