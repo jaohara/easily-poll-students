@@ -2,8 +2,8 @@ import React from 'react';
 import { createBrowserRouter } from "react-router-dom";
 
 import Home from "./components/pages/Home/Home";
-import MaterialUISwatch from "./components/MaterialUISwatch/MaterialUISwatch";
-import ColorSwatchTest from "./components/ColorSwatchTest/ColorSwatchTest";
+import MaterialUISwatch from "./components/Demo/MaterialUISwatch/MaterialUISwatch";
+import ColorSwatchTest from "./components/Demo/ColorSwatchTest/ColorSwatchTest";
 
 // name is display name on button/link
 export const routes = [
