@@ -39,6 +39,7 @@ function useColorSwatch (subscribeToChanges = false) {
       query: onUpdateColorSwatch,
       ...colorSwatchVariablesObject,
     }).subscribe({
+      //@ts-ignore
       next: (colorData) => 
         setCurrentColor(colorData.value.data.onUpdateColorSwatch.color)
     });

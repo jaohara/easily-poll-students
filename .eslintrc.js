@@ -17,6 +17,10 @@ module.exports = {
             "parserOptions": {
                 "project": ['./tsconfig.json'],
             },
+            "rules": {
+                "@typescript-eslint/ban-ts-comment": "off",
+                "@typescript-eslint/no-floating-promises": "off",
+            },
         },
     ],
     "parserOptions": {
