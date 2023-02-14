@@ -7,7 +7,7 @@
   height: 256px;
   margin: 3rem auto;
   opacity: 0;
-  transition: 
+  transition:
     background-color 250ms ease-in-out,
     opacity 250ms ease-in-out;
   width: 256px;
@@ -19,6 +19,6 @@
 
 .loading-status {
   margin: 1rem 0;
-  font-size: .8rem;
+  font-size: 0.8rem;
   font-weight: bold;
 }
