@@ -11,7 +11,10 @@ module.exports = {
     ],
     "parserOptions": {
         "ecmaVersion": "latest",
-        "sourceType": "module"
+        "sourceType": "module",
+        "project": "./tsconfig.json",
+        // "project": true,
+        // "tsconfigRootDir"
     },
     "plugins": [
         "react"
