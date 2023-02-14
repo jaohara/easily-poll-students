@@ -1,6 +1,6 @@
 import { useState, useEffect } from "react";
 //@ts-ignore
-import useApi from "./useApi.ts";
+import useApi from "./useApi";
 import { graphqlOperation } from "@aws-amplify/api-graphql";
 import { getColorSwatch } from "../graphql/queries";
 import { updateColorSwatch } from "../graphql/mutations";
