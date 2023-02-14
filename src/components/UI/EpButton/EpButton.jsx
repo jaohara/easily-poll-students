@@ -1,6 +1,7 @@
 import React from 'react';
 
-import './EpButton.scss';
+// Commented as file doesn't exist yet
+// import './EpButton.scss';
 
 import Button from '@mui/material/Button';
 

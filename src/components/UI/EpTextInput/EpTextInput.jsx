@@ -1,6 +1,7 @@
 import React from 'react';
 
-import './EpTextInput.scss';
+// Commented as file doesn't exist yet
+// import './EpTextInput.scss';
 
 import TextField from '@mui/material/TextField';
 
