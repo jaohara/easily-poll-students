@@ -18,4 +18,7 @@
 
 function useQuestionData() {
   // TODO: pretty much all of this
+  console.log("This should fix shut up an error");
 }
+
+export default useQuestionData;
