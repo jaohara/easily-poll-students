@@ -1,5 +1,11 @@
 {
   "AppSyncApiName": "easilypollstudents",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
-  "DynamoDBEnableServerSideEncryption": false
+  "DynamoDBEnableServerSideEncryption": false,
+  "AuthCognitoUserPoolId": {
+    "Fn::GetAtt": [
+      "autheasilypollstudentse6b9c839",
+      "Outputs.UserPoolId"
+    ]
+  }
 }
