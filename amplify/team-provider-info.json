@@ -18,13 +18,20 @@
         "easilypollstudents7e1a4448": {
           "deploymentBucketName": "amplify-amplifya3ad9333421a4-staging-163121-deployment",
           "s3Key": "amplify-builds/easilypollstudents7e1a4448-336d6539773831663757-build.zip"
+        },
+        "easilypollstudentsCustomMessage": {
+          "REDIRECTURL": "http://localhost:3000/",
+          "EMAILSUBJECT": "",
+          "EMAILMESSAGE": "",
+          "deploymentBucketName": "amplify-amplifya3ad9333421a4-staging-163121-deployment",
+          "s3Key": "amplify-builds/easilypollstudentsCustomMessage-59714b6e4d65325a544e-build.zip"
         }
+      },
+      "auth": {
+        "easilypollstudents": {}
       },
       "api": {
         "easilypollstudents": {}
-      },
-      "auth": {
-        "easilypollstudentse6b9c839": {}
       }
     }
   }
