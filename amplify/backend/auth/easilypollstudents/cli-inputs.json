@@ -1,10 +1,10 @@
 {
   "version": "1",
   "cognitoConfig": {
-    "identityPoolName": "easilypollstudentse6b9c839_identitypool_e6b9c839",
+    "identityPoolName": "easilypollstudents_identitypool_226aec48",
     "allowUnauthenticatedIdentities": false,
-    "resourceNameTruncated": "easilye6b9c839",
-    "userPoolName": "easilypollstudentse6b9c839_userpool_e6b9c839",
+    "resourceNameTruncated": "easily226aec48",
+    "userPoolName": "easilypollstudents_userpool_226aec48",
     "autoVerifiedAttributes": [
       "email"
     ],
@@ -24,26 +24,20 @@
     ],
     "aliasAttributes": [],
     "userpoolClientGenerateSecret": false,
-    "userpoolClientRefreshTokenValidity": 30,
+    "userpoolClientRefreshTokenValidity": "3",
     "userpoolClientWriteAttributes": [
       "email"
     ],
     "userpoolClientReadAttributes": [
       "email"
     ],
-    "userpoolClientLambdaRole": "easilye6b9c839_userpoolclient_lambda_role",
+    "userpoolClientLambdaRole": "easily226aec48_userpoolclient_lambda_role",
     "userpoolClientSetAttributes": false,
-    "sharedId": "e6b9c839",
-    "resourceName": "easilypollstudentse6b9c839",
     "authSelections": "identityPoolAndUserPool",
-    "useDefault": "manual",
-    "usernameAttributes": [
-      "email"
-    ],
-    "userPoolGroupList": [],
+    "resourceName": "easilypollstudents",
+    "sharedId": "226aec48",
     "serviceName": "Cognito",
-    "usernameCaseSensitive": false,
-    "useEnabledMfas": true,
+    "useDefault": "manual",
     "authRoleArn": {
       "Fn::GetAtt": [
         "AuthRole",
@@ -57,16 +51,34 @@
       ]
     },
     "breakCircularDependency": true,
-    "dependsOn": [],
+    "useEnabledMfas": true,
+    "dependsOn": [
+      {
+        "category": "function",
+        "resourceName": "easilypollstudentsCustomMessage",
+        "triggerProvider": "Cognito",
+        "attributes": [
+          "Arn",
+          "Name"
+        ]
+      }
+    ],
     "thirdPartyAuth": false,
     "userPoolGroups": false,
     "adminQueries": false,
-    "triggers": {},
+    "triggers": {
+      "CustomMessage": [
+        "verification-link"
+      ]
+    },
     "hostedUI": false,
+    "userPoolGroupList": [],
+    "verificationBucketName": "easilypollstudentsverificationbucket",
     "authProviders": [],
     "parentStack": {
       "Ref": "AWS::StackId"
     },
+    "authTriggerConnections": "[\n  {\n    \"triggerType\": \"CustomMessage\",\n    \"lambdaFunctionName\": \"easilypollstudentsCustomMessage\"\n  }\n]",
     "permissions": []
   }
 }

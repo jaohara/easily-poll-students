@@ -9,22 +9,15 @@
       "UnauthRoleName": "amplify-amplifya3ad9333421a4-staging-163121-unauthRole",
       "StackName": "amplify-amplifya3ad9333421a4-staging-163121",
       "StackId": "arn:aws:cloudformation:us-west-2:971359340948:stack/amplify-amplifya3ad9333421a4-staging-163121/302dcf30-a897-11ed-8836-0abadda20251",
-      "AmplifyAppId": "d352xi8ppdghfe"
+      "AmplifyAppId": "d352xi8ppdghfe",
+      "AuthTriggerTemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/auth/auth-trigger-cloudformation-template.json"
     }
   },
   "api": {
     "easilypollstudents": {
       "service": "AppSync",
       "providerPlugin": "awscloudformation",
-      "dependsOn": [
-        {
-          "category": "auth",
-          "resourceName": "easilypollstudentse6b9c839",
-          "attributes": [
-            "UserPoolId"
-          ]
-        }
-      ],
+      "dependsOn": [],
       "output": {
         "authConfig": {
           "defaultAuthentication": {
@@ -37,21 +30,21 @@
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "autheasilypollstudentse6b9c839"
+                "userPoolId": "autheasilypollstudents"
               }
             }
           ]
         },
-        "GraphQLAPIIdOutput": "odf3n6otbjfxdcho63ityjuk7q",
-        "GraphQLAPIEndpointOutput": "https://xu4kprnasffthniikpai3ongam.appsync-api.us-west-2.amazonaws.com/graphql",
-        "GraphQLAPIKeyOutput": "da2-dzaytmtp5vdihobnj5dpggxnja"
+        "GraphQLAPIIdOutput": "sc4yazbmkbaz7kzuxmddbzulcu",
+        "GraphQLAPIEndpointOutput": "https://mnfs3vzscjbpvpjci2u45xkjiu.appsync-api.us-west-2.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-ny2st7buzbappg354duvvavmvu"
       },
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apieasilypollstudents"
       },
-      "lastPushTimeStamp": "2023-02-15T05:28:37.377Z",
-      "lastPushDirHash": "1eNzAvmejc0bKEScmCXfcWNOVeU="
+      "lastPushTimeStamp": "2023-02-10T04:00:20.625Z",
+      "lastPushDirHash": "QhRx+HYVT8Fh4ITO2wOlt3ruRfQ="
     }
   },
   "function": {
@@ -71,7 +64,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/function/easilypollstudents7e1a4448-cloudformation-template.json",
         "logicalId": "functioneasilypollstudents7e1a4448"
       },
-      "lastPushTimeStamp": "2023-02-15T05:28:33.064Z",
+      "lastPushTimeStamp": "2023-02-10T04:00:17.370Z",
       "output": {
         "LambdaExecutionRoleArn": "arn:aws:iam::971359340948:role/easilypollstudentsLambdaRole245a9d39-staging",
         "Region": "us-west-2",
@@ -80,19 +73,53 @@
         "LambdaExecutionRole": "easilypollstudentsLambdaRole245a9d39-staging"
       },
       "lastPushDirHash": "NpXtXaTS3ujmEncZ6BrXYLs6WS0="
+    },
+    "easilypollstudentsCustomMessage": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "lastBuildTimeStamp": "2023-02-09T16:47:04.215Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2023-02-09T16:47:04.258Z",
+      "distZipFilename": "easilypollstudentsCustomMessage-59714b6e4d65325a544e-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-amplifya3ad9333421a4-staging-163121-deployment",
+        "s3Key": "amplify-builds/easilypollstudentsCustomMessage-59714b6e4d65325a544e-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/function/easilypollstudentsCustomMessage-cloudformation-template.json",
+        "logicalId": "functioneasilypollstudentsCustomMessage"
+      },
+      "lastPushTimeStamp": "2023-02-10T04:00:17.373Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::971359340948:role/easilypollstudentsCustomMessage-staging",
+        "Region": "us-west-2",
+        "Arn": "arn:aws:lambda:us-west-2:971359340948:function:easilypollstudentsCustomMessage-staging",
+        "Name": "easilypollstudentsCustomMessage-staging",
+        "LambdaExecutionRole": "easilypollstudentsCustomMessage-staging"
+      },
+      "lastPushDirHash": "tdehWO5ro/f710BpqITbJ7UO9jE="
     }
   },
   "auth": {
-    "easilypollstudentse6b9c839": {
+    "easilypollstudents": {
       "service": "Cognito",
+      "serviceType": "managed",
       "providerPlugin": "awscloudformation",
-      "dependsOn": [],
-      "customAuth": false,
+      "dependsOn": [
+        {
+          "category": "function",
+          "resourceName": "easilypollstudentsCustomMessage",
+          "triggerProvider": "Cognito",
+          "attributes": [
+            "Arn",
+            "Name"
+          ]
+        }
+      ],
       "frontendAuthConfig": {
         "socialProviders": [],
-        "usernameAttributes": [
-          "EMAIL"
-        ],
+        "usernameAttributes": [],
         "signupAttributes": [
           "EMAIL"
         ],
@@ -108,21 +135,22 @@
           "EMAIL"
         ]
       },
+      "lastPushTimeStamp": "2023-02-10T04:00:17.376Z",
+      "customAuth": false,
       "providerMetadata": {
-        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/auth/easilypollstudentse6b9c839-cloudformation-template.json",
-        "logicalId": "autheasilypollstudentse6b9c839"
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplifya3ad9333421a4-staging-163121-deployment/amplify-cfn-templates/auth/easilypollstudents-cloudformation-template.json",
+        "logicalId": "autheasilypollstudents"
       },
-      "lastPushTimeStamp": "2023-02-15T05:28:33.066Z",
       "output": {
-        "UserPoolId": "us-west-2_l4MoaIXAG",
-        "AppClientIDWeb": "2kfhrsb6e3o12me3p6lo6dqqqc",
-        "AppClientID": "13tchen54nhgf71qsi8l940u8i",
-        "IdentityPoolId": "us-west-2:7881d2eb-0734-4c52-a2e3-d6a56abea939",
-        "UserPoolArn": "arn:aws:cognito-idp:us-west-2:971359340948:userpool/us-west-2_l4MoaIXAG",
-        "IdentityPoolName": "easilypollstudentse6b9c839_identitypool_e6b9c839__staging",
-        "UserPoolName": "easilypollstudentse6b9c839_userpool_e6b9c839"
+        "UserPoolId": "us-west-2_dO6VMEpGd",
+        "AppClientIDWeb": "eduj4j8flr0lp50m59dbtr8ce",
+        "AppClientID": "79jms520gtrqscd3f8695ddlm7",
+        "IdentityPoolId": "us-west-2:9d017d54-6626-4f9f-aa68-25bc67cfea36",
+        "UserPoolArn": "arn:aws:cognito-idp:us-west-2:971359340948:userpool/us-west-2_dO6VMEpGd",
+        "IdentityPoolName": "easilypollstudents_identitypool_226aec48__staging",
+        "UserPoolName": "easilypollstudents_userpool_226aec48"
       },
-      "lastPushDirHash": "MYbDci5RNHgVP7AoJXX6B++Ky7A="
+      "lastPushDirHash": "lN3Q3mByIe5MrkjNnds1iy8HS04="
     }
   }
 }
