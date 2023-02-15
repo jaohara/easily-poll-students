@@ -1,14 +1,22 @@
 {
   "api": {
     "easilypollstudents": {
-      "dependsOn": [],
+      "dependsOn": [
+        {
+          "attributes": [
+            "UserPoolId"
+          ],
+          "category": "auth",
+          "resourceName": "easilypollstudentse6b9c839"
+        }
+      ],
       "output": {
         "authConfig": {
           "additionalAuthenticationProviders": [
             {
               "authenticationType": "AMAZON_COGNITO_USER_POOLS",
               "userPoolConfig": {
-                "userPoolId": "autheasilypollstudents"
+                "userPoolId": "autheasilypollstudentse6b9c839"
               }
             }
           ],
@@ -25,18 +33,9 @@
     }
   },
   "auth": {
-    "easilypollstudents": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage",
-          "triggerProvider": "Cognito"
-        }
-      ],
+    "easilypollstudentse6b9c839": {
+      "customAuth": false,
+      "dependsOn": [],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -50,23 +49,19 @@
           "EMAIL"
         ],
         "socialProviders": [],
-        "usernameAttributes": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
         "verificationMechanisms": [
           "EMAIL"
         ]
       },
       "providerPlugin": "awscloudformation",
-      "service": "Cognito",
-      "serviceType": "managed"
+      "service": "Cognito"
     }
   },
   "function": {
     "easilypollstudents7e1a4448": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "easilypollstudentsCustomMessage": {
       "build": true,
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
@@ -86,46 +81,6 @@
         {
           "category": "function",
           "resourceName": "easilypollstudents7e1a4448"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudentsCustomMessage_EMAILMESSAGE": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudentsCustomMessage_EMAILSUBJECT": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudentsCustomMessage_REDIRECTURL": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudentsCustomMessage_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudentsCustomMessage_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage"
         }
       ]
     }
