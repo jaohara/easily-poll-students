@@ -5,11 +5,11 @@ import Button from "@mui/material/Button";
 
 // AWS AppSync related stuff
 import { API, graphqlOperation } from "@aws-amplify/api";
-import config from "../../aws-exports";
+import config from "../../../aws-exports";
 // automatically created query in graphql schema
-import { getColorSwatch } from "../../graphql/queries";
-import { updateColorSwatch } from "../../graphql/mutations";
-import { onUpdateColorSwatch } from "../../graphql/subscriptions";
+import { getColorSwatch } from "../../../graphql/queries";
+import { updateColorSwatch } from "../../../graphql/mutations";
+import { onUpdateColorSwatch } from "../../../graphql/subscriptions";
 
 API.configure(config);
 

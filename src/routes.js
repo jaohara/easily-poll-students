@@ -4,6 +4,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "./components/pages/Home/Home";
 import MaterialUISwatch from "./components/MaterialUISwatch/MaterialUISwatch";
 import ColorSwatchTest from "./components/ColorSwatchTest/ColorSwatchTest";
+import ColorSwatchHookTest from "./components/Demo/ColorSwatchTest/ColorSwatchHookTest";
+import EpChartDemo from "./components/Demo/EpChartDemo/EpChartDemo";
 import Login from "./components/pages/Auth/Login/Login";
 import Register from "./components/pages/Auth/Register/Register";
 import TestApi from "./components/pages/TestApi/TestApi";
@@ -39,6 +41,16 @@ export const routes = [
     path: "/testapi",
     name: "Test Api",
     element: <TestApi />,
+  },
+  {
+    path: "/color-swatch-demo-hooks",
+    name: "Color Swatch Demo w/Hooks",
+    element: <ColorSwatchHookTest />
+  },
+  {
+    path: "/epchart-demo",
+    name: "chart demo",
+    element: <EpChartDemo />
   },
 ];
 
