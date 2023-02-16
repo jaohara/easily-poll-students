@@ -2,6 +2,9 @@ import React from 'react';
 import { createBrowserRouter } from "react-router-dom";
 
 import Home from "./components/pages/Home/Home";
+import CreatePoll from './components/pages/CreatePoll/CreatePoll';
+
+// demo-related pages
 import MaterialUISwatch from "./components/Demo/MaterialUISwatch/MaterialUISwatch";
 import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo';
 
@@ -18,8 +21,13 @@ export const routes = [
     element: <MaterialUISwatch />
   },
   {
+    path: "/create-poll",
+    name: "Create Poll",
+    element: <CreatePoll />
+  },
+  {
     path: "/epchart-demo",
-    name: "chart demo",
+    name: "Chart Demo",
     element: <EpChartDemo />
   }
 ];
