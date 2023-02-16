@@ -4,6 +4,8 @@ import { createBrowserRouter } from "react-router-dom";
 import Home from "./components/pages/Home/Home";
 import MaterialUISwatch from "./components/MaterialUISwatch/MaterialUISwatch";
 import ColorSwatchTest from "./components/ColorSwatchTest/ColorSwatchTest";
+import Host from './components/pages/Admin/Host';
+import Poll from './components/pages/Admin/Poll';
 
 // name is display name on button/link
 export const routes = [
@@ -22,6 +24,21 @@ export const routes = [
     name: "Color Swatch Demo",
     element: <ColorSwatchTest />
   }
+  ,
+  {
+    path: "/Host",
+    name: "Host",
+    element: <Host/>
+  },
+
+  {
+    path: "/Poll",
+    name: "Poll",
+    element: <Poll/>
+
+  }
+
+
 ];
 
 // create router, filtering out names
