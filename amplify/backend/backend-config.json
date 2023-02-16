@@ -4,17 +4,12 @@
       "dependsOn": [],
       "output": {
         "authConfig": {
-          "additionalAuthenticationProviders": [
-            {
-              "authenticationType": "AMAZON_COGNITO_USER_POOLS",
-              "userPoolConfig": {
-                "userPoolId": "autheasilypollstudents"
-              }
-            }
-          ],
+          "additionalAuthenticationProviders": [],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDays": 7
+              "apiKeyExpirationDate": "2023-03-18T01:44:25.697Z",
+              "apiKeyExpirationDays": 30,
+              "description": "30"
             },
             "authenticationType": "API_KEY"
           }
@@ -25,18 +20,9 @@
     }
   },
   "auth": {
-    "easilypollstudents": {
-      "dependsOn": [
-        {
-          "attributes": [
-            "Arn",
-            "Name"
-          ],
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage",
-          "triggerProvider": "Cognito"
-        }
-      ],
+    "easilypollstudents834464d1": {
+      "customAuth": false,
+      "dependsOn": [],
       "frontendAuthConfig": {
         "mfaConfiguration": "OFF",
         "mfaTypes": [
@@ -50,84 +36,15 @@
           "EMAIL"
         ],
         "socialProviders": [],
-        "usernameAttributes": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
         "verificationMechanisms": [
           "EMAIL"
         ]
       },
       "providerPlugin": "awscloudformation",
-      "service": "Cognito",
-      "serviceType": "managed"
-    }
-  },
-  "function": {
-    "easilypollstudents7e1a4448": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "easilypollstudentsCustomMessage": {
-      "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    }
-  },
-  "parameters": {
-    "AMPLIFY_function_easilypollstudents7e1a4448_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudents7e1a4448"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudents7e1a4448_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudents7e1a4448"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudentsCustomMessage_EMAILMESSAGE": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudentsCustomMessage_EMAILSUBJECT": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudentsCustomMessage_REDIRECTURL": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudentsCustomMessage_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage"
-        }
-      ]
-    },
-    "AMPLIFY_function_easilypollstudentsCustomMessage_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "easilypollstudentsCustomMessage"
-        }
-      ]
+      "service": "Cognito"
     }
   }
 }
