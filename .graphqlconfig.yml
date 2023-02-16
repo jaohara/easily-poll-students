@@ -1,6 +1,6 @@
 projects:
-  JohnColorSwatchTest:
-    schemaPath: src/graphql/schema.json
+  easilypollstudents:
+    schemaPath: amplify/backend/api/easilypollstudents/build/schema.graphql
     includes:
       - src/graphql/**/*.js
     excludes:
@@ -11,19 +11,5 @@ projects:
         generatedFileName: ''
         docsFilePath: src/graphql
         region: us-west-2
-        apiId: amxggpzox5bkrabrgqc3atai4q
+        apiId: null
         maxDepth: 2
-  easilypollstudents:
-    schemaPath: src/graphql/schema.json
-    includes:
-      - src/graphql/**/*.js
-    excludes:
-      - ./amplify/**
-    extensions:
-      amplify:
-        codeGenTarget: javascript
-        generatedFileName: ''
-        docsFilePath: src/graphql
-extensions:
-  amplify:
-    version: 3
