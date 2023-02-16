@@ -165,6 +165,7 @@ function CurrentPollElementDeleteButton ({onClick}) {
     <EpButton
       className="current-poll-delete-element"
       onClick={onClick}
+      tabIndex="-1"
     >
       <MdRemoveCircleOutline />
     </EpButton>
