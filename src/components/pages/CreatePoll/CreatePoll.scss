@@ -1,0 +1,43 @@
+@use "../../../styles/globals.scss" as g;
+
+// .create-poll-container {
+//   border-radius: g.$common-border-radius;
+//   background: #fff;
+//   padding: g.$common-container-padding;
+// }
+
+
+.current-poll-question {
+  border-radius: g.$common-border-radius;
+  // padding: g.$common-container-padding;
+  // margin: g.$common-margin 0 g.$common-margin 0;
+  margin: 3rem 0 3rem 0;
+}
+
+.current-poll-question-prompt {
+  // background: green;
+  margin-bottom: 3rem;
+}
+
+.current-poll-question-answers {
+  // background: red;
+}
+
+.current-poll-answer {
+  margin-bottom: g.$common-margin;
+}
+
+.current-poll-element {
+  display: flex;
+  justify-content: space-between;
+}
+
+.current-poll-element-input {
+  margin-right: .5rem;
+  width: 85%;
+}
+
+.current-poll-empty {
+  margin-top: 3rem;
+  font-weight: bold;
+}

@@ -8,25 +8,22 @@ import theme from './styles/theme';
 // router-related imports
 import { 
   BrowserRouter, 
-  // RouterProvider
   Route,
   Routes 
 } from "react-router-dom";
 import { 
-  // router,
   routes
 } from './routes';
 
-import NavBar from './components/NavBar/NavBar';
+import EpNavBar from './components/UI/EpNavBar/EpNavBar';
 
 function App () {
   return (
-    // <RouterProvider router={router}>
     <BrowserRouter>
       <ThemeProvider theme={theme}>
         <div className="App">
           <h1>Easy Poll App!</h1>
-          <NavBar />
+          <EpNavBar />
 
           <p>This is <strong>another test</strong> of the new CI/CD approach.</p>
 
@@ -37,11 +34,9 @@ function App () {
               ))
             }
           </Routes>
-          {/* <RouterProvider router={router} /> */}
         </div>
       </ThemeProvider>
     </BrowserRouter>
-    // </RouterProvider>
   );
 }
 

@@ -23,6 +23,9 @@ jobs:
         env:
           VALIDATE_ALL_CODEBASE: false
           VALIDATE_JAVASCRIPT_STANDARD: false
+          VALIDATE_TYPESCRIPT_STANDARD: false
           USE_FIND_ALGORITHM: true
+          FILTER_REGEX_INCLUDE: .*src/.*
+          FILTER_REGEX_EXCLUDE: .*src/aws-exports.js
           DEFAULT_BRANCH: main
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

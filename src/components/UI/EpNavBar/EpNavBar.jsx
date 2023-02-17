@@ -1,5 +1,5 @@
 import React from 'react';
-import './NavBar.scss';
+import './EpNavBar.scss';
 
 /*
   John, 2/2/23:
@@ -10,11 +10,11 @@ import './NavBar.scss';
 
 import Button from '@mui/material/Button';
 
-import { routes } from '../../routes';
+import { routes } from '../../../routes';
 import { useNavigate } from "react-router-dom";
 // import { redirect } from "react-router-dom";
 
-const NavButton = ({route, navHandler}) => (
+const EpNavButton = ({route, navHandler}) => (
   <Button
     onClick={() => navHandler()}
   >
@@ -22,14 +22,14 @@ const NavButton = ({route, navHandler}) => (
   </Button>
 );
 
-const NavBar = () => {
+const EpNavBar = () => {
   const navigate = useNavigate();
 
   return (
     <div className='nav-bar'>
       {
         routes.map((route, index) => (
-          <NavButton 
+          <EpNavButton 
             key={`button-${index}`} 
             navHandler={() => {
               console.log(`route.path: ${route.path}`);
@@ -42,4 +42,4 @@ const NavBar = () => {
   );
 }
  
-export default NavBar;
+export default EpNavBar;

@@ -1,0 +1,52 @@
+# This "input" configures a global authorization rule to enable public access to
+# all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
+input AMPLIFY {
+  globalAuthRule: AuthRule = { allow: public }
+} # FOR TESTING ONLY!
+type User @model {
+  polls: [Poll!]! @hasMany
+  id: ID!
+  email: String!
+  name_first: String!
+  name_last: String!
+}
+
+type Poll @model {
+  user: User! @belongsTo
+  questions: [Question!]! @hasMany
+  guests_in: [Guest!]! @hasMany
+  guests_waiting: [Guest!] @hasMany
+  link_name: LinkName! @hasOne
+  id: ID!
+  title: String!
+  free_join: Int!
+}
+
+type Question @model {
+  poll: Poll! @belongsTo
+  answers: [Answer!]! @hasMany
+  id: ID!
+  prompt: String!
+  answer_options: [String!]!
+  question_type: String!
+}
+
+type Answer @model {
+  question: Question! @belongsTo
+  owner: Guest! @belongsTo
+  answer: [String!]!
+}
+
+type Guest @model {
+  polls: [Poll!]! @hasMany
+  questions: [Question!]! @hasMany
+  answers: [Answer!]! @hasMany
+  id: ID!
+  name: String!
+  key: String!
+}
+
+type LinkName @model {
+  poll: Poll! @belongsTo
+  name: String!
+}

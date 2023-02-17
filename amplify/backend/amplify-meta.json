@@ -1,34 +1,85 @@
 {
-    "providers": {
-        "awscloudformation": {
-            "AuthRoleName": "amplify-easilypollstudents-dev-142055-authRole",
-            "UnauthRoleArn": "arn:aws:iam::971359340948:role/amplify-easilypollstudents-dev-142055-unauthRole",
-            "AuthRoleArn": "arn:aws:iam::971359340948:role/amplify-easilypollstudents-dev-142055-authRole",
-            "Region": "us-west-2",
-            "DeploymentBucketName": "amplify-easilypollstudents-dev-142055-deployment",
-            "UnauthRoleName": "amplify-easilypollstudents-dev-142055-unauthRole",
-            "StackName": "amplify-easilypollstudents-dev-142055",
-            "StackId": "arn:aws:cloudformation:us-west-2:971359340948:stack/amplify-easilypollstudents-dev-142055/dd64f520-a347-11ed-8925-02cd0f40211b",
-            "AmplifyAppId": "dx7q7mtp16p43"
-        }
-    },
-    "api": {
-        "JohnColorSwatchTest": {
-            "service": "AppSync",
-            "output": {
-                "authConfig": {
-                    "defaultAuthentication": {
-                        "authenticationType": "API_KEY"
-                    },
-                    "additionalAuthenticationProviders": null
-                },
-                "GraphQLAPIIdOutput": "amxggpzox5bkrabrgqc3atai4q",
-                "GraphQLAPIEndpointOutput": "https://pdbft6pxs5g2vhbu26cgghoj4u.appsync-api.us-west-2.amazonaws.com/graphql",
-                "name": "JohnColorSwatchTest",
-                "region": "us-west-2",
-                "GraphQLAPIKeyOutput": "da2-p36cwmdobvaxtlhzrzlolz7tqa"
-            },
-            "lastPushTimeStamp": "2023-02-02T22:23:27.569Z"
-        }
+  "providers": {
+    "awscloudformation": {
+      "AuthRoleName": "amplify-amplify918ba012a4234-staging-171536-authRole",
+      "UnauthRoleArn": "arn:aws:iam::971359340948:role/amplify-amplify918ba012a4234-staging-171536-unauthRole",
+      "AuthRoleArn": "arn:aws:iam::971359340948:role/amplify-amplify918ba012a4234-staging-171536-authRole",
+      "Region": "us-west-2",
+      "DeploymentBucketName": "amplify-amplify918ba012a4234-staging-171536-deployment",
+      "UnauthRoleName": "amplify-amplify918ba012a4234-staging-171536-unauthRole",
+      "StackName": "amplify-amplify918ba012a4234-staging-171536",
+      "StackId": "arn:aws:cloudformation:us-west-2:971359340948:stack/amplify-amplify918ba012a4234-staging-171536/5d24e2f0-ad54-11ed-a316-06c0fbd747f5",
+      "AmplifyAppId": "d352xi8ppdghfe"
     }
+  },
+  "api": {
+    "easilypollstudents": {
+      "dependsOn": [],
+      "output": {
+        "authConfig": {
+          "additionalAuthenticationProviders": [],
+          "defaultAuthentication": {
+            "apiKeyConfig": {
+              "apiKeyExpirationDate": "2023-03-18T01:44:25.697Z",
+              "apiKeyExpirationDays": 30,
+              "description": "30"
+            },
+            "authenticationType": "API_KEY"
+          }
+        },
+        "GraphQLAPIIdOutput": "z6hldzchvva3rmvxgm7nznigty",
+        "GraphQLAPIEndpointOutput": "https://jhici4pcfra7phrlypj3f6f5aq.appsync-api.us-west-2.amazonaws.com/graphql",
+        "GraphQLAPIKeyOutput": "da2-5mhifquchvc5lnna3r5nvrd6dy"
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "AppSync",
+      "lastPushTimeStamp": "2023-02-16T15:32:06.366Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "logicalId": "apieasilypollstudents"
+      }
+    }
+  },
+  "auth": {
+    "easilypollstudents834464d1": {
+      "customAuth": false,
+      "dependsOn": [],
+      "frontendAuthConfig": {
+        "mfaConfiguration": "OFF",
+        "mfaTypes": [
+          "SMS"
+        ],
+        "passwordProtectionSettings": {
+          "passwordPolicyMinLength": 8,
+          "passwordPolicyCharacters": []
+        },
+        "signupAttributes": [
+          "EMAIL"
+        ],
+        "socialProviders": [],
+        "usernameAttributes": [
+          "EMAIL"
+        ],
+        "verificationMechanisms": [
+          "EMAIL"
+        ]
+      },
+      "providerPlugin": "awscloudformation",
+      "service": "Cognito",
+      "output": {
+        "UserPoolId": "us-west-2_3Z94AVIXT",
+        "AppClientIDWeb": "5h9ave7p4qehkleg58qnvg3rgt",
+        "AppClientID": "3e234fk9dngdrke1dg5405l3k6",
+        "IdentityPoolId": "us-west-2:a73a5424-9219-46f8-b90f-766a4d23387c",
+        "UserPoolArn": "arn:aws:cognito-idp:us-west-2:971359340948:userpool/us-west-2_3Z94AVIXT",
+        "IdentityPoolName": "easilypollstudents834464d1_identitypool_834464d1__staging",
+        "UserPoolName": "easilypollstudents834464d1_userpool_834464d1"
+      },
+      "lastPushTimeStamp": "2023-02-16T15:32:06.367Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/auth/easilypollstudents834464d1-cloudformation-template.json",
+        "logicalId": "autheasilypollstudents834464d1"
+      }
+    }
+  }
 }
