@@ -37,8 +37,8 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apieasilypollstudents"
       },
-      "lastPushTimeStamp": "2023-02-16T03:14:27.694Z",
-      "lastPushDirHash": "BVlwBoqYNYoAUefHBKuBysPU2xE="
+      "lastPushTimeStamp": "2023-02-17T20:10:01.364Z",
+      "lastPushDirHash": "JXIyvYB/MxhZJJ2PMGOLfN2wYmY="
     }
   },
   "auth": {
@@ -71,7 +71,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/auth/easilypollstudents834464d1-cloudformation-template.json",
         "logicalId": "autheasilypollstudents834464d1"
       },
-      "lastPushTimeStamp": "2023-02-16T03:14:22.010Z",
+      "lastPushTimeStamp": "2023-02-17T20:09:56.705Z",
       "output": {
         "UserPoolId": "us-west-2_3Z94AVIXT",
         "AppClientIDWeb": "5h9ave7p4qehkleg58qnvg3rgt",

@@ -75,11 +75,11 @@ export const onCreatePoll = /* GraphQL */ `
       }
       id
       title
+      free_join_active
       free_join
       createdAt
       updatedAt
       userPollsId
-      guestPollsId
       pollLink_nameId
     }
   }
@@ -113,11 +113,11 @@ export const onUpdatePoll = /* GraphQL */ `
       }
       id
       title
+      free_join_active
       free_join
       createdAt
       updatedAt
       userPollsId
-      guestPollsId
       pollLink_nameId
     }
   }
@@ -151,11 +151,11 @@ export const onDeletePoll = /* GraphQL */ `
       }
       id
       title
+      free_join_active
       free_join
       createdAt
       updatedAt
       userPollsId
-      guestPollsId
       pollLink_nameId
     }
   }
@@ -166,11 +166,11 @@ export const onCreateQuestion = /* GraphQL */ `
       poll {
         id
         title
+        free_join_active
         free_join
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
         pollLink_nameId
       }
       answers {
@@ -183,7 +183,6 @@ export const onCreateQuestion = /* GraphQL */ `
       createdAt
       updatedAt
       pollQuestionsId
-      guestQuestionsId
     }
   }
 `;
@@ -193,11 +192,11 @@ export const onUpdateQuestion = /* GraphQL */ `
       poll {
         id
         title
+        free_join_active
         free_join
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
         pollLink_nameId
       }
       answers {
@@ -210,7 +209,6 @@ export const onUpdateQuestion = /* GraphQL */ `
       createdAt
       updatedAt
       pollQuestionsId
-      guestQuestionsId
     }
   }
 `;
@@ -220,11 +218,11 @@ export const onDeleteQuestion = /* GraphQL */ `
       poll {
         id
         title
+        free_join_active
         free_join
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
         pollLink_nameId
       }
       answers {
@@ -237,7 +235,6 @@ export const onDeleteQuestion = /* GraphQL */ `
       createdAt
       updatedAt
       pollQuestionsId
-      guestQuestionsId
     }
   }
 `;
@@ -252,7 +249,6 @@ export const onCreateAnswer = /* GraphQL */ `
         createdAt
         updatedAt
         pollQuestionsId
-        guestQuestionsId
       }
       owner {
         id
@@ -260,8 +256,6 @@ export const onCreateAnswer = /* GraphQL */ `
         key
         createdAt
         updatedAt
-        pollGuests_inId
-        pollGuests_waitingId
       }
       answer
       id
@@ -283,7 +277,6 @@ export const onUpdateAnswer = /* GraphQL */ `
         createdAt
         updatedAt
         pollQuestionsId
-        guestQuestionsId
       }
       owner {
         id
@@ -291,8 +284,6 @@ export const onUpdateAnswer = /* GraphQL */ `
         key
         createdAt
         updatedAt
-        pollGuests_inId
-        pollGuests_waitingId
       }
       answer
       id
@@ -314,7 +305,6 @@ export const onDeleteAnswer = /* GraphQL */ `
         createdAt
         updatedAt
         pollQuestionsId
-        guestQuestionsId
       }
       owner {
         id
@@ -322,8 +312,6 @@ export const onDeleteAnswer = /* GraphQL */ `
         key
         createdAt
         updatedAt
-        pollGuests_inId
-        pollGuests_waitingId
       }
       answer
       id
@@ -337,10 +325,10 @@ export const onDeleteAnswer = /* GraphQL */ `
 export const onCreateGuest = /* GraphQL */ `
   subscription OnCreateGuest($filter: ModelSubscriptionGuestFilterInput) {
     onCreateGuest(filter: $filter) {
-      polls {
+      pollsIn {
         nextToken
       }
-      questions {
+      pollsWaiting {
         nextToken
       }
       answers {
@@ -351,18 +339,16 @@ export const onCreateGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
-      pollGuests_inId
-      pollGuests_waitingId
     }
   }
 `;
 export const onUpdateGuest = /* GraphQL */ `
   subscription OnUpdateGuest($filter: ModelSubscriptionGuestFilterInput) {
     onUpdateGuest(filter: $filter) {
-      polls {
+      pollsIn {
         nextToken
       }
-      questions {
+      pollsWaiting {
         nextToken
       }
       answers {
@@ -373,18 +359,16 @@ export const onUpdateGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
-      pollGuests_inId
-      pollGuests_waitingId
     }
   }
 `;
 export const onDeleteGuest = /* GraphQL */ `
   subscription OnDeleteGuest($filter: ModelSubscriptionGuestFilterInput) {
     onDeleteGuest(filter: $filter) {
-      polls {
+      pollsIn {
         nextToken
       }
-      questions {
+      pollsWaiting {
         nextToken
       }
       answers {
@@ -395,8 +379,6 @@ export const onDeleteGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
-      pollGuests_inId
-      pollGuests_waitingId
     }
   }
 `;
@@ -406,11 +388,11 @@ export const onCreateLinkName = /* GraphQL */ `
       poll {
         id
         title
+        free_join_active
         free_join
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
         pollLink_nameId
       }
       name
@@ -427,11 +409,11 @@ export const onUpdateLinkName = /* GraphQL */ `
       poll {
         id
         title
+        free_join_active
         free_join
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
         pollLink_nameId
       }
       name
@@ -448,11 +430,11 @@ export const onDeleteLinkName = /* GraphQL */ `
       poll {
         id
         title
+        free_join_active
         free_join
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
         pollLink_nameId
       }
       name
@@ -460,6 +442,186 @@ export const onDeleteLinkName = /* GraphQL */ `
       createdAt
       updatedAt
       linkNamePollId
+    }
+  }
+`;
+export const onCreatePollGuestIn = /* GraphQL */ `
+  subscription OnCreatePollGuestIn(
+    $filter: ModelSubscriptionPollGuestInFilterInput
+  ) {
+    onCreatePollGuestIn(filter: $filter) {
+      id
+      pollId
+      guestId
+      poll {
+        id
+        title
+        free_join_active
+        free_join
+        createdAt
+        updatedAt
+        userPollsId
+        pollLink_nameId
+      }
+      guest {
+        id
+        name
+        key
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdatePollGuestIn = /* GraphQL */ `
+  subscription OnUpdatePollGuestIn(
+    $filter: ModelSubscriptionPollGuestInFilterInput
+  ) {
+    onUpdatePollGuestIn(filter: $filter) {
+      id
+      pollId
+      guestId
+      poll {
+        id
+        title
+        free_join_active
+        free_join
+        createdAt
+        updatedAt
+        userPollsId
+        pollLink_nameId
+      }
+      guest {
+        id
+        name
+        key
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeletePollGuestIn = /* GraphQL */ `
+  subscription OnDeletePollGuestIn(
+    $filter: ModelSubscriptionPollGuestInFilterInput
+  ) {
+    onDeletePollGuestIn(filter: $filter) {
+      id
+      pollId
+      guestId
+      poll {
+        id
+        title
+        free_join_active
+        free_join
+        createdAt
+        updatedAt
+        userPollsId
+        pollLink_nameId
+      }
+      guest {
+        id
+        name
+        key
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onCreatePollGuestWaiting = /* GraphQL */ `
+  subscription OnCreatePollGuestWaiting(
+    $filter: ModelSubscriptionPollGuestWaitingFilterInput
+  ) {
+    onCreatePollGuestWaiting(filter: $filter) {
+      id
+      pollId
+      guestId
+      poll {
+        id
+        title
+        free_join_active
+        free_join
+        createdAt
+        updatedAt
+        userPollsId
+        pollLink_nameId
+      }
+      guest {
+        id
+        name
+        key
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onUpdatePollGuestWaiting = /* GraphQL */ `
+  subscription OnUpdatePollGuestWaiting(
+    $filter: ModelSubscriptionPollGuestWaitingFilterInput
+  ) {
+    onUpdatePollGuestWaiting(filter: $filter) {
+      id
+      pollId
+      guestId
+      poll {
+        id
+        title
+        free_join_active
+        free_join
+        createdAt
+        updatedAt
+        userPollsId
+        pollLink_nameId
+      }
+      guest {
+        id
+        name
+        key
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const onDeletePollGuestWaiting = /* GraphQL */ `
+  subscription OnDeletePollGuestWaiting(
+    $filter: ModelSubscriptionPollGuestWaitingFilterInput
+  ) {
+    onDeletePollGuestWaiting(filter: $filter) {
+      id
+      pollId
+      guestId
+      poll {
+        id
+        title
+        free_join_active
+        free_join
+        createdAt
+        updatedAt
+        userPollsId
+        pollLink_nameId
+      }
+      guest {
+        id
+        name
+        key
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
     }
   }
 `;
