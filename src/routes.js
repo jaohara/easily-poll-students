@@ -8,6 +8,11 @@ import CreatePoll from './components/pages/CreatePoll/CreatePoll';
 import MaterialUISwatch from "./components/Demo/MaterialUISwatch/MaterialUISwatch";
 import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo';
 
+
+// testing login stuff
+import Login from "./components/pages/Login/Login";
+import Register from "./components/pages/Register/Register";
+
 // name is display name on button/link
 export const routes = [
   {
@@ -29,7 +34,17 @@ export const routes = [
     path: "/epchart-demo",
     name: "Chart Demo",
     element: <EpChartDemo />
-  }
+  },
+  {
+    path: "/login",
+    name: "Login",
+    element: <Login />
+  },
+  {
+    path: "/register",
+    name: "Register",
+    element: <Register />
+  },
 ];
 
 // create router, filtering out names
