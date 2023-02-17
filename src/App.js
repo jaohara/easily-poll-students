@@ -30,8 +30,6 @@ function App () {
             <h1>Easy Poll App!</h1>
             <EpNavBar />
 
-            <p>This is <strong>another test</strong> of the new CI/CD approach.</p>
-
             <Routes>
               {
                 routes.map((route, index) => (
