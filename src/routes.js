@@ -5,7 +5,6 @@ import Home from "./components/pages/Home/Home";
 import CreatePoll from './components/pages/CreatePoll/CreatePoll';
 
 // demo-related pages
-import MaterialUISwatch from "./components/Demo/MaterialUISwatch/MaterialUISwatch";
 import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo';
 
 
@@ -19,11 +18,6 @@ export const routes = [
     path: "/",
     name: "Home",
     element: <Home />
-  },
-  {
-    path: "/material-demo",
-    name: "Material UI Swatch",
-    element: <MaterialUISwatch />
   },
   {
     path: "/create-poll",
