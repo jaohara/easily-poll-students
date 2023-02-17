@@ -1,9 +1,27 @@
 import React from 'react';
+import { Chart as ChartJS, ArcElement, Tooltip, Legend } from 'chart.js';
+import { Pie } from "react-chartjs-2";
 
-const EpChart = () => {
+ChartJS.register(ArcElement, Tooltip, Legend);
+
+function EpChart( { chartData } ) {
   return (
-    <h1>&quot;hey, I&apos;m a chart.&quot;</h1>
+    <div className="chart-container" >
+      <h2 style={{ textAlign: "center" }}>Pie Chart</h2>
+      <Pie
+        data={chartData}
+        options={{
+          aspectRatio: 2,
+          plugins: {
+            title: { 
+              display: true,
+              text: "Users Gained between 2016-2020"
+            }
+          }
+        }}
+      />
+    </div>
   );
 }
-   
+
 export default EpChart;
