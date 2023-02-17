@@ -1,5 +1,10 @@
 import React from 'react';
 
+import config from "./aws-exports";
+import { Amplify } from "aws-amplify";
+Amplify.configure(config);
+
+
 // style-related imports
 import { ThemeProvider } from '@mui/material';
 import './styles/App.scss';
