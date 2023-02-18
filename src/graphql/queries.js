@@ -64,11 +64,11 @@ export const getPoll = /* GraphQL */ `
       }
       id
       title
+      free_join_active
       free_join
       createdAt
       updatedAt
       userPollsId
-      guestPollsId
       pollLink_nameId
     }
   }
@@ -83,11 +83,11 @@ export const listPolls = /* GraphQL */ `
       items {
         id
         title
+        free_join_active
         free_join
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
         pollLink_nameId
       }
       nextToken
@@ -100,11 +100,11 @@ export const getQuestion = /* GraphQL */ `
       poll {
         id
         title
+        free_join_active
         free_join
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
         pollLink_nameId
       }
       answers {
@@ -117,7 +117,6 @@ export const getQuestion = /* GraphQL */ `
       createdAt
       updatedAt
       pollQuestionsId
-      guestQuestionsId
     }
   }
 `;
@@ -136,7 +135,6 @@ export const listQuestions = /* GraphQL */ `
         createdAt
         updatedAt
         pollQuestionsId
-        guestQuestionsId
       }
       nextToken
     }
@@ -153,7 +151,6 @@ export const getAnswer = /* GraphQL */ `
         createdAt
         updatedAt
         pollQuestionsId
-        guestQuestionsId
       }
       owner {
         id
@@ -161,8 +158,6 @@ export const getAnswer = /* GraphQL */ `
         key
         createdAt
         updatedAt
-        pollGuests_inId
-        pollGuests_waitingId
       }
       answer
       id
@@ -195,10 +190,10 @@ export const listAnswers = /* GraphQL */ `
 export const getGuest = /* GraphQL */ `
   query GetGuest($id: ID!) {
     getGuest(id: $id) {
-      polls {
+      pollsIn {
         nextToken
       }
-      questions {
+      pollsWaiting {
         nextToken
       }
       answers {
@@ -209,8 +204,6 @@ export const getGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
-      pollGuests_inId
-      pollGuests_waitingId
     }
   }
 `;
@@ -227,8 +220,6 @@ export const listGuests = /* GraphQL */ `
         key
         createdAt
         updatedAt
-        pollGuests_inId
-        pollGuests_waitingId
       }
       nextToken
     }
@@ -240,11 +231,11 @@ export const getLinkName = /* GraphQL */ `
       poll {
         id
         title
+        free_join_active
         free_join
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
         pollLink_nameId
       }
       name
@@ -268,6 +259,206 @@ export const listLinkNames = /* GraphQL */ `
         createdAt
         updatedAt
         linkNamePollId
+      }
+      nextToken
+    }
+  }
+`;
+export const getPollGuestIn = /* GraphQL */ `
+  query GetPollGuestIn($id: ID!) {
+    getPollGuestIn(id: $id) {
+      id
+      pollId
+      guestId
+      poll {
+        id
+        title
+        free_join_active
+        free_join
+        createdAt
+        updatedAt
+        userPollsId
+        pollLink_nameId
+      }
+      guest {
+        id
+        name
+        key
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listPollGuestIns = /* GraphQL */ `
+  query ListPollGuestIns(
+    $filter: ModelPollGuestInFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPollGuestIns(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        id
+        pollId
+        guestId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const getPollGuestWaiting = /* GraphQL */ `
+  query GetPollGuestWaiting($id: ID!) {
+    getPollGuestWaiting(id: $id) {
+      id
+      pollId
+      guestId
+      poll {
+        id
+        title
+        free_join_active
+        free_join
+        createdAt
+        updatedAt
+        userPollsId
+        pollLink_nameId
+      }
+      guest {
+        id
+        name
+        key
+        createdAt
+        updatedAt
+      }
+      createdAt
+      updatedAt
+    }
+  }
+`;
+export const listPollGuestWaitings = /* GraphQL */ `
+  query ListPollGuestWaitings(
+    $filter: ModelPollGuestWaitingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listPollGuestWaitings(
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        pollId
+        guestId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const pollGuestInsByPollId = /* GraphQL */ `
+  query PollGuestInsByPollId(
+    $pollId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPollGuestInFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    pollGuestInsByPollId(
+      pollId: $pollId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        pollId
+        guestId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const pollGuestInsByGuestId = /* GraphQL */ `
+  query PollGuestInsByGuestId(
+    $guestId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPollGuestInFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    pollGuestInsByGuestId(
+      guestId: $guestId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        pollId
+        guestId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const pollGuestWaitingsByPollId = /* GraphQL */ `
+  query PollGuestWaitingsByPollId(
+    $pollId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPollGuestWaitingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    pollGuestWaitingsByPollId(
+      pollId: $pollId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        pollId
+        guestId
+        createdAt
+        updatedAt
+      }
+      nextToken
+    }
+  }
+`;
+export const pollGuestWaitingsByGuestId = /* GraphQL */ `
+  query PollGuestWaitingsByGuestId(
+    $guestId: ID!
+    $sortDirection: ModelSortDirection
+    $filter: ModelPollGuestWaitingFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    pollGuestWaitingsByGuestId(
+      guestId: $guestId
+      sortDirection: $sortDirection
+      filter: $filter
+      limit: $limit
+      nextToken: $nextToken
+    ) {
+      items {
+        id
+        pollId
+        guestId
+        createdAt
+        updatedAt
       }
       nextToken
     }

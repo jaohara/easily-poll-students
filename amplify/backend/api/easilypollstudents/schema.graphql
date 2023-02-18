@@ -14,11 +14,12 @@ type User @model {
 type Poll @model {
   user: User! @belongsTo
   questions: [Question!]! @hasMany
-  guests_in: [Guest!]! @hasMany
-  guests_waiting: [Guest!] @hasMany
-  link_name: LinkName! @hasOne
+  guests_in: [Guest!]! @manyToMany(relationName: "PollGuestIn")
+  guests_waiting: [Guest!] @manyToMany(relationName: "PollGuestWaiting")
+  link_name: LinkName @hasOne
   id: ID!
   title: String!
+  free_join_active: Boolean!
   free_join: Int!
 }
 
@@ -38,8 +39,8 @@ type Answer @model {
 }
 
 type Guest @model {
-  polls: [Poll!]! @hasMany
-  questions: [Question!]! @hasMany
+  pollsIn: [Poll!]! @manyToMany(relationName: "PollGuestIn")
+  pollsWaiting: [Poll!]! @manyToMany(relationName: "PollGuestWaiting")
   answers: [Answer!]! @hasMany
   id: ID!
   name: String!

@@ -1,5 +1,6 @@
 import * as React from "react";
-import { Auth } from "aws-amplify";
+import { Auth, API } from "aws-amplify";
+import * as mutations from "../../../graphql/mutations";
 
 import Avatar from "@mui/material/Avatar";
 import Button from "@mui/material/Button";
@@ -22,7 +23,12 @@ export default function Register() {
   const handleSubmit = (event) => {
     event.preventDefault();
     const data = new FormData(event.currentTarget);
-    signUp(data.get("email"), data.get("password"));
+    signUp(
+      data.get("email"),
+      data.get("password"),
+      data.get("firstName"),
+      data.get("lastName")
+    );
     console.log({
       email: data.get("email"),
       password: data.get("password"),
@@ -31,7 +37,7 @@ export default function Register() {
 
   return (
     <>
-    {/* <Navbar /> */}
+      {/* <Navbar /> */}
       <Container component="main" maxWidth="xs">
         <CssBaseline />
         <Box
@@ -121,22 +127,50 @@ export default function Register() {
   );
 }
 
-async function signUp(username, password) {
-  try {
-    const { user } = await Auth.signUp({
-      username,
-      password,
-      attributes: {
-        email: username, // optional
-        // other custom attributes
-      },
-      autoSignIn: {
-        // optional - enables auto sign in after user is confirmed
-        enabled: true,
-      },
+async function signUp(username, password, firstName, lastName) {
+  await Auth.signUp({
+    username,
+    password,
+    attributes: {
+      email: username, // optional
+      // other custom attributes
+    },
+    autoSignIn: {
+      // optional - enables auto sign in after user is confirmed
+      enabled: true,
+    },
+  })
+    .then(async (res) => {
+      console.log("Auth: creating user success");
+      await API.graphql({
+        query: mutations.createUser,
+        variables: {
+          input: {
+            id: res.username,
+            name_first: firstName,
+            name_last: lastName,
+            email: username,
+          },
+        },
+      })
+        .then(() => {
+          console.log("Registration: dynamodb input success");
+        })
+        .catch(async (err) => {
+          console.log("Registration: dynamodb failure, attempt deleting user");
+          console.log(err);
+          await Auth.deleteUser()
+            .then(() => {
+              console.log("Registration: deleting user successful");
+            })
+            .catch((err) => {
+              console.log("Registration: deleting user unsuccessful");
+              console.log(err);
+            });
+        });
+    })
+    .catch((err) => {
+      console.log("Auth: creating user failure");
+      console.log(err);
     });
-    console.log(user);
-  } catch (error) {
-    console.log("error signing up:", error);
-  }
 }
