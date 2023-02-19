@@ -12,6 +12,9 @@ import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo';
 import Login from "./components/pages/Login/Login";
 import Register from "./components/pages/Register/Register";
 
+// testing hook stuff
+import HooksPreview from './components/pages/HooksPreview/HooksPreview';
+
 // name is display name on button/link
 export const routes = [
   {
@@ -38,6 +41,11 @@ export const routes = [
     path: "/register",
     name: "Register",
     element: <Register />
+  },
+  {
+    path: "/hooks",
+    name: "Hooks Preview",
+    element: <HooksPreview />
   },
 ];
 
