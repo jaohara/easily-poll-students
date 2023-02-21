@@ -1,0 +1,22 @@
+.hooks-preview-card {
+  margin-bottom: 2rem;
+
+  div {
+    margin-bottom: .25rem;
+  }
+}
+
+.hooks-preview-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hooks-preview-card-container {
+  min-width: 42.5%;
+  width: 42.5%;
+  // background: red;
+  background-color: #fff;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+  border-radius: .5rem;
+  padding: 1rem 2rem;
+}

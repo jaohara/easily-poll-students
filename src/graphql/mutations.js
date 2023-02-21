@@ -12,8 +12,8 @@ export const createUser = /* GraphQL */ `
       }
       id
       email
-      name_first
-      name_last
+      firstName
+      lastName
       createdAt
       updatedAt
     }
@@ -30,8 +30,8 @@ export const updateUser = /* GraphQL */ `
       }
       id
       email
-      name_first
-      name_last
+      firstName
+      lastName
       createdAt
       updatedAt
     }
@@ -48,8 +48,8 @@ export const deleteUser = /* GraphQL */ `
       }
       id
       email
-      name_first
-      name_last
+      firstName
+      lastName
       createdAt
       updatedAt
     }
@@ -64,21 +64,18 @@ export const createPoll = /* GraphQL */ `
       user {
         id
         email
-        name_first
-        name_last
+        firstName
+        lastName
         createdAt
         updatedAt
       }
       questions {
         nextToken
       }
-      guests_in {
+      guests {
         nextToken
       }
-      guests_waiting {
-        nextToken
-      }
-      link_name {
+      linkName {
         name
         id
         createdAt
@@ -87,12 +84,12 @@ export const createPoll = /* GraphQL */ `
       }
       id
       title
-      free_join_active
-      free_join
+      pollLocked
+      pollRoomSize
       createdAt
       updatedAt
       userPollsId
-      pollLink_nameId
+      pollLinkNameId
     }
   }
 `;
@@ -105,21 +102,18 @@ export const updatePoll = /* GraphQL */ `
       user {
         id
         email
-        name_first
-        name_last
+        firstName
+        lastName
         createdAt
         updatedAt
       }
       questions {
         nextToken
       }
-      guests_in {
+      guests {
         nextToken
       }
-      guests_waiting {
-        nextToken
-      }
-      link_name {
+      linkName {
         name
         id
         createdAt
@@ -128,12 +122,12 @@ export const updatePoll = /* GraphQL */ `
       }
       id
       title
-      free_join_active
-      free_join
+      pollLocked
+      pollRoomSize
       createdAt
       updatedAt
       userPollsId
-      pollLink_nameId
+      pollLinkNameId
     }
   }
 `;
@@ -146,21 +140,18 @@ export const deletePoll = /* GraphQL */ `
       user {
         id
         email
-        name_first
-        name_last
+        firstName
+        lastName
         createdAt
         updatedAt
       }
       questions {
         nextToken
       }
-      guests_in {
+      guests {
         nextToken
       }
-      guests_waiting {
-        nextToken
-      }
-      link_name {
+      linkName {
         name
         id
         createdAt
@@ -169,12 +160,12 @@ export const deletePoll = /* GraphQL */ `
       }
       id
       title
-      free_join_active
-      free_join
+      pollLocked
+      pollRoomSize
       createdAt
       updatedAt
       userPollsId
-      pollLink_nameId
+      pollLinkNameId
     }
   }
 `;
@@ -187,20 +178,20 @@ export const createQuestion = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        pollLocked
+        pollRoomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       answers {
         nextToken
       }
       id
       prompt
-      answer_options
-      question_type
+      answerOptions
+      questionType
       createdAt
       updatedAt
       pollQuestionsId
@@ -216,20 +207,20 @@ export const updateQuestion = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        pollLocked
+        pollRoomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       answers {
         nextToken
       }
       id
       prompt
-      answer_options
-      question_type
+      answerOptions
+      questionType
       createdAt
       updatedAt
       pollQuestionsId
@@ -245,20 +236,20 @@ export const deleteQuestion = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        pollLocked
+        pollRoomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       answers {
         nextToken
       }
       id
       prompt
-      answer_options
-      question_type
+      answerOptions
+      questionType
       createdAt
       updatedAt
       pollQuestionsId
@@ -274,18 +265,20 @@ export const createAnswer = /* GraphQL */ `
       question {
         id
         prompt
-        answer_options
-        question_type
+        answerOptions
+        questionType
         createdAt
         updatedAt
         pollQuestionsId
       }
       owner {
+        canVote
         id
         name
         key
         createdAt
         updatedAt
+        pollGuestsId
       }
       answer
       id
@@ -305,18 +298,20 @@ export const updateAnswer = /* GraphQL */ `
       question {
         id
         prompt
-        answer_options
-        question_type
+        answerOptions
+        questionType
         createdAt
         updatedAt
         pollQuestionsId
       }
       owner {
+        canVote
         id
         name
         key
         createdAt
         updatedAt
+        pollGuestsId
       }
       answer
       id
@@ -336,18 +331,20 @@ export const deleteAnswer = /* GraphQL */ `
       question {
         id
         prompt
-        answer_options
-        question_type
+        answerOptions
+        questionType
         createdAt
         updatedAt
         pollQuestionsId
       }
       owner {
+        canVote
         id
         name
         key
         createdAt
         updatedAt
+        pollGuestsId
       }
       answer
       id
@@ -364,12 +361,17 @@ export const createGuest = /* GraphQL */ `
     $condition: ModelGuestConditionInput
   ) {
     createGuest(input: $input, condition: $condition) {
-      pollsIn {
-        nextToken
+      poll {
+        id
+        title
+        pollLocked
+        pollRoomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
       }
-      pollsWaiting {
-        nextToken
-      }
+      canVote
       answers {
         nextToken
       }
@@ -378,6 +380,7 @@ export const createGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
+      pollGuestsId
     }
   }
 `;
@@ -387,12 +390,17 @@ export const updateGuest = /* GraphQL */ `
     $condition: ModelGuestConditionInput
   ) {
     updateGuest(input: $input, condition: $condition) {
-      pollsIn {
-        nextToken
+      poll {
+        id
+        title
+        pollLocked
+        pollRoomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
       }
-      pollsWaiting {
-        nextToken
-      }
+      canVote
       answers {
         nextToken
       }
@@ -401,6 +409,7 @@ export const updateGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
+      pollGuestsId
     }
   }
 `;
@@ -410,12 +419,17 @@ export const deleteGuest = /* GraphQL */ `
     $condition: ModelGuestConditionInput
   ) {
     deleteGuest(input: $input, condition: $condition) {
-      pollsIn {
-        nextToken
+      poll {
+        id
+        title
+        pollLocked
+        pollRoomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
       }
-      pollsWaiting {
-        nextToken
-      }
+      canVote
       answers {
         nextToken
       }
@@ -424,6 +438,7 @@ export const deleteGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
+      pollGuestsId
     }
   }
 `;
@@ -436,12 +451,12 @@ export const createLinkName = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        pollLocked
+        pollRoomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       name
       id
@@ -460,12 +475,12 @@ export const updateLinkName = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        pollLocked
+        pollRoomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       name
       id
@@ -484,204 +499,18 @@ export const deleteLinkName = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        pollLocked
+        pollRoomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       name
       id
       createdAt
       updatedAt
       linkNamePollId
-    }
-  }
-`;
-export const createPollGuestIn = /* GraphQL */ `
-  mutation CreatePollGuestIn(
-    $input: CreatePollGuestInInput!
-    $condition: ModelPollGuestInConditionInput
-  ) {
-    createPollGuestIn(input: $input, condition: $condition) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updatePollGuestIn = /* GraphQL */ `
-  mutation UpdatePollGuestIn(
-    $input: UpdatePollGuestInInput!
-    $condition: ModelPollGuestInConditionInput
-  ) {
-    updatePollGuestIn(input: $input, condition: $condition) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deletePollGuestIn = /* GraphQL */ `
-  mutation DeletePollGuestIn(
-    $input: DeletePollGuestInInput!
-    $condition: ModelPollGuestInConditionInput
-  ) {
-    deletePollGuestIn(input: $input, condition: $condition) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const createPollGuestWaiting = /* GraphQL */ `
-  mutation CreatePollGuestWaiting(
-    $input: CreatePollGuestWaitingInput!
-    $condition: ModelPollGuestWaitingConditionInput
-  ) {
-    createPollGuestWaiting(input: $input, condition: $condition) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const updatePollGuestWaiting = /* GraphQL */ `
-  mutation UpdatePollGuestWaiting(
-    $input: UpdatePollGuestWaitingInput!
-    $condition: ModelPollGuestWaitingConditionInput
-  ) {
-    updatePollGuestWaiting(input: $input, condition: $condition) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const deletePollGuestWaiting = /* GraphQL */ `
-  mutation DeletePollGuestWaiting(
-    $input: DeletePollGuestWaitingInput!
-    $condition: ModelPollGuestWaitingConditionInput
-  ) {
-    deletePollGuestWaiting(input: $input, condition: $condition) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
     }
   }
 `;
