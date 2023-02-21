@@ -17,11 +17,6 @@ import {
   onUpdateQuestion,
 } from "../graphql/subscriptions";
 
-
-// TODO: REMOVE THIS DUMMY TEST DATA
-// id for Mets Question
-const QUESTION_ID =  "001";
-
 // Modified graphQL query to include answer data with the question data
 const getQuestionWithAnswers = /* GraphQL */ `
   query GetQuestion($id: ID!) {
@@ -29,8 +24,9 @@ const getQuestionWithAnswers = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isLocked
+        isActive
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -58,10 +54,10 @@ const getQuestionWithAnswers = /* GraphQL */ `
   }`;
 
 function useQuestionData({
-  questionId = QUESTION_ID,
+  questionId = null,
   subscribeToChanges = false,
 }) {
-  const [ questionIsLoaded, setQuestionIsLoaded ] = useState();
+  const [ questionIsLoaded, setQuestionIsLoaded ] = useState(false);
   const [ questionData, setQuestionData ] = useState();
   const [ answerData, setAnswerData ] = useState();
 
@@ -83,6 +79,10 @@ function useQuestionData({
   };
 
   const fetchAndSetQuestionData = async () => {
+    if (questionId === null) {
+      return;
+    }
+
     // build out getQuestion query
     try {
       const questionResponse = await API.graphql({
@@ -184,9 +184,9 @@ function useQuestionData({
   const addGuestAnswer = ({ guestId, answerValue }) => {
     const guestAnswerDataObject = {
       input: {
+        answer: answerValue,
         guestAnswersId: guestId,
         questionAnswersId: questionId,
-        answer: answerValue,
       }
     };
 
@@ -199,6 +199,9 @@ function useQuestionData({
     submitData();
   };
 
+  // TODO: Idea for this - maybe make the "addGuestAnswer" function check to see
+  // if the guest has already answered for this question, then either have it
+  // add a new answer if they haven't or update if they already have.
   const updateGuestAnswer = ({ guestId, newAnswerValue }) => {
 
   };
@@ -208,7 +211,7 @@ function useQuestionData({
     fetchAndSetQuestionData();
 
     // if necessary, mash that subscribe button and return useEffect cleanup callback
-    if (subscribeToChanges) {
+    if (subscribeToChanges && questionId !== null) {
       const questionSubscription = subscribeToQuestion();
       const questionAnswerCreatedSubscription = subscribeToCreatedAnswers();
       const questionAnswerUpdatedSubscription = subscribeToUpdatedAnswers();

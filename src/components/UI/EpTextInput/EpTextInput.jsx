@@ -14,5 +14,7 @@ const EpTextInput = (props) => {
     <TextField {...props} />
   );
 }
+
+EpTextInput.muiName = TextField.muiName;
  
 export default EpTextInput;

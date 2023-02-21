@@ -20,8 +20,9 @@ type Poll @model {
   linkName: LinkName @hasOne
   id: ID!
   title: String!
-  pollLocked: Boolean!
-  pollRoomSize: Int!
+  isActive: Boolean!
+  isLocked: Boolean!
+  roomSize: Int!
 }
 
 type Question @model {

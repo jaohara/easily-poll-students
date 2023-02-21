@@ -61,8 +61,9 @@ export const getPoll = /* GraphQL */ `
       }
       id
       title
-      pollLocked
-      pollRoomSize
+      isActive
+      isLocked
+      roomSize
       createdAt
       updatedAt
       userPollsId
@@ -80,8 +81,9 @@ export const listPolls = /* GraphQL */ `
       items {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -97,8 +99,9 @@ export const getQuestion = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -192,8 +195,9 @@ export const getGuest = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -238,8 +242,9 @@ export const getLinkName = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId

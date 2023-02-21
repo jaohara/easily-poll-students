@@ -14,5 +14,7 @@ const EpButton = (props) => {
     <Button {...props} />
   );
 }
+
+EpButton.muiName = Button.muiName;
  
 export default EpButton;

@@ -84,8 +84,9 @@ export const createPoll = /* GraphQL */ `
       }
       id
       title
-      pollLocked
-      pollRoomSize
+      isActive
+      isLocked
+      roomSize
       createdAt
       updatedAt
       userPollsId
@@ -122,8 +123,9 @@ export const updatePoll = /* GraphQL */ `
       }
       id
       title
-      pollLocked
-      pollRoomSize
+      isActive
+      isLocked
+      roomSize
       createdAt
       updatedAt
       userPollsId
@@ -160,8 +162,9 @@ export const deletePoll = /* GraphQL */ `
       }
       id
       title
-      pollLocked
-      pollRoomSize
+      isActive
+      isLocked
+      roomSize
       createdAt
       updatedAt
       userPollsId
@@ -178,8 +181,9 @@ export const createQuestion = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -207,8 +211,9 @@ export const updateQuestion = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -236,8 +241,9 @@ export const deleteQuestion = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -364,8 +370,9 @@ export const createGuest = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -393,8 +400,9 @@ export const updateGuest = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -422,8 +430,9 @@ export const deleteGuest = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -451,8 +460,9 @@ export const createLinkName = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -475,8 +485,9 @@ export const updateLinkName = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
@@ -499,8 +510,9 @@ export const deleteLinkName = /* GraphQL */ `
       poll {
         id
         title
-        pollLocked
-        pollRoomSize
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
