@@ -7,32 +7,48 @@ import "./HooksPreview.scss";
 
 import { React, useState } from 'react';
 import useQuestionData from '../../../hooks/useQuestionData';
-import EpButton from "../../UI/EpButton/EpButton"
-import EpTextInput from "../../UI/EpTextInput/EpTextInput";
 import usePollData from "../../../hooks/usePollData";
 
+import EpButton from "../../UI/EpButton/EpButton"
+import EpTextInput from "../../UI/EpTextInput/EpTextInput";
+import Select from "@mui/material/Select";
+import MenuItem from "@mui/material/MenuItem";
+
 const HooksPreview = () => {
+  const [ currentGuestId, setCurrentGuestId ] = useState("001");
+  const [ currentQuestionId, setCurrentQuestionId ] = useState("001");
+
+  // const {
+  //   addGuestAnswer,
+  //   answerData, 
+  //   questionData, 
+  //   questionIsLoaded, 
+  //   updateQuestionData, 
+  // } = useQuestionData({subscribeToChanges: true, questionId: "001"});
 
   const {
-    addGuestAnswer,
-    answerData, 
-    questionData, 
-    questionIsLoaded, 
-    updateQuestionData, 
-  } = useQuestionData({subscribeToChanges: true, questionId: "001"});
-
-  const {
+    addGuestAnswerToCurrentQuestion,
+    addNewPollGuest,
+    currentAnswerData, 
+    currentQuestionData, 
+    currentQuestionIsLoaded, 
     pollData,
+    pollGuestsData,
     pollIsLoaded,
+    pollQuestionsData,
+    updateCurrentQuestionData, 
     updatePollData,
-  } = usePollData({subscribeToChanges: true, pollId: "001"});
+  } = usePollData({subscribeToChanges: true, pollId: "001", questionId: currentQuestionId});
 
-  const [ newAnswer, setNewAnswer ] = useState("");
+  const [ newAnswer, setNewAnswer ] = 
+    useState(currentQuestionData ? currentQuestionData.answerOptions[0] : "");
   const [ newGuestName, setNewGuestName ] = useState("");
   const [ newPrompt, setNewPrompt ] = useState("");
   const [ newTitle, setNewTitle ] = useState("");
 
-  const [ currentGuestId, setCurrentGuestId ] = useState("001");
+  const formatGuestIdString = (idString) => 
+    idString.length > 6 ? `${idString.slice(0,7)}...` : idString;
+
 
   return ( 
     <div className="hooks-preview">
@@ -49,11 +65,11 @@ const HooksPreview = () => {
               >
                 Log pollData
               </EpButton>
-              {/* <EpButton
-                onClick={() => console.log("answerData:", answerData)}
+              <EpButton
+                onClick={() => console.log("guestData:", pollGuestsData)}
               >
-                Log answerData
-              </EpButton> */}
+                Log pollGuestsData
+              </EpButton>
             </div>
             <div className="hooks-preview-container">
               <div className="hooks-preview-card-container">
@@ -78,7 +94,6 @@ const HooksPreview = () => {
                 <div className="hooks-preview-card">
                   <div>
                     <EpTextInput
-                      disabled
                       fullWidth={true}
                       label={"New Guest Name"}
                       onChange={e => setNewGuestName(e.target.value)}
@@ -88,9 +103,7 @@ const HooksPreview = () => {
 
                   <div>
                     <EpButton
-                      disabled
-                      // TODO: Change to use poll function for adding guests
-                      onClick={() => {} }
+                      onClick={() => addNewPollGuest({name: newGuestName, key: `guest-key-${Date.now()}`})}
                     >
                       Create New Guest
                     </EpButton>
@@ -124,17 +137,23 @@ const HooksPreview = () => {
                 </ul>
 
                 <h1>Guest Data</h1>
-                {/* <ul className="guest-data-list">    
+                <ul className="guest-data-list">    
                   {
-                    answerData.map((answer, i) => (
-                      <DataListItem
-                        dataKey={`${(answer.id).slice(0,3)}`}
-                        dataValue={answer.answer[0]}
-                        key={`answer-${answer.id}`}
-                      />
+                    pollGuestsData.map((guest, i) => (
+                      <li className="data-list-item" key={`guest-${i}`}>
+                        <a
+                          className="guest-link" 
+                          onClick={e => {
+                            e.preventDefault();
+                            setCurrentGuestId(guest.id);
+                          }}
+                        >
+                          <strong>{guest.name}:</strong>&nbsp;{formatGuestIdString(guest.id)}
+                        </a>
+                      </li>
                     ))
                   }
-                </ul> */}
+                </ul>
               </div>
             </div>
 
@@ -142,26 +161,31 @@ const HooksPreview = () => {
         ) 
       }
       { 
-        (!questionIsLoaded && questionData === undefined) ? (
+        (!currentQuestionIsLoaded && currentQuestionData === undefined) ? (
           <DataLoading dataName="question"/>
         ) : (
           <div className="question-data-container">
             <h2>useQuestionData results</h2>
             <div className='hooks-preview-controls'>
               <EpButton
-                onClick={() => console.log("questionData:", questionData)}
+                onClick={() => console.log("questionData:", currentQuestionData)}
               >
-                Log questionData
+                Log currrentQuestionData
               </EpButton>
               <EpButton
-                onClick={() => console.log("answerData:", answerData)}
+                onClick={() => console.log("answerData:", currentAnswerData)}
               >
-                Log answerData
+                Log currentAnswerData
               </EpButton>
             </div>
             <div className="hooks-preview-container">
               <div className="hooks-preview-card-container">
                 <div className='hooks-preview-card'>
+                  <h4>Answering as 
+                    <span className="current-data">
+                      Guest {formatGuestIdString(currentGuestId)}
+                    </span>
+                  </h4>
                   <div>
                     <EpTextInput
                       fullWidth={true}
@@ -172,7 +196,7 @@ const HooksPreview = () => {
                   </div>
                   <div>
                     <EpButton
-                      onClick={() => updateQuestionData({prompt: newPrompt})}
+                      onClick={() => updateCurrentQuestionData({prompt: newPrompt})}
                     >
                       Change Question Prompt
                     </EpButton>
@@ -183,15 +207,28 @@ const HooksPreview = () => {
                   <div>
                     <EpTextInput
                       fullWidth={true}
-                      label={"New Answer Value"}
-                      onChange={e => setNewAnswer(e.target.value)}
+                      label="New Answer"
                       value={newAnswer}
-                    />
+                      select
+                      onChange={e => setNewAnswer(e.target.value)}
+                    >
+                      {
+                        currentQuestionData.answerOptions.map(answer => (
+                          <MenuItem 
+                            key={`answer-${answer}`}
+                            value={answer}
+                          >
+                            {answer}
+                          </MenuItem>
+                        ))
+                      }
+                    </EpTextInput>
                   </div>
 
                   <div>
                     <EpButton
-                      onClick={() => addGuestAnswer({guestId: "001", answerValue: newAnswer})}
+                      onClick={() => 
+                        addGuestAnswerToCurrentQuestion({guestId: currentGuestId, answerValue: newAnswer})}
                       >
                       Submit New Answer
                     </EpButton>
@@ -204,22 +241,22 @@ const HooksPreview = () => {
                 <ul className="question-data-list">
                   <DataListItem
                     dataKey={"id"}
-                    dataValue={questionData.id}
+                    dataValue={currentQuestionData.id}
                     key={"id"}
                   />    
                   <DataListItem
                     dataKey={"prompt"}
-                    dataValue={questionData.prompt}
+                    dataValue={currentQuestionData.prompt}
                     key={"prompt"}
                   />
                   <DataListItem
                     dataKey={"answerOptions"}
-                    dataValue={questionData.answerOptions}
+                    dataValue={`${currentQuestionData.answerOptions}`}
                     key={"answerOptions"}
                   />
                   <DataListItem
                     dataKey={"pollQuestionsId"}
-                    dataValue={questionData.pollQuestionsId}
+                    dataValue={currentQuestionData.pollQuestionsId}
                     key={"pollQuestionsId"}
                   />
                 </ul>
@@ -227,7 +264,7 @@ const HooksPreview = () => {
                 <h1>Answer Data</h1>
                 <ul className="answer-data-list">    
                   {
-                    answerData.map((answer, i) => (
+                    currentAnswerData.map((answer, i) => (
                       <DataListItem
                         dataKey={`${(answer.id).slice(0,3)}`}
                         dataValue={answer.answer[0]}

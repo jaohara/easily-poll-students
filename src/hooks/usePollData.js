@@ -4,20 +4,30 @@
 
 import { useState, useEffect } from "react";
 import { graphqlOperation } from "@aws-amplify/api";
-import { 
-  getPoll // TODO: Replace with custom query that returns guets and questions a la useQuestionData
-} from "../graphql/queries";
 import {
+  createGuest,
   createPoll,
   createQuestion,
+  updateGuest,
   updatePoll,
 } from "../graphql/mutations";
 import {
   onCreateGuestForPoll,
+  // onCreateQuestionForPoll, // see note below
   onUpdateGuestForPoll,
   onUpdatePoll,
-  onUpdateQuestion,
+  // onUpdateQuestionForPoll, // see note below
 } from "../graphql/subscriptions";
+
+/*
+  Do we need to subsribe to "onCreateQuestionForPoll" and "onUpdateQuestionForPoll"? 
+  Potentially not - I'm not sure if either of these entities will change during the
+  lifecycle of a poll. It's more likely that the questions will be created when the 
+  poll is created via the "addNewPoll" function. I wrote more thoughts in the comment
+  above commented-out "subscribeToQuestions" function stub.
+
+  We can return to this later if this is 
+*/
 
 import useApi from "./useApi";
 import useQuestionData from "./useQuestionData";
@@ -89,20 +99,23 @@ query GetPoll($id: ID!) {
 */
 function usePollData({
   pollId = null, // null before poll has been created
+  questionId = null,
   subscribeToChanges = false,
   userId = USER_ID,
 }) {
   const [ pollIsLoaded, setPollIsLoaded ] = useState(false);
+  const [ pollIsLoading, setPollIsLoading ] = useState(false);
   const [ pollData, setPollData ] = useState();
-  const [ pollGuestData, setPollGuestData ] = useState();
-  const [ currentQuestionId, setCurrentQuestionId ] = useState(null);
+  const [ pollQuestionsData, setPollQuestionsData ] = useState();
+  const [ pollGuestsData, setPollGuestsData ] = useState();
+  const [ currentQuestionId, setCurrentQuestionId ] = useState(questionId);
 
   const {
-    addGuestAnswer,
-    answerData, 
-    questionData, 
-    questionIsLoaded, 
-    updateQuestionData, 
+    addGuestAnswer: addGuestAnswerToCurrentQuestion,
+    answerData: currentAnswerData, 
+    questionData: currentQuestionData, 
+    questionIsLoaded: currentQuestionIsLoaded, 
+    updateQuestionData: updateCurrentQuestionData, 
   } = useQuestionData({subscribeToChanges: true, questionId: currentQuestionId});
 
   const API = useApi();
@@ -114,12 +127,29 @@ function usePollData({
     }
   };
 
+
+  // common vars for guest queries and subs
+  const guestsVariablesObject = {
+    variables: {
+      pollGuestsId: pollId,
+    }
+  };
+
+  // common vars for question queries and subs
+  const questionsVariablesObject = {
+    variables: {
+      pollQuestionsId: pollId, 
+    }
+  };
+
   const fetchAndSetPollData = async () => {
-    if (pollId === null) {
+    if (pollId === null || pollIsLoading) {
       return;
     }
 
     console.log("pollId set, fetching poll data...");
+
+    setPollIsLoading(true);
 
     try {
       const pollResponse = await API.graphql({
@@ -129,16 +159,26 @@ function usePollData({
       });
 
       const pollResponseData = pollResponse.data.getPoll;
+      const pollResponseGuestData = pollResponseData.guests.items;
+      const pollResponseQuestionData = pollResponseData.questions.items;
+
       console.log("pollResponseData:", pollResponseData);
+      console.log("pollResponseGuestData:", pollResponseGuestData);
+      console.log("pollResponseQuestionData:", pollResponseQuestionData);
       setPollData(pollResponseData);
+      setPollGuestsData(pollResponseGuestData);
+      setPollQuestionsData(pollResponseQuestionData);
     }
     catch (err) {
       console.error("Error fetching poll data:", err);
     }
+
+    setPollIsLoaded(true);
+    setPollIsLoading(false);
   };
 
-  // TODO: TEST
-  const addNewPoll = ({ roomSize = 10, title}) => {
+  // TODO: Finish implementing question adding portion and test
+  const addNewPoll = ({ roomSize = 10, title, questions }) => {
     const newPollDataObject = {
       input: {
         isActive: false,
@@ -149,13 +189,29 @@ function usePollData({
       }
     };
 
-    // gather all questions up 
-    const newQuestionDataArray = [];
-
     console.log("addNewPoll with newPollDataObject:", newPollDataObject);
 
     const submitData = async () => {
-      await API.graphql(graphqlOperation(createPoll, newPollDataObject));
+      const newPollData = await API.graphql(graphqlOperation(createPoll, newPollDataObject));
+
+      const newQuestionDataObject = {
+        input: {
+          pollQuestionsId: newPollData.id,
+        }
+      }
+
+      // TODO: now append questions
+      for (let i = 0; i < questions.length; i++) {
+        // this assumes the items in the "questions" array match the shape of the question data
+        const newQuestionDataObject = {
+          input: {
+            pollQuestionsId: newPollData.id,
+            ...questions[i],
+          }
+        }
+
+        await API.graphql(graphqlOperation(createQuestion, newQuestionDataObject));
+      }
     };
 
     submitData();
@@ -183,19 +239,66 @@ function usePollData({
     submitData();
   };
 
-  // TODO: Implement
-  const addNewPollGuest = ({}) => {
+  // TODO: test
+  const addNewPollGuest = ({name, key}) => {
+    if (pollId === null) {
+      console.log("pollId is null, not creating guest.");
+      return;
+    }
 
+    const newGuestDataObject = {
+      input: {
+        canVote: true,
+        key: key,
+        name: name,
+        pollGuestsId: pollId,
+      }
+    };
+
+    console.log("addNewPollGuest with newGuestDataObject:", newGuestDataObject);
+
+    const submitData = async () => {
+      await API.graphql(graphqlOperation(createGuest, newGuestDataObject));
+    };
+
+    submitData();
   };
 
-  // TODO: Implement
-  const togglePollGuest = (guestId) => {
+  // TODO: Test
+  const togglePollGuestLock = (guestId) => {
+    // first ensure guest exists
+    let guestData = null;
 
+    for (let i = 0; i < pollGuestsData; i++){
+      if (pollGuestsData[i].id === guestId) {
+        guestData = pollGuestsData[i];
+      }
+    }
+
+    if (guestData === null) {
+      console.log(`togglePollGuestLock: guest "${guestId}" does not exist, aborting`);
+      return;
+    }
+
+    console.log(`togglePollGuestLock: toggling guest '${guestData.id}' canVote to '${!guestData.canVote}'`);
+
+    const guestDataObject = {
+      input: {
+        id: guestId,
+        canVote: !guestData.canVote,
+      }
+    };
+
+    const submitData = async () => {
+      await API.graphql(graphqlOperation(updateGuest, guestDataObject));
+    }
+
+    submitData();
   };
 
   // subscriptions
   const subscribeToPoll = () => {
-    if (pollId === null) {
+    if (pollId === null || subscribeToChanges === false) {
       return;
     }
 
@@ -217,30 +320,116 @@ function usePollData({
         }
       },
       error: (err) => console.warn(err),
-    })
+    });
   };
 
+  const subscribeToCreatedGuests = () => {
+    if (pollId === null || subscribeToChanges === false) {
+      return;
+    }
+
+    return API.graphql({
+      query: onCreateGuestForPoll,
+      ...guestsVariablesObject,
+    }).subscribe({
+      next: (response) => {
+        const newGuestData = response.value.data.onCreateGuestForPoll;
+        console.log("newGuestData received from subscription:", newGuestData);
+
+        if (newGuestData !== null) {
+          setPollGuestsData(oldGuestsData => [...oldGuestsData, newGuestData]);
+        }
+        else {
+          // very bad times
+          const responseErrors = response.value.errors;
+          console.error("Error with data received from subscription:", responseErrors);
+        }
+      },
+      error: (err) => console.warn(err),
+    });
+  };
+
+  // TODO: test
+  const subscribeToUpdatedGuests = () => {
+    if (pollId === null || subscribeToChanges === false) {
+      return;
+    }
+
+    return API.graphql({
+      query: onUpdateGuestForPoll,
+      ...guestsVariablesObject,
+    }).subscribe({
+      next: (response) => {
+        const updatedGuestData = response.value.data.onUpdateGuestForPoll;
+        console.log("updatedGuestData received from subscription:", updatedGuestData);
+
+        if (newGuestData !== null) {
+          setPollGuestsData(oldGuestsData => oldGuestsData.map(guest => 
+            guest.id === updatedGuestData.id ? updatedGuestData : guest
+          ));
+        }
+        else {
+          // very bad times
+          const responseErrors = response.value.errors;
+          console.error("Error with data received from subscription:", responseErrors);
+        }
+      },
+      error: (err) => console.warn(err),
+    });
+  };
+
+  // TODO: implement
+  //
+  // Do we actually need this? I don't think we need it until a scenario where
+  // we can append questions on the fly, but I don't think we want to be doing
+  // this when a poll is already live. I envision that the user flow for poll
+  // creation will have a user create all of the poll questions before the poll 
+  // has started. This also makes for far fewer headaches. 
+  //
+  // const subscribeToQuestions = () => {
+  //   if (pollId === null || subscribeToChanges === false) {
+  //     return;
+  //   }
+  // };
+
   useEffect(() => {
-    pollId !== null && fetchAndSetPollData();
+    if (pollId === null) {
+      return;
+    }
+
+    fetchAndSetPollData();
 
     if (subscribeToChanges) {
       const pollSubscription = subscribeToPoll();
+      const pollGuestCreatedSubscription = subscribeToCreatedGuests();
+      const pollGuestUpdatedSubscription = subscribeToUpdatedGuests();
       return () => {
         pollSubscription.unsubscribe();
+        pollGuestCreatedSubscription.unsubscribe();
+        pollGuestUpdatedSubscription.unsubscribe();
       };
     }
   }, []);
   
   useEffect(() => {
-    fetchAndSetPollData();
+    !pollIsLoading && fetchAndSetPollData();
   }, [pollId]);
 
   return {
     //...(condition && { objKey: objValue }), // <- conditionally add an object property
+    addGuestAnswerToCurrentQuestion,
+    addNewPollGuest,
+    currentAnswerData, 
+    currentQuestionData, 
+    currentQuestionIsLoaded, 
     pollData,
+    pollGuestsData,
     pollIsLoaded,
+    pollQuestionsData,
+    togglePollGuestLock,
+    updateCurrentQuestionData, 
     updatePollData,
-  }
+  };
 }
 
 export default usePollData;

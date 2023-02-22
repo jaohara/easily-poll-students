@@ -58,6 +58,7 @@ function useQuestionData({
   subscribeToChanges = false,
 }) {
   const [ questionIsLoaded, setQuestionIsLoaded ] = useState(false);
+  const [ questionIsLoading, setQuestionIsLoading ] = useState(false);
   const [ questionData, setQuestionData ] = useState();
   const [ answerData, setAnswerData ] = useState();
 
@@ -79,9 +80,13 @@ function useQuestionData({
   };
 
   const fetchAndSetQuestionData = async () => {
-    if (questionId === null) {
+    if (questionId === null || questionIsLoading) {
       return;
     }
+
+    console.log("questionId set, fetching question data...");
+
+    setQuestionIsLoading(true);
 
     // build out getQuestion query
     try {
@@ -92,17 +97,22 @@ function useQuestionData({
 
       // data comes back at initialQuestionResponse.data.getQuestion
       const questionResponseData = questionResponse.data.getQuestion;
+      const questionAnswerOptionsArray = JSON.parse(questionResponseData.answerOptions);
       const questionResponseAnswerData = questionResponseData.answers.items;
+
+      questionResponseData.answerOptions = questionAnswerOptionsArray;
 
       console.log("questionResponseData:", questionResponseData);
       console.log("answerData:", questionResponseAnswerData);
-      setQuestionIsLoaded(true);
       setQuestionData(questionResponseData);
       setAnswerData(questionResponseAnswerData);
     }
     catch (err) {
       console.error("Error fetching question data: ", err);
     }
+
+    setQuestionIsLoading(false);
+    setQuestionIsLoaded(true);
   };
 
   // function for client to modify question data
@@ -134,6 +144,8 @@ function useQuestionData({
         console.log("questionData received from subscription:", newQuestionData);
 
         if (newQuestionData !== null) {
+          const newQuestionAnswerOptionsArray = JSON.parse(newQuestionData.answerOptions);
+          newQuestionData.answerOptions = newQuestionAnswerOptionsArray;
           setQuestionData(newQuestionData);
         }
         else {
