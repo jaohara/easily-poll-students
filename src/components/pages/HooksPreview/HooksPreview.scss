@@ -1,0 +1,85 @@
+@use "../../../styles/globals.scss" as g;
+
+// TODO: potentially move to App.scss if this looks good
+ul {
+  list-style-type: none;
+  padding-left: 1rem;
+  margin: 0 0 1rem;
+
+  li::before {
+    color: g.$shallow-space-sparkle;
+    content: "\2022";
+    display: inline-block;
+    font-weight: bold;
+    margin-left: 1rem;
+    width: 1rem;
+  }
+}
+
+.data-container h1 {
+  margin-bottom: .5rem;
+}
+
+li {
+  margin-bottom: .25rem;
+}
+
+.hooks-preview {
+  margin-top: 1rem;
+  margin-bottom: 2rem;
+}
+
+.hooks-preview-card {
+  margin-bottom: 2rem;
+
+  div {
+    margin-bottom: .25rem;
+  }
+}
+
+.hooks-preview-container {
+  display: flex;
+  justify-content: space-between;
+}
+
+.hooks-preview-card-container {
+  min-width: 42.5%;
+  width: 42.5%;
+  // background: red;
+  background-color: #fff;
+  box-shadow: 0px 5px 15px rgba(0,0,0,0.1);
+  border-radius: g.$common-border-radius;
+  padding: 2rem 2rem;
+  padding: 2rem 2rem;
+}
+
+.hooks-preview-controls {
+  margin-bottom: 1rem;
+}
+
+.poll-data-container {
+  margin-bottom: 2rem;
+}
+
+.guest-link, .question-link {
+  border-bottom: 1px solid g.$shallow-space-sparkle;
+  
+  &:hover{
+    color: g.$shallow-space-sparkle;
+    cursor: pointer;
+  }
+}
+
+.current-data {
+  background-color: #eee;
+  border-radius: 1rem;
+  color: g.$shallow-space-sparkle;
+  margin-left: .5rem;
+  padding: .25rem .75rem;
+}
+
+.default-poll-message {
+  font-weight: bold;
+  font-size: .8rem;
+  margin-bottom: 1rem;
+}

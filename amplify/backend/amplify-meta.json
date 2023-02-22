@@ -33,11 +33,12 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2023-02-17T20:15:14.313Z",
+      "lastPushTimeStamp": "2023-02-21T01:45:01.073Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apieasilypollstudents"
-      }
+      },
+      "lastPushDirHash": "7g3EWAV6+axOFEkUDhSb+PwESI0="
     }
   },
   "auth": {
@@ -75,7 +76,7 @@
         "IdentityPoolName": "easilypollstudents834464d1_identitypool_834464d1__staging",
         "UserPoolName": "easilypollstudents834464d1_userpool_834464d1"
       },
-      "lastPushTimeStamp": "2023-02-17T20:15:14.315Z",
+      "lastPushTimeStamp": "2023-02-21T01:45:00.456Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/auth/easilypollstudents834464d1-cloudformation-template.json",
         "logicalId": "autheasilypollstudents834464d1"

@@ -1,6 +1,218 @@
 /* eslint-disable */
 // this is an auto generated file. This will be overwritten
 
+export const onCreateAnswerForQuestion = /* GraphQL */ `
+  subscription OnCreateAnswerForQuestion($questionAnswersId: ID!) {
+    onCreateAnswerForQuestion(questionAnswersId: $questionAnswersId) {
+      question {
+        id
+        prompt
+        answerOptions
+        questionType
+        createdAt
+        updatedAt
+        pollQuestionsId
+      }
+      owner {
+        canVote
+        id
+        name
+        key
+        createdAt
+        updatedAt
+        pollGuestsId
+      }
+      answer
+      id
+      createdAt
+      updatedAt
+      questionAnswersId
+      guestAnswersId
+    }
+  }
+`;
+export const onCreateGuestForPoll = /* GraphQL */ `
+  subscription OnCreateGuestForPoll($pollGuestsId: ID!) {
+    onCreateGuestForPoll(pollGuestsId: $pollGuestsId) {
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
+      }
+      canVote
+      answers {
+        nextToken
+      }
+      id
+      name
+      key
+      createdAt
+      updatedAt
+      pollGuestsId
+    }
+  }
+`;
+export const onCreateLinkNameForPoll = /* GraphQL */ `
+  subscription OnCreateLinkNameForPoll($linkNamePollId: ID!) {
+    onCreateLinkNameForPoll(linkNamePollId: $linkNamePollId) {
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
+      }
+      name
+      id
+      createdAt
+      updatedAt
+      linkNamePollId
+    }
+  }
+`;
+export const onCreateQuestionForPoll = /* GraphQL */ `
+  subscription OnCreateQuestionForPoll($pollQuestionsId: ID!) {
+    onCreateQuestionForPoll(pollQuestionsId: $pollQuestionsId) {
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
+      }
+      answers {
+        nextToken
+      }
+      id
+      prompt
+      answerOptions
+      questionType
+      createdAt
+      updatedAt
+      pollQuestionsId
+    }
+  }
+`;
+export const onUpdateAnswerForQuestion = /* GraphQL */ `
+  subscription OnUpdateAnswerForQuestion($questionAnswersId: ID!) {
+    onUpdateAnswerForQuestion(questionAnswersId: $questionAnswersId) {
+      question {
+        id
+        prompt
+        answerOptions
+        questionType
+        createdAt
+        updatedAt
+        pollQuestionsId
+      }
+      owner {
+        canVote
+        id
+        name
+        key
+        createdAt
+        updatedAt
+        pollGuestsId
+      }
+      answer
+      id
+      createdAt
+      updatedAt
+      questionAnswersId
+      guestAnswersId
+    }
+  }
+`;
+export const onUpdateGuestForPoll = /* GraphQL */ `
+  subscription OnUpdateGuestForPoll($pollGuestsId: ID!) {
+    onUpdateGuestForPoll(pollGuestsId: $pollGuestsId) {
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
+      }
+      canVote
+      answers {
+        nextToken
+      }
+      id
+      name
+      key
+      createdAt
+      updatedAt
+      pollGuestsId
+    }
+  }
+`;
+export const onUpdateLinkNameForPoll = /* GraphQL */ `
+  subscription OnUpdateLinkNameForPoll($linkNamePollId: ID!) {
+    onUpdateLinkNameForPoll(linkNamePollId: $linkNamePollId) {
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
+      }
+      name
+      id
+      createdAt
+      updatedAt
+      linkNamePollId
+    }
+  }
+`;
+export const onUpdateQuestionForPoll = /* GraphQL */ `
+  subscription OnUpdateQuestionForPoll($pollQuestionsId: ID!) {
+    onUpdateQuestionForPoll(pollQuestionsId: $pollQuestionsId) {
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
+      }
+      answers {
+        nextToken
+      }
+      id
+      prompt
+      answerOptions
+      questionType
+      createdAt
+      updatedAt
+      pollQuestionsId
+    }
+  }
+`;
 export const onCreateUser = /* GraphQL */ `
   subscription OnCreateUser($filter: ModelSubscriptionUserFilterInput) {
     onCreateUser(filter: $filter) {
@@ -9,8 +221,8 @@ export const onCreateUser = /* GraphQL */ `
       }
       id
       email
-      name_first
-      name_last
+      firstName
+      lastName
       createdAt
       updatedAt
     }
@@ -24,8 +236,8 @@ export const onUpdateUser = /* GraphQL */ `
       }
       id
       email
-      name_first
-      name_last
+      firstName
+      lastName
       createdAt
       updatedAt
     }
@@ -39,8 +251,8 @@ export const onDeleteUser = /* GraphQL */ `
       }
       id
       email
-      name_first
-      name_last
+      firstName
+      lastName
       createdAt
       updatedAt
     }
@@ -52,21 +264,18 @@ export const onCreatePoll = /* GraphQL */ `
       user {
         id
         email
-        name_first
-        name_last
+        firstName
+        lastName
         createdAt
         updatedAt
       }
       questions {
         nextToken
       }
-      guests_in {
+      guests {
         nextToken
       }
-      guests_waiting {
-        nextToken
-      }
-      link_name {
+      linkName {
         name
         id
         createdAt
@@ -75,12 +284,13 @@ export const onCreatePoll = /* GraphQL */ `
       }
       id
       title
-      free_join_active
-      free_join
+      isActive
+      isLocked
+      roomSize
       createdAt
       updatedAt
       userPollsId
-      pollLink_nameId
+      pollLinkNameId
     }
   }
 `;
@@ -90,21 +300,18 @@ export const onUpdatePoll = /* GraphQL */ `
       user {
         id
         email
-        name_first
-        name_last
+        firstName
+        lastName
         createdAt
         updatedAt
       }
       questions {
         nextToken
       }
-      guests_in {
+      guests {
         nextToken
       }
-      guests_waiting {
-        nextToken
-      }
-      link_name {
+      linkName {
         name
         id
         createdAt
@@ -113,12 +320,13 @@ export const onUpdatePoll = /* GraphQL */ `
       }
       id
       title
-      free_join_active
-      free_join
+      isActive
+      isLocked
+      roomSize
       createdAt
       updatedAt
       userPollsId
-      pollLink_nameId
+      pollLinkNameId
     }
   }
 `;
@@ -128,21 +336,18 @@ export const onDeletePoll = /* GraphQL */ `
       user {
         id
         email
-        name_first
-        name_last
+        firstName
+        lastName
         createdAt
         updatedAt
       }
       questions {
         nextToken
       }
-      guests_in {
+      guests {
         nextToken
       }
-      guests_waiting {
-        nextToken
-      }
-      link_name {
+      linkName {
         name
         id
         createdAt
@@ -151,12 +356,13 @@ export const onDeletePoll = /* GraphQL */ `
       }
       id
       title
-      free_join_active
-      free_join
+      isActive
+      isLocked
+      roomSize
       createdAt
       updatedAt
       userPollsId
-      pollLink_nameId
+      pollLinkNameId
     }
   }
 `;
@@ -166,20 +372,21 @@ export const onCreateQuestion = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       answers {
         nextToken
       }
       id
       prompt
-      answer_options
-      question_type
+      answerOptions
+      questionType
       createdAt
       updatedAt
       pollQuestionsId
@@ -192,20 +399,21 @@ export const onUpdateQuestion = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       answers {
         nextToken
       }
       id
       prompt
-      answer_options
-      question_type
+      answerOptions
+      questionType
       createdAt
       updatedAt
       pollQuestionsId
@@ -218,20 +426,21 @@ export const onDeleteQuestion = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       answers {
         nextToken
       }
       id
       prompt
-      answer_options
-      question_type
+      answerOptions
+      questionType
       createdAt
       updatedAt
       pollQuestionsId
@@ -244,18 +453,20 @@ export const onCreateAnswer = /* GraphQL */ `
       question {
         id
         prompt
-        answer_options
-        question_type
+        answerOptions
+        questionType
         createdAt
         updatedAt
         pollQuestionsId
       }
       owner {
+        canVote
         id
         name
         key
         createdAt
         updatedAt
+        pollGuestsId
       }
       answer
       id
@@ -272,18 +483,20 @@ export const onUpdateAnswer = /* GraphQL */ `
       question {
         id
         prompt
-        answer_options
-        question_type
+        answerOptions
+        questionType
         createdAt
         updatedAt
         pollQuestionsId
       }
       owner {
+        canVote
         id
         name
         key
         createdAt
         updatedAt
+        pollGuestsId
       }
       answer
       id
@@ -300,18 +513,20 @@ export const onDeleteAnswer = /* GraphQL */ `
       question {
         id
         prompt
-        answer_options
-        question_type
+        answerOptions
+        questionType
         createdAt
         updatedAt
         pollQuestionsId
       }
       owner {
+        canVote
         id
         name
         key
         createdAt
         updatedAt
+        pollGuestsId
       }
       answer
       id
@@ -325,12 +540,18 @@ export const onDeleteAnswer = /* GraphQL */ `
 export const onCreateGuest = /* GraphQL */ `
   subscription OnCreateGuest($filter: ModelSubscriptionGuestFilterInput) {
     onCreateGuest(filter: $filter) {
-      pollsIn {
-        nextToken
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
       }
-      pollsWaiting {
-        nextToken
-      }
+      canVote
       answers {
         nextToken
       }
@@ -339,18 +560,25 @@ export const onCreateGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
+      pollGuestsId
     }
   }
 `;
 export const onUpdateGuest = /* GraphQL */ `
   subscription OnUpdateGuest($filter: ModelSubscriptionGuestFilterInput) {
     onUpdateGuest(filter: $filter) {
-      pollsIn {
-        nextToken
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
       }
-      pollsWaiting {
-        nextToken
-      }
+      canVote
       answers {
         nextToken
       }
@@ -359,18 +587,25 @@ export const onUpdateGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
+      pollGuestsId
     }
   }
 `;
 export const onDeleteGuest = /* GraphQL */ `
   subscription OnDeleteGuest($filter: ModelSubscriptionGuestFilterInput) {
     onDeleteGuest(filter: $filter) {
-      pollsIn {
-        nextToken
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
       }
-      pollsWaiting {
-        nextToken
-      }
+      canVote
       answers {
         nextToken
       }
@@ -379,6 +614,7 @@ export const onDeleteGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
+      pollGuestsId
     }
   }
 `;
@@ -388,12 +624,13 @@ export const onCreateLinkName = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       name
       id
@@ -409,12 +646,13 @@ export const onUpdateLinkName = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       name
       id
@@ -430,198 +668,19 @@ export const onDeleteLinkName = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       name
       id
       createdAt
       updatedAt
       linkNamePollId
-    }
-  }
-`;
-export const onCreatePollGuestIn = /* GraphQL */ `
-  subscription OnCreatePollGuestIn(
-    $filter: ModelSubscriptionPollGuestInFilterInput
-  ) {
-    onCreatePollGuestIn(filter: $filter) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdatePollGuestIn = /* GraphQL */ `
-  subscription OnUpdatePollGuestIn(
-    $filter: ModelSubscriptionPollGuestInFilterInput
-  ) {
-    onUpdatePollGuestIn(filter: $filter) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeletePollGuestIn = /* GraphQL */ `
-  subscription OnDeletePollGuestIn(
-    $filter: ModelSubscriptionPollGuestInFilterInput
-  ) {
-    onDeletePollGuestIn(filter: $filter) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onCreatePollGuestWaiting = /* GraphQL */ `
-  subscription OnCreatePollGuestWaiting(
-    $filter: ModelSubscriptionPollGuestWaitingFilterInput
-  ) {
-    onCreatePollGuestWaiting(filter: $filter) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onUpdatePollGuestWaiting = /* GraphQL */ `
-  subscription OnUpdatePollGuestWaiting(
-    $filter: ModelSubscriptionPollGuestWaitingFilterInput
-  ) {
-    onUpdatePollGuestWaiting(filter: $filter) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const onDeletePollGuestWaiting = /* GraphQL */ `
-  subscription OnDeletePollGuestWaiting(
-    $filter: ModelSubscriptionPollGuestWaitingFilterInput
-  ) {
-    onDeletePollGuestWaiting(filter: $filter) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
     }
   }
 `;

@@ -9,8 +9,8 @@ export const getUser = /* GraphQL */ `
       }
       id
       email
-      name_first
-      name_last
+      firstName
+      lastName
       createdAt
       updatedAt
     }
@@ -26,8 +26,8 @@ export const listUsers = /* GraphQL */ `
       items {
         id
         email
-        name_first
-        name_last
+        firstName
+        lastName
         createdAt
         updatedAt
       }
@@ -41,21 +41,18 @@ export const getPoll = /* GraphQL */ `
       user {
         id
         email
-        name_first
-        name_last
+        firstName
+        lastName
         createdAt
         updatedAt
       }
       questions {
         nextToken
       }
-      guests_in {
+      guests {
         nextToken
       }
-      guests_waiting {
-        nextToken
-      }
-      link_name {
+      linkName {
         name
         id
         createdAt
@@ -64,12 +61,13 @@ export const getPoll = /* GraphQL */ `
       }
       id
       title
-      free_join_active
-      free_join
+      isActive
+      isLocked
+      roomSize
       createdAt
       updatedAt
       userPollsId
-      pollLink_nameId
+      pollLinkNameId
     }
   }
 `;
@@ -83,12 +81,13 @@ export const listPolls = /* GraphQL */ `
       items {
         id
         title
-        free_join_active
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       nextToken
     }
@@ -100,20 +99,21 @@ export const getQuestion = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       answers {
         nextToken
       }
       id
       prompt
-      answer_options
-      question_type
+      answerOptions
+      questionType
       createdAt
       updatedAt
       pollQuestionsId
@@ -130,8 +130,8 @@ export const listQuestions = /* GraphQL */ `
       items {
         id
         prompt
-        answer_options
-        question_type
+        answerOptions
+        questionType
         createdAt
         updatedAt
         pollQuestionsId
@@ -146,18 +146,20 @@ export const getAnswer = /* GraphQL */ `
       question {
         id
         prompt
-        answer_options
-        question_type
+        answerOptions
+        questionType
         createdAt
         updatedAt
         pollQuestionsId
       }
       owner {
+        canVote
         id
         name
         key
         createdAt
         updatedAt
+        pollGuestsId
       }
       answer
       id
@@ -190,12 +192,18 @@ export const listAnswers = /* GraphQL */ `
 export const getGuest = /* GraphQL */ `
   query GetGuest($id: ID!) {
     getGuest(id: $id) {
-      pollsIn {
-        nextToken
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
+        pollLinkNameId
       }
-      pollsWaiting {
-        nextToken
-      }
+      canVote
       answers {
         nextToken
       }
@@ -204,6 +212,7 @@ export const getGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
+      pollGuestsId
     }
   }
 `;
@@ -215,11 +224,13 @@ export const listGuests = /* GraphQL */ `
   ) {
     listGuests(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        canVote
         id
         name
         key
         createdAt
         updatedAt
+        pollGuestsId
       }
       nextToken
     }
@@ -231,12 +242,13 @@ export const getLinkName = /* GraphQL */ `
       poll {
         id
         title
-        free_join_active
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        pollLink_nameId
+        pollLinkNameId
       }
       name
       id
@@ -259,206 +271,6 @@ export const listLinkNames = /* GraphQL */ `
         createdAt
         updatedAt
         linkNamePollId
-      }
-      nextToken
-    }
-  }
-`;
-export const getPollGuestIn = /* GraphQL */ `
-  query GetPollGuestIn($id: ID!) {
-    getPollGuestIn(id: $id) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listPollGuestIns = /* GraphQL */ `
-  query ListPollGuestIns(
-    $filter: ModelPollGuestInFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPollGuestIns(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        id
-        pollId
-        guestId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const getPollGuestWaiting = /* GraphQL */ `
-  query GetPollGuestWaiting($id: ID!) {
-    getPollGuestWaiting(id: $id) {
-      id
-      pollId
-      guestId
-      poll {
-        id
-        title
-        free_join_active
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        pollLink_nameId
-      }
-      guest {
-        id
-        name
-        key
-        createdAt
-        updatedAt
-      }
-      createdAt
-      updatedAt
-    }
-  }
-`;
-export const listPollGuestWaitings = /* GraphQL */ `
-  query ListPollGuestWaitings(
-    $filter: ModelPollGuestWaitingFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listPollGuestWaitings(
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        pollId
-        guestId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const pollGuestInsByPollId = /* GraphQL */ `
-  query PollGuestInsByPollId(
-    $pollId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelPollGuestInFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    pollGuestInsByPollId(
-      pollId: $pollId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        pollId
-        guestId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const pollGuestInsByGuestId = /* GraphQL */ `
-  query PollGuestInsByGuestId(
-    $guestId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelPollGuestInFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    pollGuestInsByGuestId(
-      guestId: $guestId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        pollId
-        guestId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const pollGuestWaitingsByPollId = /* GraphQL */ `
-  query PollGuestWaitingsByPollId(
-    $pollId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelPollGuestWaitingFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    pollGuestWaitingsByPollId(
-      pollId: $pollId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        pollId
-        guestId
-        createdAt
-        updatedAt
-      }
-      nextToken
-    }
-  }
-`;
-export const pollGuestWaitingsByGuestId = /* GraphQL */ `
-  query PollGuestWaitingsByGuestId(
-    $guestId: ID!
-    $sortDirection: ModelSortDirection
-    $filter: ModelPollGuestWaitingFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    pollGuestWaitingsByGuestId(
-      guestId: $guestId
-      sortDirection: $sortDirection
-      filter: $filter
-      limit: $limit
-      nextToken: $nextToken
-    ) {
-      items {
-        id
-        pollId
-        guestId
-        createdAt
-        updatedAt
       }
       nextToken
     }

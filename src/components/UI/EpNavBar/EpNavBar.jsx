@@ -26,9 +26,9 @@ const EpNavBar = () => {
   const navigate = useNavigate();
 
   return (
-    <div className='nav-bar'>
+    <div className='ep-nav-bar'>
       {
-        routes.map((route, index) => (
+        routes.map((route, index) => !route.hideInNavBar && (
           <EpNavButton 
             key={`button-${index}`} 
             navHandler={() => {
