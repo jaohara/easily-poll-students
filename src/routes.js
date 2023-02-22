@@ -45,7 +45,13 @@ export const routes = [
   {
     path: "/hooks",
     name: "Hooks Preview",
-    element: <HooksPreview />
+    element: <HooksPreview />,
+  },
+  {
+    path: "/hooks/:targetPollId",
+    name: "Hooks Preview",
+    element: <HooksPreview />,
+    hideInNavBar: true,
   },
 ];
 

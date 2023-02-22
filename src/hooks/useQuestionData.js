@@ -79,6 +79,11 @@ function useQuestionData({
     }
   };
 
+  const parseAnswerOptions = (answerOptionsData) => Array.isArray(answerOptionsData) ?
+    answerOptionsData : JSON.parse(answerOptions);
+        
+  // JSON.parse(questionResponseData.answerOptions);
+
   const fetchAndSetQuestionData = async () => {
     if (questionId === null || questionIsLoading) {
       return;
@@ -97,7 +102,7 @@ function useQuestionData({
 
       // data comes back at initialQuestionResponse.data.getQuestion
       const questionResponseData = questionResponse.data.getQuestion;
-      const questionAnswerOptionsArray = JSON.parse(questionResponseData.answerOptions);
+      const questionAnswerOptionsArray = parseAnswerOptions(questionResponseData.answerOptions);
       const questionResponseAnswerData = questionResponseData.answers.items;
 
       questionResponseData.answerOptions = questionAnswerOptionsArray;
@@ -211,7 +216,8 @@ function useQuestionData({
     submitData();
   };
 
-  // TODO: Idea for this - maybe make the "addGuestAnswer" function check to see
+  // TODO: Implement
+  // Idea for this - maybe make the "addGuestAnswer" function check to see
   // if the guest has already answered for this question, then either have it
   // add a new answer if they haven't or update if they already have.
   const updateGuestAnswer = ({ guestId, newAnswerValue }) => {
@@ -233,12 +239,12 @@ function useQuestionData({
         questionAnswerUpdatedSubscription.unsubscribe();
       };
     }
-  }, []);
+  }, [questionId]);
 
   // update question data when the questionId is changed
-  useEffect(() => {
-    fetchAndSetQuestionData();
-  }, [questionId])
+  // useEffect(() => {
+  //   fetchAndSetQuestionData();
+  // }, [questionId])
 
   // items exported from hook
   return {

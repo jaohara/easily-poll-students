@@ -108,7 +108,7 @@ function usePollData({
   const [ pollData, setPollData ] = useState();
   const [ pollQuestionsData, setPollQuestionsData ] = useState();
   const [ pollGuestsData, setPollGuestsData ] = useState();
-  const [ currentQuestionId, setCurrentQuestionId ] = useState(questionId);
+  const [ currentQuestionId, setCurrentQuestionId ] = useState();
 
   const {
     addGuestAnswer: addGuestAnswerToCurrentQuestion,
@@ -153,7 +153,6 @@ function usePollData({
 
     try {
       const pollResponse = await API.graphql({
-        // query: getPoll,
         query: getPollWithQuestionsAndGuests,
         ...pollVariablesObject,
       });
@@ -178,10 +177,10 @@ function usePollData({
   };
 
   // TODO: Finish implementing question adding portion and test
-  const addNewPoll = ({ roomSize = 10, title, questions }) => {
+  const createNewPoll = ({ roomSize = 10, title, questions }) => {
     const newPollDataObject = {
       input: {
-        isActive: false,
+        isActive: true,
         isLocked: false,
         roomSize: roomSize,
         title: title,
@@ -192,13 +191,10 @@ function usePollData({
     console.log("addNewPoll with newPollDataObject:", newPollDataObject);
 
     const submitData = async () => {
-      const newPollData = await API.graphql(graphqlOperation(createPoll, newPollDataObject));
+      const newPollResponse = await API.graphql(graphqlOperation(createPoll, newPollDataObject));
+      const newPollData = newPollResponse.data.createPoll;
 
-      const newQuestionDataObject = {
-        input: {
-          pollQuestionsId: newPollData.id,
-        }
-      }
+      console.log("createNewPoll: newPollData:", newPollData);
 
       // TODO: now append questions
       for (let i = 0; i < questions.length; i++) {
@@ -207,14 +203,19 @@ function usePollData({
           input: {
             pollQuestionsId: newPollData.id,
             ...questions[i],
+            // HARDCODING IN "single" QUESTION TYPE
+            // TODO: make some way to choose this option
+            questionType: "single",
           }
         }
 
         await API.graphql(graphqlOperation(createQuestion, newQuestionDataObject));
       }
+
+      return newPollData;
     };
 
-    submitData();
+    return submitData();
   };
 
   const updatePollData = (newData) => {
@@ -397,6 +398,9 @@ function usePollData({
       return;
     }
 
+    // console.log("in initial useEffect, pollId:", pollId);
+    console.log("in useEffect for pollId changing:", pollId);
+
     fetchAndSetPollData();
 
     if (subscribeToChanges) {
@@ -409,11 +413,18 @@ function usePollData({
         pollGuestUpdatedSubscription.unsubscribe();
       };
     }
-  }, []);
-  
-  useEffect(() => {
-    !pollIsLoading && fetchAndSetPollData();
   }, [pollId]);
+
+  useEffect(() => {
+    setCurrentQuestionId(questionId);
+  }, [questionId])
+  
+  // This was causing errors with data being pulled twice - seeing as
+  // we should only have data pull when a pollId is set, I made the above
+  // hook use that dependency. 
+  // useEffect(() => {
+  //   !pollIsLoaded && fetchAndSetPollData();
+  // }, [pollId]);
 
   return {
     //...(condition && { objKey: objValue }), // <- conditionally add an object property
@@ -421,7 +432,8 @@ function usePollData({
     addNewPollGuest,
     currentAnswerData, 
     currentQuestionData, 
-    currentQuestionIsLoaded, 
+    currentQuestionIsLoaded,
+    createNewPoll,
     pollData,
     pollGuestsData,
     pollIsLoaded,

@@ -5,7 +5,9 @@
 import "./HooksPreview.scss";
 
 
-import { React, useState } from 'react';
+import { React, useState, useEffect } from 'react';
+import { useParams } from "react-router-dom"; 
+
 import useQuestionData from '../../../hooks/useQuestionData';
 import usePollData from "../../../hooks/usePollData";
 
@@ -15,8 +17,9 @@ import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 const HooksPreview = () => {
-  const [ currentGuestId, setCurrentGuestId ] = useState("001");
-  const [ currentQuestionId, setCurrentQuestionId ] = useState("001");
+
+  const [ currentGuestId, setCurrentGuestId ] = useState(null);
+  const [ currentQuestionId, setCurrentQuestionId ] = useState(null);
 
   // const {
   //   addGuestAnswer,
@@ -25,6 +28,9 @@ const HooksPreview = () => {
   //   questionIsLoaded, 
   //   updateQuestionData, 
   // } = useQuestionData({subscribeToChanges: true, questionId: "001"});
+
+  const { targetPollId } = useParams(); 
+  const DEFAULT_POLL_ID = "001"
 
   const {
     addGuestAnswerToCurrentQuestion,
@@ -38,7 +44,11 @@ const HooksPreview = () => {
     pollQuestionsData,
     updateCurrentQuestionData, 
     updatePollData,
-  } = usePollData({subscribeToChanges: true, pollId: "001", questionId: currentQuestionId});
+  } = usePollData({
+    subscribeToChanges: true, 
+    pollId: targetPollId === undefined ? DEFAULT_POLL_ID : targetPollId, 
+    questionId: currentQuestionId,
+  });
 
   const [ newAnswer, setNewAnswer ] = 
     useState(currentQuestionData ? currentQuestionData.answerOptions[0] : "");
@@ -46,13 +56,17 @@ const HooksPreview = () => {
   const [ newPrompt, setNewPrompt ] = useState("");
   const [ newTitle, setNewTitle ] = useState("");
 
-  const formatGuestIdString = (idString) => 
+  const formatIdString = (idString) => 
     idString.length > 6 ? `${idString.slice(0,7)}...` : idString;
 
+  useEffect(() => {console.log("targetPollID:", targetPollId)}, [])
 
   return ( 
     <div className="hooks-preview">
       <h1>Hooks Preview</h1>
+
+      
+
       {
         (!pollIsLoaded && pollData === undefined) ? (
           <DataLoading dataName="poll"/>
@@ -113,6 +127,12 @@ const HooksPreview = () => {
 
               <div className="hooks-preview-card-container data-container">
                 <h1>Poll Data</h1>
+                {
+                  targetPollId === undefined && 
+                  (<div className="default-poll-message">
+                    No poll specified, using default of "{DEFAULT_POLL_ID}"
+                  </div>)
+                }
                 <ul className="question-data-list">
                   <DataListItem
                     dataKey={"id"}
@@ -136,9 +156,29 @@ const HooksPreview = () => {
                   />
                 </ul>
 
+                <h1>Question Data</h1>
+                <ul className="question-data-list">    
+                  {
+                    pollQuestionsData.map((question, i) => (
+                      <li className="data-list-item" key={`guest-${i}`}>
+                        <a
+                          className="question-link" 
+                          onClick={e => {
+                            e.preventDefault();
+                            setCurrentQuestionId(question.id);
+                          }}
+                        >
+                          <strong>{question.prompt}</strong>
+                        </a>
+                      </li>
+                    ))
+                  }
+                </ul>
+
                 <h1>Guest Data</h1>
                 <ul className="guest-data-list">    
                   {
+                    pollGuestsData.length > 0 ? 
                     pollGuestsData.map((guest, i) => (
                       <li className="data-list-item" key={`guest-${i}`}>
                         <a
@@ -148,10 +188,11 @@ const HooksPreview = () => {
                             setCurrentGuestId(guest.id);
                           }}
                         >
-                          <strong>{guest.name}:</strong>&nbsp;{formatGuestIdString(guest.id)}
+                          <strong>{guest.name}:</strong>&nbsp;{formatIdString(guest.id)}
                         </a>
                       </li>
-                    ))
+                    )) :
+                    <li>No Guests in Poll.</li>
                   }
                 </ul>
               </div>
@@ -181,12 +222,19 @@ const HooksPreview = () => {
             <div className="hooks-preview-container">
               <div className="hooks-preview-card-container">
                 <div className='hooks-preview-card'>
-                  <h4>Answering as 
-                    <span className="current-data">
-                      Guest {formatGuestIdString(currentGuestId)}
-                    </span>
-                  </h4>
-                  <div>
+                  {
+                    currentGuestId !== null ? (
+                      <h4>Answering as 
+                        <span className="current-data">
+                          Guest {formatIdString(currentGuestId)}
+                        </span>
+                      </h4>
+                    ) : (
+                      <h4>No Guest Selected.</h4>
+                    )
+                  }
+
+                  {/* <div>
                     <EpTextInput
                       fullWidth={true}
                       label={"Question Prompt"}
@@ -200,12 +248,13 @@ const HooksPreview = () => {
                     >
                       Change Question Prompt
                     </EpButton>
-                  </div>
+                  </div> */}
                 </div>
 
                 <div className="hooks-preview-card">
                   <div>
                     <EpTextInput
+                      disabled={currentGuestId === null}
                       fullWidth={true}
                       label="New Answer"
                       value={newAnswer}
@@ -227,6 +276,7 @@ const HooksPreview = () => {
 
                   <div>
                     <EpButton
+                      disabled={currentGuestId === null}
                       onClick={() => 
                         addGuestAnswerToCurrentQuestion({guestId: currentGuestId, answerValue: newAnswer})}
                       >
@@ -237,7 +287,7 @@ const HooksPreview = () => {
               </div>
 
               <div className="hooks-preview-card-container data-container">
-                <h1>Question Data</h1>
+                <h1>Current Question Data</h1>
                 <ul className="question-data-list">
                   <DataListItem
                     dataKey={"id"}
@@ -264,13 +314,15 @@ const HooksPreview = () => {
                 <h1>Answer Data</h1>
                 <ul className="answer-data-list">    
                   {
+                    currentAnswerData.length > 0 ?
                     currentAnswerData.map((answer, i) => (
                       <DataListItem
-                        dataKey={`${(answer.id).slice(0,3)}`}
+                        dataKey={`${formatIdString(answer.id)}`}
                         dataValue={answer.answer[0]}
                         key={`answer-${answer.id}`}
                       />
-                    ))
+                    )) :
+                    <li>No Answers for Question.</li>
                   }
                 </ul>
               </div>
