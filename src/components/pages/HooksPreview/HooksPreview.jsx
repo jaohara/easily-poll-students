@@ -65,8 +65,6 @@ const HooksPreview = () => {
     <div className="hooks-preview">
       <h1>Hooks Preview</h1>
 
-      
-
       {
         (!pollIsLoaded && pollData === undefined) ? (
           <DataLoading dataName="poll"/>
@@ -203,7 +201,11 @@ const HooksPreview = () => {
       }
       { 
         (!currentQuestionIsLoaded && currentQuestionData === undefined) ? (
-          <DataLoading dataName="question"/>
+          currentQuestionId === null ? (
+            <h4>No Question Selected.</h4>
+          ): (
+            <DataLoading dataName="question"/>
+          )
         ) : (
           <div className="question-data-container">
             <h2>useQuestionData results</h2>
