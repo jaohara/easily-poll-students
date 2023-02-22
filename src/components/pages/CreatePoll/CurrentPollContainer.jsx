@@ -56,6 +56,7 @@ const CurrentPollContainer = ({
         // TODO: Probably not where this lives in the end
       }
       <EpButton
+        disabled={questions === null || questions === undefined || questions.length === 0}
         onClick={() => handleSubmitPoll()}
       >
         Submit Poll
