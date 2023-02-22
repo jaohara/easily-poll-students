@@ -1,0 +1,19 @@
+{
+  "version": 1,
+  "paths": {
+    "/guest": {
+      "name": "/guest",
+      "lambdaFunction": "guestregister",
+      "permissions": {
+        "setting": "open"
+      }
+    },
+    "/answer": {
+      "name": "/guest/answer",
+      "lambdaFunction": "guestanswer",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

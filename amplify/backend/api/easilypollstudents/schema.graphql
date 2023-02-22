@@ -7,20 +7,22 @@ type User @model {
   polls: [Poll!]! @hasMany
   id: ID!
   email: String!
-  name_first: String!
-  name_last: String!
+  firstName: String!
+  lastName: String!
 }
 
 type Poll @model {
   user: User! @belongsTo
   questions: [Question!]! @hasMany
-  guests_in: [Guest!]! @manyToMany(relationName: "PollGuestIn")
-  guests_waiting: [Guest!] @manyToMany(relationName: "PollGuestWaiting")
-  link_name: LinkName @hasOne
+  #guestsIn: [Guest!]! @manyToMany(relationName: "PollGuestIn")
+  #guestsExcluded: [Guest!] @manyToMany(relationName: "PollGuestExcluded")
+  guests: [Guest!]! @hasMany
+  linkName: LinkName @hasOne
   id: ID!
   title: String!
-  free_join_active: Boolean!
-  free_join: Int!
+  isActive: Boolean!
+  isLocked: Boolean!
+  roomSize: Int!
 }
 
 type Question @model {
@@ -28,19 +30,22 @@ type Question @model {
   answers: [Answer!]! @hasMany
   id: ID!
   prompt: String!
-  answer_options: [String!]!
-  question_type: String!
+  answerOptions: [String!]!
+  questionType: String!
 }
 
 type Answer @model {
   question: Question! @belongsTo
+  # maybe ambiguous - change from "owner" to "guest"?
   owner: Guest! @belongsTo
   answer: [String!]!
 }
 
 type Guest @model {
-  pollsIn: [Poll!]! @manyToMany(relationName: "PollGuestIn")
-  pollsWaiting: [Poll!]! @manyToMany(relationName: "PollGuestWaiting")
+  #pollsIncluded: [Poll!]! @manyToMany(relationName: "PollGuestIn")
+  #pollsExcluded: [Poll!]! @manyToMany(relationName: "PollGuestExcluded")
+  poll: Poll! @belongsTo
+  canVote: Boolean!
   answers: [Answer!]! @hasMany
   id: ID!
   name: String!
@@ -50,4 +55,16 @@ type Guest @model {
 type LinkName @model {
   poll: Poll! @belongsTo
   name: String!
+}
+
+# Custom subscriptions to enable updates on associated types
+type Subscription {
+  onCreateAnswerForQuestion(questionAnswersId: ID!): Answer @aws_subscribe(mutations: ["createAnswer"])
+  onCreateGuestForPoll(pollGuestsId: ID!): Guest @aws_subscribe(mutations: ["createGuest"])
+  onCreateLinkNameForPoll(linkNamePollId: ID!): LinkName @aws_subscribe(mutations: ["createLinkName"])
+  onCreateQuestionForPoll(pollQuestionsId: ID!): Question @aws_subscribe(mutations: ["createQuestion"])
+  onUpdateAnswerForQuestion(questionAnswersId: ID!): Answer @aws_subscribe(mutations: ["updateAnswer"])
+  onUpdateGuestForPoll(pollGuestsId: ID!): Guest @aws_subscribe(mutations: ["updateGuest"])
+  onUpdateLinkNameForPoll(linkNamePollId: ID!): LinkName @aws_subscribe(mutations: ["updateLinkName"])
+  onUpdateQuestionForPoll(pollQuestionsId: ID!): Question @aws_subscribe(mutations: ["updateQuestion"])
 }

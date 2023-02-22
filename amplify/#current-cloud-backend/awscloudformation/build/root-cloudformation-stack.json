@@ -160,8 +160,47 @@
           "AppSyncApiName": "easilypollstudents",
           "DynamoDBBillingMode": "PAY_PER_REQUEST",
           "DynamoDBEnableServerSideEncryption": false,
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "unauthRoleName": {
+            "Ref": "UnauthRoleName"
+          },
           "S3DeploymentBucket": "amplify-amplify918ba012a4234-staging-171536-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/7309f30d08e287c465ffe0d8ed2385b3c34b1b30",
+          "S3DeploymentRootKey": "amplify-appsync-files/588076703f8807ec8e7e8989c29bd364a0705553",
+          "env": "staging"
+        }
+      }
+    },
+    "apiguest": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/api/guest-cloudformation-template.json",
+        "Parameters": {
+          "functionguestregisterName": {
+            "Fn::GetAtt": [
+              "functionguestregister",
+              "Outputs.Name"
+            ]
+          },
+          "functionguestregisterArn": {
+            "Fn::GetAtt": [
+              "functionguestregister",
+              "Outputs.Arn"
+            ]
+          },
+          "functionguestanswerName": {
+            "Fn::GetAtt": [
+              "functionguestanswer",
+              "Outputs.Name"
+            ]
+          },
+          "functionguestanswerArn": {
+            "Fn::GetAtt": [
+              "functionguestanswer",
+              "Outputs.Arn"
+            ]
+          },
           "env": "staging"
         }
       }
@@ -216,6 +255,28 @@
           },
           "breakCircularDependency": true,
           "dependsOn": "",
+          "env": "staging"
+        }
+      }
+    },
+    "functionguestanswer": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/function/guestanswer-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-amplify918ba012a4234-staging-171536-deployment",
+          "s3Key": "amplify-builds/guestanswer-747774454533444e2b79-build.zip",
+          "env": "staging"
+        }
+      }
+    },
+    "functionguestregister": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/function/guestregister-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-amplify918ba012a4234-staging-171536-deployment",
+          "s3Key": "amplify-builds/guestregister-6e69352f697665642f34-build.zip",
           "env": "staging"
         }
       }

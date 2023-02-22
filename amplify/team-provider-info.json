@@ -14,6 +14,20 @@
     "categories": {
       "auth": {
         "easilypollstudents834464d1": {}
+      },
+      "function": {
+        "guestanswer": {
+          "deploymentBucketName": "amplify-amplify918ba012a4234-staging-171536-deployment",
+          "s3Key": "amplify-builds/guestanswer-747774454533444e2b79-build.zip"
+        },
+        "guestregister": {
+          "deploymentBucketName": "amplify-amplify918ba012a4234-staging-171536-deployment",
+          "s3Key": "amplify-builds/guestregister-6e69352f697665642f34-build.zip"
+        }
+      },
+      "api": {
+        "easilypollstudents": {},
+        "guest": {}
       }
     }
   }
