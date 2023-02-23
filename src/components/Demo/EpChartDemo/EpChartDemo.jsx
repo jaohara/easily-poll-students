@@ -4,6 +4,7 @@ import React from 'react';
 import EpChart from '../../UI/EpChart/EpChart';
 
 import useQuestionData from '../../../hooks/useQuestionData';
+import EpBar from '../../UI/EpChart/EpBar';
 
 const EpChartDemo = () => {
   const { answerTally } = useQuestionData({
@@ -34,7 +35,26 @@ const EpChartDemo = () => {
           }
         ]
       }} />
-    </div>
+    <EpBar chartData={{
+      //labels: Data.map((data) => data.year), 
+      labels: answerTally.labels,
+      datasets: [
+        {
+          //label: "Users Gained ",
+          data: answerTally.data,
+          backgroundColor: [
+            "rgba(75,192,192,1)",
+            "#ecf0f1",
+            "#50AF95",
+            "#f3ba2f",
+            "#2a71d0"
+          ],
+          borderColor: "black",
+          borderWidth: 2,
+        }
+      ]
+    }} />
+  </div>
   )
     }
     </>

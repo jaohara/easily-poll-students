@@ -14,7 +14,7 @@ function EpChart( { chartData } ) {
           plugins: {
             title: { 
               display: true,
-              text: "Users Gained between 2016-2020"
+              text: "Pie Chart Demo"
             }
           }
         }}
