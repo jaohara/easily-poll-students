@@ -57,10 +57,11 @@ function useQuestionData({
   questionId = null,
   subscribeToChanges = false,
 }) {
+  const [ answerData, setAnswerData ] = useState();
+  const [ answerTally, setAnswerTally ] = useState();
   const [ questionIsLoaded, setQuestionIsLoaded ] = useState(false);
   const [ questionIsLoading, setQuestionIsLoading ] = useState(false);
   const [ questionData, setQuestionData ] = useState();
-  const [ answerData, setAnswerData ] = useState();
 
   // initialize graphQL api from other hook
   const API = useApi();
@@ -79,9 +80,42 @@ function useQuestionData({
     }
   };
 
+  // Helper functions
+  
+  // parses answer options if array was stored as string
   const parseAnswerOptions = (answerOptionsData) => Array.isArray(answerOptionsData) ?
-    answerOptionsData : JSON.parse(answerOptions);
-        
+    answerOptionsData : JSON.parse(answerOptionsData);
+
+  
+  // calculates answer tally in a form for charts and saves it in state
+  const calculateAndSetAnswerTally = () => {
+    if (!answerData) {
+      return;
+    }
+
+    const answerCount = {};
+
+    for (let i = 0; i < answerData.length; i++) {
+      //TODO: we will need to rework this for multiple choice questions
+      //  gross, but nested for loop to iterate through the internal array?
+      const currentAnswer = answerData[i].answer[0];
+  
+      if (!answerCount[currentAnswer]) {
+        // does not exist in answerCount object, so create it
+        answerCount[currentAnswer] = 1;
+      }
+      else {
+        answerCount[currentAnswer]++;
+      }
+    }
+  
+    setAnswerTally({
+      labels: Object.keys(answerCount),
+      data: Object.values(answerCount)
+    });
+  };
+
+
   // JSON.parse(questionResponseData.answerOptions);
 
   const fetchAndSetQuestionData = async () => {
@@ -100,7 +134,7 @@ function useQuestionData({
         ...questionVariablesObject,
       });
 
-      // data comes back at initialQuestionResponse.data.getQuestion
+      // data comes back at questionResponse.data.getQuestion
       const questionResponseData = questionResponse.data.getQuestion;
       const questionAnswerOptionsArray = parseAnswerOptions(questionResponseData.answerOptions);
       const questionResponseAnswerData = questionResponseData.answers.items;
@@ -241,6 +275,10 @@ function useQuestionData({
     }
   }, [questionId]);
 
+  useEffect(() => {
+    calculateAndSetAnswerTally();
+  }, [answerData]);
+
   // update question data when the questionId is changed
   // useEffect(() => {
   //   fetchAndSetQuestionData();
@@ -250,6 +288,7 @@ function useQuestionData({
   return {
     addGuestAnswer,
     answerData,
+    answerTally,
     questionData,
     questionIsLoaded,
     updateQuestionData,
