@@ -112,7 +112,8 @@ function usePollData({
 
   const {
     addGuestAnswer: addGuestAnswerToCurrentQuestion,
-    answerData: currentAnswerData, 
+    answerData: currentAnswerData,
+    answerTally: currentAnswerTally, 
     questionData: currentQuestionData, 
     questionIsLoaded: currentQuestionIsLoaded, 
     updateQuestionData: updateCurrentQuestionData, 
@@ -430,7 +431,8 @@ function usePollData({
     //...(condition && { objKey: objValue }), // <- conditionally add an object property
     addGuestAnswerToCurrentQuestion,
     addNewPollGuest,
-    currentAnswerData, 
+    currentAnswerData,
+    currentAnswerTally, 
     currentQuestionData, 
     currentQuestionIsLoaded,
     createNewPoll,

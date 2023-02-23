@@ -6,8 +6,7 @@ ChartJS.register(ArcElement, Tooltip, Legend);
 
 function EpChart( { chartData } ) {
   return (
-    <div className="chart-container" >
-      <h2 style={{ textAlign: "center" }}>Pie Chart</h2>
+    <div className="chart-container">
       <Pie
         data={chartData}
         options={{
