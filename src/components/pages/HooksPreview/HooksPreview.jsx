@@ -16,7 +16,6 @@ import EpChart from "../../UI/EpChart/EpChart";
 import EpTextInput from "../../UI/EpTextInput/EpTextInput";
 import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
-import EpBar from "../../UI/EpChart/EpBar";
 
 const HooksPreview = () => {
 
@@ -320,19 +319,13 @@ const HooksPreview = () => {
                 {
                   currentAnswerTally && (
                     <DemoEpChart
+                      chartType={'pie'}
                       data={currentAnswerTally.data}
                       labels={currentAnswerTally.labels}
                     />
                   )
                 }
-                {
-                  currentAnswerTally && (
-                    <DemoEpBar
-                      data={currentAnswerTally.data}
-                      labels={currentAnswerTally.labels}
-                    />
-                  )
-                }
+                
                 <ul className="answer-data-list">    
                   {
                     currentAnswerData.length > 0 ?
@@ -370,37 +363,10 @@ const DataLoading = ({dataName}) => {
   )
 }
 
-const DemoEpChart = ({labels, data}) => (
+const DemoEpChart = ({labels, data, chartType}) => (
   <div className="demo-chart-container">
     <div className="demo-chart-wrapper">
-      <EpChart
-        chartData={{
-          labels: labels, 
-          datasets: [
-            {
-              label: "",
-              data: data,
-              backgroundColor: [
-                "#519e8a",
-                "#FF785A",
-                "#EC0B43",
-                "#6A7FDB",
-                "#F4B942",
-              ],
-              borderColor: "black",
-              borderWidth: 2, 
-            }
-          ]
-        }}
-      />
-    </div>
-  </div>
-);
-
-const DemoEpBar = ({labels, data}) => (
-  <div className="demo-chart-container">
-    <div className="demo-chart-wrapper">
-      <EpBar
+      <EpChart chartType={chartType}
         chartData={{
           labels: labels, 
           datasets: [
