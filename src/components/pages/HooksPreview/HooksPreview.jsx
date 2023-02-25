@@ -373,15 +373,6 @@ const DemoEpChart = ({labels, data, chartType}) => (
             {
               label: "",
               data: data,
-              backgroundColor: [
-                "#519e8a",
-                "#FF785A",
-                "#EC0B43",
-                "#6A7FDB",
-                "#F4B942",
-              ],
-              borderColor: "black",
-              borderWidth: 2, 
             }
           ]
         }}
