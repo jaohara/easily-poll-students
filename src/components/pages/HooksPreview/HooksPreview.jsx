@@ -321,6 +321,7 @@ const HooksPreview = () => {
                     <DemoEpChart
                       data={currentAnswerTally.data}
                       labels={currentAnswerTally.labels}
+                      chartType="bar"
                     />
                   )
                 }
