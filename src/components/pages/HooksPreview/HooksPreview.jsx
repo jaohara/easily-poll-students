@@ -319,13 +319,12 @@ const HooksPreview = () => {
                 {
                   currentAnswerTally && (
                     <DemoEpChart
-                      chartType={'pie'}
                       data={currentAnswerTally.data}
                       labels={currentAnswerTally.labels}
+                      chartType="bar"
                     />
                   )
                 }
-                
                 <ul className="answer-data-list">    
                   {
                     currentAnswerData.length > 0 ?
@@ -363,16 +362,25 @@ const DataLoading = ({dataName}) => {
   )
 }
 
-const DemoEpChart = ({labels, data, chartType}) => (
+const DemoEpChart = ({labels, data}) => (
   <div className="demo-chart-container">
     <div className="demo-chart-wrapper">
-      <EpChart chartType={chartType}
+      <EpChart
         chartData={{
           labels: labels, 
           datasets: [
             {
               label: "",
               data: data,
+              backgroundColor: [
+                "#519e8a",
+                "#FF785A",
+                "#EC0B43",
+                "#6A7FDB",
+                "#F4B942",
+              ],
+              borderColor: "black",
+              borderWidth: 2, 
             }
           ]
         }}

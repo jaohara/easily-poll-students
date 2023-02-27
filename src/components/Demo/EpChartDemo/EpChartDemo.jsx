@@ -7,7 +7,7 @@ import useQuestionData from '../../../hooks/useQuestionData';
 
 const EpChartDemo = () => {
   const { answerTally } = useQuestionData({
-    questionId: "d3a126ab-292a-4d0d-bee9-d4c73d19016d"
+    questionId: "5e4d07c6-d6a6-4257-b4a8-6edc4d8a68fa"
   });
 
   return (
