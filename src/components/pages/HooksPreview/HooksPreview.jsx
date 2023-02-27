@@ -318,10 +318,10 @@ const HooksPreview = () => {
                 <h1>Answer Data</h1>
                 {
                   currentAnswerTally && (
-                    <DemoEpChart
+                    <EpChart
+                      chartType="pie"
                       data={currentAnswerTally.data}
                       labels={currentAnswerTally.labels}
-                      chartType="bar"
                     />
                   )
                 }
@@ -362,31 +362,31 @@ const DataLoading = ({dataName}) => {
   )
 }
 
-const DemoEpChart = ({labels, data}) => (
-  <div className="demo-chart-container">
-    <div className="demo-chart-wrapper">
-      <EpChart
-        chartData={{
-          labels: labels, 
-          datasets: [
-            {
-              label: "",
-              data: data,
-              backgroundColor: [
-                "#519e8a",
-                "#FF785A",
-                "#EC0B43",
-                "#6A7FDB",
-                "#F4B942",
-              ],
-              borderColor: "black",
-              borderWidth: 2, 
-            }
-          ]
-        }}
-      />
-    </div>
-  </div>
-);
+// const DemoEpChart = ({labels, data}) => (
+//   <div className="demo-chart-container">
+//     <div className="demo-chart-wrapper">
+//       <EpChart
+//         chartData={{
+//           labels: labels, 
+//           datasets: [
+//             {
+//               label: "",
+//               data: data,
+//               backgroundColor: [
+//                 "#519e8a",
+//                 "#FF785A",
+//                 "#EC0B43",
+//                 "#6A7FDB",
+//                 "#F4B942",
+//               ],
+//               borderColor: "black",
+//               borderWidth: 2, 
+//             }
+//           ]
+//         }}
+//       />
+//     </div>
+//   </div>
+// );
  
 export default HooksPreview;

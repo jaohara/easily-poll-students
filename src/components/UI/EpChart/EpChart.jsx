@@ -13,20 +13,17 @@ ChartJS.register(CategoryScale,
 function EpChart({ 
   chartType = "pie",
   colors = [
-    "#00A6FB", //picton blue
-    "#0582CA", //steel blue
-    "#006494", //lapis lazuli 
-    "#003554", //Prussian Blue
-    "#051923", //Rich Black
-    "#9AC2C9", // Light blue
-    "#999AC6", // Cool Gray
-    "#61988E", // zomp
-    "#8B5FBF", // Amethyst               
+    "#519e8a",
+    "#FF785A",
+    "#6A7FDB",
+    "#EC0B43",
+    "#F4B942",
+    "#45CB85",
   ],
   data,
   labels, 
 }) {
-  const data = {
+  const chartData = {
     labels: labels,
     datasets: [
       {
@@ -36,48 +33,32 @@ function EpChart({
         borderWidth: 2,
       }
     ]
-  }
+  };
 
-  if (chartType === 'pie') {
-    return (
-      <div className="chart-container">
-        <Pie
-          data={data}
-          options={{
-            aspectRatio: 2,
-            plugins: {
-              title: {
-                display: true,
-                text: "Pie Chart Demo"
-              }
-            }
-          }}
-        />
-      </div>
-    );
-  }
-  else if (chartType === 'bar') {
-    return (
-      <div className="chart-container">
-        <Bar
-          data={data}
-          options={{
-            indexAxis: 'y',
-            plugins: {
-              title: {
-                display: true,
-                text: "Bar Chart Demo"
-              },
-              legend: {
-                //position: 'right',
-                display: false
-              }
-            }
-          }}
-        />
-      </div>
-    );
-  }
+  return (
+    <div className="chart-container">
+      {
+        chartType === 'pie' && (
+          <Pie
+            data={chartData}
+            options={{
+              aspectRatio: 2,
+            }}
+          />
+        )
+      }
+      {
+        chartType === 'bar' && (
+          <Bar
+            data={chartData}
+            options={{
+              indexAxis: 'y',
+            }}
+          />
+        )
+      }
+    </div>
+  );
 }
     
 export default EpChart;

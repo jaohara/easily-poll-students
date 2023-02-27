@@ -15,44 +15,16 @@ const EpChartDemo = () => {
     {
       answerTally && (
     <div className="App">
-      <EpChart chartType={'pie'} chartData={{
-        //labels: Data.map((data) => data.year), 
-        labels: answerTally.labels,
-        datasets: [
-          {
-            //label: "Users Gained ",
-            data: answerTally.data,
-            backgroundColor: [
-              "rgba(75,192,192,1)",
-              "#ecf0f1",
-              "#50AF95",
-              "#f3ba2f",
-              "#2a71d0"
-            ],
-            borderColor: "black",
-            borderWidth: 2,
-          }
-        ]
-      }} />
-      <EpChart chartType={'bar'} chartData={{
-        //labels: Data.map((data) => data.year), 
-        labels: answerTally.labels,
-        datasets: [
-          {
-            //label: "Users Gained ",
-            data: answerTally.data,
-            backgroundColor: [
-              "rgba(75,192,192,1)",
-              "#ecf0f1",
-              "#50AF95",
-              "#f3ba2f",
-              "#2a71d0"
-            ],
-            borderColor: "black",
-            borderWidth: 2,
-          }
-        ]
-      }} />
+      <EpChart 
+        chartType={'pie'} 
+        data={answerTally.data}
+        labels={answerTally.labels}        
+      />
+      <EpChart 
+        chartType={'bar'} 
+        data={answerTally.data}
+        labels={answerTally.labels}
+      />
     </div>
       )
     }
