@@ -25,9 +25,12 @@ export const routes = [
   {
     path: "/create-poll",
     name: "Create Poll",
-    element: <CreatePoll />
+    element: <CreatePoll />,
+    // TODO: Hide when app workflow is finalized (only available if logged in)
+    // hideInNavBar: true,
   },
   {
+    // TODO: Remove this when gutting demo code
     path: "/epchart-demo",
     name: "Chart Demo",
     element: <EpChartDemo />
@@ -43,11 +46,14 @@ export const routes = [
     element: <Register />
   },
   {
+    // TODO: ultimately remove this when gutting demo code
     path: "/hooks",
     name: "Hooks Preview",
     element: <HooksPreview />,
+    hideInNavBar: true,
   },
   {
+    // and this, I suppose
     path: "/hooks/:targetPollId",
     name: "Hooks Preview",
     element: <HooksPreview />,
@@ -55,21 +61,4 @@ export const routes = [
   },
 ];
 
-// create router, filtering out names
-// export const router = createBrowserRouter(routes.map(route => {route.path, route.element}));
 export const router = createBrowserRouter(routes);
-
-// export const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <Home />
-//   },
-//   {
-//     path: "/material-demo",
-//     element: <MaterialUISwatch />
-//   },
-//   {
-//     path: "/color-swatch-demo",
-//     element: <ColorSwatchTest />
-//   }
-// ]);
