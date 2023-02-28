@@ -5,11 +5,13 @@
 import "./HooksPreview.scss";
 
 
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { useParams } from "react-router-dom"; 
 
 import useQuestionData from '../../../hooks/useQuestionData';
 import usePollData from "../../../hooks/usePollData";
+
+import { AppDataContext } from "../../../contexts/AuthContext/AppDataContext";
 
 import EpButton from "../../UI/EpButton/EpButton";
 import EpChart from "../../UI/EpChart/EpChart";
@@ -20,7 +22,7 @@ import MenuItem from "@mui/material/MenuItem";
 const HooksPreview = () => {
 
   const [ currentGuestId, setCurrentGuestId ] = useState(null);
-  const [ currentQuestionId, setCurrentQuestionId ] = useState(null);
+  // const [ currentQuestionId, setCurrentQuestionId ] = useState(null);
 
   // const {
   //   addGuestAnswer,
@@ -31,26 +33,48 @@ const HooksPreview = () => {
   // } = useQuestionData({subscribeToChanges: true, questionId: "001"});
 
   const { targetPollId } = useParams(); 
-  const DEFAULT_POLL_ID = "001"
+  // const DEFAULT_POLL_ID = "001"
 
+  // const {
+  //   addGuestAnswerToCurrentQuestion,
+  //   addNewPollGuest,
+  //   currentAnswerData,
+  //   currentAnswerTally, 
+  //   currentQuestionData, 
+  //   currentQuestionIsLoaded, 
+  //   pollData,
+  //   pollGuestsData,
+  //   pollIsLoaded,
+  //   pollQuestionsData,
+  //   updateCurrentQuestionData, 
+  //   updatePollData,
+  // } = usePollData({
+  //   subscribeToChanges: true, 
+  //   pollId: targetPollId === undefined ? DEFAULT_POLL_ID : targetPollId, 
+  //   questionId: currentQuestionId,
+  // });
+
+  // Destructuring everything here to test if it's working, but we'll probably assign
+  // this object to "AppData" or something
   const {
     addGuestAnswerToCurrentQuestion,
     addNewPollGuest,
     currentAnswerData,
     currentAnswerTally, 
-    currentQuestionData, 
+    currentQuestionData,
+    currentQuestionId, 
     currentQuestionIsLoaded, 
     pollData,
     pollGuestsData,
+    pollId,
+    // pollIdParam,
     pollIsLoaded,
     pollQuestionsData,
+    setCurrentQuestionId, // Do I need this?
+    setPollId,
     updateCurrentQuestionData, 
     updatePollData,
-  } = usePollData({
-    subscribeToChanges: true, 
-    pollId: targetPollId === undefined ? DEFAULT_POLL_ID : targetPollId, 
-    questionId: currentQuestionId,
-  });
+  } = useContext(AppDataContext);
 
   const [ newAnswer, setNewAnswer ] = 
     useState(currentQuestionData ? currentQuestionData.answerOptions[0] : "");
@@ -63,9 +87,19 @@ const HooksPreview = () => {
 
   useEffect(() => {console.log("targetPollID:", targetPollId)}, [])
 
+  useEffect(() => {
+    // to get a new poll if this id is set
+    setPollId(targetPollId);
+  }, [targetPollId]);
+
   return ( 
     <div className="hooks-preview">
       <h1>Hooks Preview</h1>
+      {
+        targetPollId && (
+          <h3>targetPollId: {targetPollId}</h3>
+        )
+      }
 
       {
         (!pollIsLoaded && pollData === undefined) ? (
@@ -127,12 +161,6 @@ const HooksPreview = () => {
 
               <div className="hooks-preview-card-container data-container">
                 <h1>Poll Data</h1>
-                {
-                  targetPollId === undefined && 
-                  (<div className="default-poll-message">
-                    No poll specified, using default of "{DEFAULT_POLL_ID}"
-                  </div>)
-                }
                 <ul className="question-data-list">
                   <DataListItem
                     dataKey={"id"}

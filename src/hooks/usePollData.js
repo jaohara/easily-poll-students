@@ -144,7 +144,8 @@ function usePollData({
   };
 
   const fetchAndSetPollData = async () => {
-    if (pollId === null || pollIsLoading) {
+    // if (!pollId === null || pollIsLoading) {
+    if (!pollId || pollIsLoading) {
       return;
     }
 
@@ -168,12 +169,12 @@ function usePollData({
       setPollData(pollResponseData);
       setPollGuestsData(pollResponseGuestData);
       setPollQuestionsData(pollResponseQuestionData);
+      setPollIsLoaded(true);
     }
     catch (err) {
       console.error("Error fetching poll data:", err);
     }
 
-    setPollIsLoaded(true);
     setPollIsLoading(false);
   };
 
@@ -395,7 +396,8 @@ function usePollData({
   // };
 
   useEffect(() => {
-    if (pollId === null) {
+    // if (pollId === null) {
+    if (!pollId) {
       return;
     }
 
@@ -433,13 +435,15 @@ function usePollData({
     addNewPollGuest,
     currentAnswerData,
     currentAnswerTally, 
-    currentQuestionData, 
+    currentQuestionData,
+    currentQuestionId, 
     currentQuestionIsLoaded,
     createNewPoll,
     pollData,
     pollGuestsData,
     pollIsLoaded,
     pollQuestionsData,
+    setCurrentQuestionId,
     togglePollGuestLock,
     updateCurrentQuestionData, 
     updatePollData,
