@@ -50,7 +50,7 @@ export const routes = [
     path: "/hooks",
     name: "Hooks Preview",
     element: <HooksPreview />,
-    hideInNavBar: true,
+    // hideInNavBar: true,
   },
   {
     // and this, I suppose

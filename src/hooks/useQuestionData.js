@@ -145,13 +145,13 @@ function useQuestionData({
       console.log("answerData:", questionResponseAnswerData);
       setQuestionData(questionResponseData);
       setAnswerData(questionResponseAnswerData);
+      setQuestionIsLoaded(true);
     }
     catch (err) {
       console.error("Error fetching question data: ", err);
     }
 
     setQuestionIsLoading(false);
-    setQuestionIsLoaded(true);
   };
 
   // function for client to modify question data
