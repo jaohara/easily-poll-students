@@ -1,3 +1,11 @@
+/* Amplify Params - DO NOT EDIT
+	API_EASILYPOLLSTUDENTS_GRAPHQLAPIENDPOINTOUTPUT
+	API_EASILYPOLLSTUDENTS_GRAPHQLAPIIDOUTPUT
+	API_EASILYPOLLSTUDENTS_GRAPHQLAPIKEYOUTPUT
+	ENV
+	REGION
+Amplify Params - DO NOT EDIT */
+
 import crypto from '@aws-crypto/sha256-js'
 import { defaultProvider } from '@aws-sdk/credential-provider-node'
 import { SignatureV4 } from '@aws-sdk/signature-v4'
@@ -81,10 +89,10 @@ export const handler = async (event) => {
   return {
     statusCode,
     //  Uncomment below to enable CORS requests
-    // headers: {
-    //   "Access-Control-Allow-Origin": "*",
-    //   "Access-Control-Allow-Headers": "*"
-    // },
+    headers: {
+      'Access-Control-Allow-Origin': '*',
+      'Access-Control-Allow-Headers': '*',
+    },
     body: JSON.stringify(body),
   }
 }

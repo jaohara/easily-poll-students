@@ -15,6 +15,18 @@
     },
     "s3Key": {
       "Type": "String"
+    },
+    "apieasilypollstudentsGraphQLAPIIdOutput": {
+      "Type": "String",
+      "Default": "apieasilypollstudentsGraphQLAPIIdOutput"
+    },
+    "apieasilypollstudentsGraphQLAPIEndpointOutput": {
+      "Type": "String",
+      "Default": "apieasilypollstudentsGraphQLAPIEndpointOutput"
+    },
+    "apieasilypollstudentsGraphQLAPIKeyOutput": {
+      "Type": "String",
+      "Default": "apieasilypollstudentsGraphQLAPIKeyOutput"
     }
   },
   "Conditions": {
@@ -47,12 +59,12 @@
         "FunctionName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "guestregister",
+            "guestRegister",
             {
               "Fn::Join": [
                 "",
                 [
-                  "guestregister",
+                  "guestRegister",
                   "-",
                   {
                     "Ref": "env"
@@ -69,6 +81,15 @@
             },
             "REGION": {
               "Ref": "AWS::Region"
+            },
+            "API_EASILYPOLLSTUDENTS_GRAPHQLAPIIDOUTPUT": {
+              "Ref": "apieasilypollstudentsGraphQLAPIIdOutput"
+            },
+            "API_EASILYPOLLSTUDENTS_GRAPHQLAPIENDPOINTOUTPUT": {
+              "Ref": "apieasilypollstudentsGraphQLAPIEndpointOutput"
+            },
+            "API_EASILYPOLLSTUDENTS_GRAPHQLAPIKEYOUTPUT": {
+              "Ref": "apieasilypollstudentsGraphQLAPIKeyOutput"
             }
           }
         },
@@ -89,12 +110,12 @@
         "RoleName": {
           "Fn::If": [
             "ShouldNotCreateEnvResources",
-            "easilypollstudentsLambdaRole5933c344",
+            "easilypollstudentsLambdaRole1c988000",
             {
               "Fn::Join": [
                 "",
                 [
-                  "easilypollstudentsLambdaRole5933c344",
+                  "easilypollstudentsLambdaRole1c988000",
                   "-",
                   {
                     "Ref": "env"
@@ -160,6 +181,73 @@
                   }
                 ]
               }
+            }
+          ]
+        }
+      }
+    },
+    "AmplifyResourcesPolicy": {
+      "DependsOn": [
+        "LambdaExecutionRole"
+      ],
+      "Type": "AWS::IAM::Policy",
+      "Properties": {
+        "PolicyName": "amplify-lambda-execution-policy",
+        "Roles": [
+          {
+            "Ref": "LambdaExecutionRole"
+          }
+        ],
+        "PolicyDocument": {
+          "Version": "2012-10-17",
+          "Statement": [
+            {
+              "Effect": "Allow",
+              "Action": [
+                "appsync:GraphQL"
+              ],
+              "Resource": [
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apieasilypollstudentsGraphQLAPIIdOutput"
+                      },
+                      "/types/Query/*"
+                    ]
+                  ]
+                },
+                {
+                  "Fn::Join": [
+                    "",
+                    [
+                      "arn:aws:appsync:",
+                      {
+                        "Ref": "AWS::Region"
+                      },
+                      ":",
+                      {
+                        "Ref": "AWS::AccountId"
+                      },
+                      ":apis/",
+                      {
+                        "Ref": "apieasilypollstudentsGraphQLAPIIdOutput"
+                      },
+                      "/types/Mutation/*"
+                    ]
+                  ]
+                }
+              ]
             }
           ]
         }

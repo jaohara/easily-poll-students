@@ -11,9 +11,9 @@
           ],
           "defaultAuthentication": {
             "apiKeyConfig": {
-              "apiKeyExpirationDate": "2023-03-24T22:18:38.896Z",
-              "apiKeyExpirationDays": 30,
-              "description": "30"
+              "apiKeyExpirationDate": "2023-04-26T22:49:49.271Z",
+              "apiKeyExpirationDays": 60,
+              "description": "setup"
             },
             "authenticationType": "API_KEY"
           }
@@ -30,15 +30,7 @@
             "Arn"
           ],
           "category": "function",
-          "resourceName": "guestregister"
-        },
-        {
-          "attributes": [
-            "Name",
-            "Arn"
-          ],
-          "category": "function",
-          "resourceName": "guestanswer"
+          "resourceName": "guestRegister"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -46,7 +38,7 @@
     }
   },
   "auth": {
-    "easilypollstudents834464d1": {
+    "easilypollstudentsb7118bae": {
       "customAuth": false,
       "dependsOn": [],
       "frontendAuthConfig": {
@@ -74,47 +66,37 @@
     }
   },
   "function": {
-    "guestanswer": {
+    "guestRegister": {
       "build": true,
-      "providerPlugin": "awscloudformation",
-      "service": "Lambda"
-    },
-    "guestregister": {
-      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "easilypollstudents"
+        }
+      ],
       "providerPlugin": "awscloudformation",
       "service": "Lambda"
     }
   },
   "parameters": {
-    "AMPLIFY_function_guestanswer_deploymentBucketName": {
+    "AMPLIFY_function_guestRegister_deploymentBucketName": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "guestanswer"
+          "resourceName": "guestRegister"
         }
       ]
     },
-    "AMPLIFY_function_guestanswer_s3Key": {
+    "AMPLIFY_function_guestRegister_s3Key": {
       "usedBy": [
         {
           "category": "function",
-          "resourceName": "guestanswer"
-        }
-      ]
-    },
-    "AMPLIFY_function_guestregister_deploymentBucketName": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "guestregister"
-        }
-      ]
-    },
-    "AMPLIFY_function_guestregister_s3Key": {
-      "usedBy": [
-        {
-          "category": "function",
-          "resourceName": "guestregister"
+          "resourceName": "guestRegister"
         }
       ]
     }

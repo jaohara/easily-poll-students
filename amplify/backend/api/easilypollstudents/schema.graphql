@@ -59,12 +59,20 @@ type LinkName @model {
 
 # Custom subscriptions to enable updates on associated types
 type Subscription {
-  onCreateAnswerForQuestion(questionAnswersId: ID!): Answer @aws_subscribe(mutations: ["createAnswer"])
-  onCreateGuestForPoll(pollGuestsId: ID!): Guest @aws_subscribe(mutations: ["createGuest"])
-  onCreateLinkNameForPoll(linkNamePollId: ID!): LinkName @aws_subscribe(mutations: ["createLinkName"])
-  onCreateQuestionForPoll(pollQuestionsId: ID!): Question @aws_subscribe(mutations: ["createQuestion"])
-  onUpdateAnswerForQuestion(questionAnswersId: ID!): Answer @aws_subscribe(mutations: ["updateAnswer"])
-  onUpdateGuestForPoll(pollGuestsId: ID!): Guest @aws_subscribe(mutations: ["updateGuest"])
-  onUpdateLinkNameForPoll(linkNamePollId: ID!): LinkName @aws_subscribe(mutations: ["updateLinkName"])
-  onUpdateQuestionForPoll(pollQuestionsId: ID!): Question @aws_subscribe(mutations: ["updateQuestion"])
+  onCreateAnswerForQuestion(questionAnswersId: ID!): Answer
+    @aws_subscribe(mutations: ["createAnswer"])
+  onCreateGuestForPoll(pollGuestsId: ID!): Guest
+    @aws_subscribe(mutations: ["createGuest"])
+  onCreateLinkNameForPoll(linkNamePollId: ID!): LinkName
+    @aws_subscribe(mutations: ["createLinkName"])
+  onCreateQuestionForPoll(pollQuestionsId: ID!): Question
+    @aws_subscribe(mutations: ["createQuestion"])
+  onUpdateAnswerForQuestion(questionAnswersId: ID!): Answer
+    @aws_subscribe(mutations: ["updateAnswer"])
+  onUpdateGuestForPoll(pollGuestsId: ID!): Guest
+    @aws_subscribe(mutations: ["updateGuest"])
+  onUpdateLinkNameForPoll(linkNamePollId: ID!): LinkName
+    @aws_subscribe(mutations: ["updateLinkName"])
+  onUpdateQuestionForPoll(pollQuestionsId: ID!): Question
+    @aws_subscribe(mutations: ["updateQuestion"])
 }

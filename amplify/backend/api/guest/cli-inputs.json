@@ -3,14 +3,7 @@
   "paths": {
     "/guest": {
       "name": "/guest",
-      "lambdaFunction": "guestregister",
-      "permissions": {
-        "setting": "open"
-      }
-    },
-    "/answer": {
-      "name": "/guest/answer",
-      "lambdaFunction": "guestanswer",
+      "lambdaFunction": "guestRegister",
       "permissions": {
         "setting": "open"
       }

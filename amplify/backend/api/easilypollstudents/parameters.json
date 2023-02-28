@@ -2,5 +2,5 @@
   "AppSyncApiName": "easilypollstudents",
   "DynamoDBBillingMode": "PAY_PER_REQUEST",
   "DynamoDBEnableServerSideEncryption": false,
-  "AuthModeLastUpdated": "2023-02-22T22:18:44.771Z"
+  "AuthModeLastUpdated": "2023-02-25T22:50:19.117Z"
 }
