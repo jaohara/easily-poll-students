@@ -61,17 +61,17 @@ const HooksPreview = () => {
     addNewPollGuest,
     currentAnswerData,
     currentAnswerTally, 
+    // currentPollId,
     currentQuestionData,
     currentQuestionId, 
     currentQuestionIsLoaded, 
     pollData,
     pollGuestsData,
-    pollId,
     // pollIdParam,
     pollIsLoaded,
     pollQuestionsData,
+    selectPollById,
     setCurrentQuestionId, // Do I need this?
-    setPollId,
     updateCurrentQuestionData, 
     updatePollData,
   } = useContext(AppDataContext);
@@ -79,7 +79,6 @@ const HooksPreview = () => {
   const [ newAnswer, setNewAnswer ] = 
     useState(currentQuestionData ? currentQuestionData.answerOptions[0] : "");
   const [ newGuestName, setNewGuestName ] = useState("");
-  const [ newPrompt, setNewPrompt ] = useState("");
   const [ newTitle, setNewTitle ] = useState("");
 
   const formatIdString = (idString) => 
@@ -89,7 +88,7 @@ const HooksPreview = () => {
 
   useEffect(() => {
     // to get a new poll if this id is set
-    setPollId(targetPollId);
+    selectPollById(targetPollId);
   }, [targetPollId]);
 
   return ( 

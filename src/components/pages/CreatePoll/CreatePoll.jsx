@@ -4,11 +4,13 @@
 
 import { 
   React,
+  useContext,
   useState,
 } from 'react';
 import { useNavigate } from "react-router-dom";
 
-import usePollData from '../../../hooks/usePollData';
+// import usePollData from '../../../hooks/usePollData';
+import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
 
 import CurrentPollContainer from './CurrentPollContainer';
 
@@ -33,9 +35,10 @@ const CreatePoll = () => {
   const [ questions, setQuestions ] = useState([testQuestion]);
 
   //TODO: Remove dummy data and pull from auth
-  const TEST_USER_ID = "001"
+  // const TEST_USER_ID = "001"
 
-  const { createNewPoll } = usePollData({userId: TEST_USER_ID});
+  // const { createNewPoll } = usePollData({userId: TEST_USER_ID});
+  const { addPoll } = useContext(AppDataContext);
 
   // add question 
   const addQuestion = (questionText) => {
@@ -86,7 +89,8 @@ const CreatePoll = () => {
     // TODO: Have some way to filter out questions without valid answerOptions
     //  (less than 2 answerOptions)
 
-    const newPollData = await createNewPoll({ title: pollTitle, questions: questions });
+    // const newPollData = await createNewPoll({ title: pollTitle, questions: questions });
+    const newPollData = await addPoll({ title: pollTitle, questions: questions });
 
     console.log("handleSubmitPoll: newPolldata:", newPollData);
 

@@ -1,0 +1,40 @@
+@use "../../../styles/globals.scss" as g;
+
+.dashboard-item {
+  background-color: transparent;
+  border-radius: g.$common-border-radius;
+  margin-bottom: .25rem;
+  padding: 1rem;
+  transition: g.$common-transition-time background-color;
+  
+  .ep-pill {
+    transition: g.$common-transition-time background-color;
+  }
+
+  &:hover:not(.no-polls) {
+    background-color: g.$simple-gray; 
+    cursor: pointer;
+
+    .ep-pill {
+      background-color: #fff;
+    }
+  }
+
+  h1 {
+    font-size: 1.2rem;
+  }
+
+}
+
+.no-polls {
+  font-weight: bold;
+  text-align: center;
+}
+
+.user-dashboard-description {
+  display: none;
+}
+
+.user-dashboard, .user-dashboard-controls {
+  margin-bottom: g.$common-margin;
+}

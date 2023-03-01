@@ -26,15 +26,11 @@ import {
   poll is created via the "addNewPoll" function. I wrote more thoughts in the comment
   above commented-out "subscribeToQuestions" function stub.
 
-  We can return to this later if this is 
+  We can return to this later if this is something we want to do.
 */
 
 import useApi from "./useApi";
 import useQuestionData from "./useQuestionData";
-
-// TODO: REMOVE DUMMY DATA
-const USER_ID = "001";
-
 
 // TODO: similar to "useQuestionData", I'm going to need to create a custom query -
 //  probably something like "getPollWithQuestionsAndGuests"?
@@ -101,7 +97,7 @@ function usePollData({
   pollId = null, // null before poll has been created
   questionId = null,
   subscribeToChanges = false,
-  userId = USER_ID,
+  userId = null,
 }) {
   const [ pollIsLoaded, setPollIsLoaded ] = useState(false);
   const [ pollIsLoading, setPollIsLoading ] = useState(false);
@@ -179,7 +175,12 @@ function usePollData({
   };
 
   // TODO: Finish implementing question adding portion and test
-  const createNewPoll = ({ roomSize = 10, title, questions }) => {
+  const createNewPoll = ({ roomSize = 10, title, questions }, callback = async () => {}) => {
+    if (!userId) {
+      console.error("createNewPoll: Cannot create poll - user isn't logged in");
+      return;
+    }
+
     const newPollDataObject = {
       input: {
         isActive: true,
@@ -212,6 +213,7 @@ function usePollData({
         }
 
         await API.graphql(graphqlOperation(createQuestion, newQuestionDataObject));
+        await callback();
       }
 
       return newPollData;
@@ -221,6 +223,10 @@ function usePollData({
   };
 
   const updatePollData = (newData) => {
+    if (!userId) {
+      console.error("updatePollData: Cannot update poll data, user is not logged in");
+    }
+
     if (pollId === null) {
       console.warn("updatePollData: Cannot update poll data, poll has not been created.");
       return;
@@ -269,6 +275,11 @@ function usePollData({
 
   // TODO: Test
   const togglePollGuestLock = (guestId) => {
+    if (!userId) {
+      console.error("togglePollGuestLock: Cannot toggle guest, user is not logged in.");
+      return;
+    }
+
     // first ensure guest exists
     let guestData = null;
 
