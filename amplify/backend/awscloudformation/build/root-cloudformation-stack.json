@@ -167,7 +167,7 @@
             "Ref": "UnauthRoleName"
           },
           "S3DeploymentBucket": "amplify-amplify6042e93342d44-staging-222909-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/2789616363d9df3e91c9047bcfa2fac7905b7cbb",
+          "S3DeploymentRootKey": "amplify-appsync-files/92ffa13b05764d3e436a751d002d99889e23f340",
           "env": "staging"
         }
       }
@@ -253,7 +253,7 @@
         "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestRegister-cloudformation-template.json",
         "Parameters": {
           "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
-          "s3Key": "amplify-builds/guestRegister-2b3670452f64756e784d-build.zip",
+          "s3Key": "amplify-builds/guestRegister-45473167525569682f61-build.zip",
           "apieasilypollstudentsGraphQLAPIIdOutput": {
             "Fn::GetAtt": [
               "apieasilypollstudents",
