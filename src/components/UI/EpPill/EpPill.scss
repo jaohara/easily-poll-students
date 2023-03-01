@@ -1,0 +1,11 @@
+@use "../../../styles/globals.scss" as g;
+
+.ep-pill {
+  background-color: #eee;
+  border-radius: 1rem;
+  font-weight: bold;
+  font-size: 0.8rem;
+  color: g.$shallow-space-sparkle;
+  margin-right: 0.5rem;
+  padding: 0.25rem 0.75rem;
+}
