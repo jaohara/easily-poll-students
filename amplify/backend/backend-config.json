@@ -7,6 +7,13 @@
           "additionalAuthenticationProviders": [
             {
               "authenticationType": "AWS_IAM"
+            },
+            {
+              "authenticationType": "AWS_LAMBDA",
+              "lambdaAuthorizerConfig": {
+                "lambdaFunction": "guestRegister",
+                "ttlSeconds": "60"
+              }
             }
           ],
           "defaultAuthentication": {

@@ -13,6 +13,11 @@
     "additionalAuthTypes": [
       {
         "mode": "AWS_IAM"
+      },
+      {
+        "mode": "AWS_LAMBDA",
+        "lambdaFunction": "guestRegister",
+        "ttlSeconds": "60"
       }
     ]
   }
