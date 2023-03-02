@@ -30,6 +30,13 @@
           "additionalAuthenticationProviders": [
             {
               "authenticationType": "AWS_IAM"
+            },
+            {
+              "authenticationType": "AWS_LAMBDA",
+              "lambdaAuthorizerConfig": {
+                "lambdaFunction": "guestRegister",
+                "ttlSeconds": "60"
+              }
             }
           ]
         },
@@ -37,12 +44,12 @@
         "GraphQLAPIEndpointOutput": "https://2x3ynbm6njcvxiuwynwty5vxqm.appsync-api.us-west-2.amazonaws.com/graphql",
         "GraphQLAPIKeyOutput": "da2-u3gox4xyyfdojedagyssdcvwnq"
       },
-      "lastPushTimeStamp": "2023-02-26T02:53:11.282Z",
+      "lastPushTimeStamp": "2023-03-01T19:41:34.090Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apieasilypollstudents"
       },
-      "lastPushDirHash": "pSmn6WclalYq38X57zyJx8POuZk="
+      "lastPushDirHash": "/O0rbwKdCjWLXWmbMgltYwcu2SA="
     },
     "guest": {
       "service": "API Gateway",
@@ -61,7 +68,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/guest-cloudformation-template.json",
         "logicalId": "apiguest"
       },
-      "lastPushTimeStamp": "2023-02-26T02:53:11.286Z",
+      "lastPushTimeStamp": "2023-03-01T19:41:33.401Z",
       "output": {
         "ApiName": "guest",
         "RootUrl": "https://4lofxuc3fc.execute-api.us-west-2.amazonaws.com/staging",
@@ -100,7 +107,7 @@
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/auth/easilypollstudentsb7118bae-cloudformation-template.json",
         "logicalId": "autheasilypollstudentsb7118bae"
       },
-      "lastPushTimeStamp": "2023-02-26T02:53:11.287Z",
+      "lastPushTimeStamp": "2023-03-01T19:41:33.404Z",
       "output": {
         "UserPoolId": "us-west-2_aHzrEbgNF",
         "AppClientIDWeb": "ia5oh75p55rfool6cftip4fqd",
@@ -129,19 +136,19 @@
           ]
         }
       ],
-      "lastBuildTimeStamp": "2023-02-26T02:50:59.418Z",
+      "lastBuildTimeStamp": "2023-03-01T19:35:07.296Z",
       "lastBuildType": "PROD",
-      "lastPackageTimeStamp": "2023-02-26T02:51:02.238Z",
-      "distZipFilename": "guestRegister-2b3670452f64756e784d-build.zip",
+      "lastPackageTimeStamp": "2023-03-01T19:35:09.759Z",
+      "distZipFilename": "guestRegister-45473167525569682f61-build.zip",
       "s3Bucket": {
         "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
-        "s3Key": "amplify-builds/guestRegister-2b3670452f64756e784d-build.zip"
+        "s3Key": "amplify-builds/guestRegister-45473167525569682f61-build.zip"
       },
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestRegister-cloudformation-template.json",
         "logicalId": "functionguestRegister"
       },
-      "lastPushTimeStamp": "2023-02-26T02:53:11.494Z",
+      "lastPushTimeStamp": "2023-03-01T19:41:34.090Z",
       "output": {
         "LambdaExecutionRoleArn": "arn:aws:iam::971359340948:role/easilypollstudentsLambdaRole1c988000-staging",
         "Region": "us-west-2",
@@ -149,7 +156,8 @@
         "Name": "guestRegister-staging",
         "LambdaExecutionRole": "easilypollstudentsLambdaRole1c988000-staging"
       },
-      "lastPushDirHash": "gocjP/D5IV0bjLApiFJNynOxhwk="
+      "lastPushDirHash": "AxEnNOtaRUxrTWEczHw376KlWSw=",
+      "lastDevBuildTimeStamp": "2023-02-26T16:06:17.606Z"
     }
   }
 }

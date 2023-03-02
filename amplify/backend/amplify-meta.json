@@ -20,6 +20,13 @@
           "additionalAuthenticationProviders": [
             {
               "authenticationType": "AWS_IAM"
+            },
+            {
+              "authenticationType": "AWS_LAMBDA",
+              "lambdaAuthorizerConfig": {
+                "lambdaFunction": "guestRegister",
+                "ttlSeconds": "60"
+              }
             }
           ],
           "defaultAuthentication": {
@@ -37,7 +44,7 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2023-02-27T17:57:12.423Z",
+      "lastPushTimeStamp": "2023-03-01T22:02:14.545Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apieasilypollstudents"
@@ -61,7 +68,7 @@
         "RootUrl": "https://4lofxuc3fc.execute-api.us-west-2.amazonaws.com/staging",
         "ApiId": "4lofxuc3fc"
       },
-      "lastPushTimeStamp": "2023-02-27T17:57:12.424Z",
+      "lastPushTimeStamp": "2023-03-01T22:02:14.546Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/guest-cloudformation-template.json",
         "logicalId": "apiguest"
@@ -103,7 +110,7 @@
         "IdentityPoolName": "easilypollstudentsb7118bae_identitypool_b7118bae__staging",
         "UserPoolName": "easilypollstudentsb7118bae_userpool_b7118bae"
       },
-      "lastPushTimeStamp": "2023-02-27T17:57:12.424Z",
+      "lastPushTimeStamp": "2023-03-01T22:02:14.547Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/auth/easilypollstudentsb7118bae-cloudformation-template.json",
         "logicalId": "autheasilypollstudentsb7118bae"
@@ -133,14 +140,14 @@
         "Name": "guestRegister-staging",
         "LambdaExecutionRole": "easilypollstudentsLambdaRole1c988000-staging"
       },
-      "lastPushTimeStamp": "2023-02-27T17:57:12.425Z",
+      "lastPushTimeStamp": "2023-03-01T22:02:14.548Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestRegister-cloudformation-template.json",
         "logicalId": "functionguestRegister"
       },
       "s3Bucket": {
         "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
-        "s3Key": "amplify-builds/guestRegister-2b3670452f64756e784d-build.zip"
+        "s3Key": "amplify-builds/guestRegister-45473167525569682f61-build.zip"
       }
     }
   }

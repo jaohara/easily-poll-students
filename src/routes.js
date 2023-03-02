@@ -16,6 +16,9 @@ import Register from "./components/pages/Register/Register";
 // testing hook stuff
 import HooksPreview from './components/pages/HooksPreview/HooksPreview';
 
+//poll result test 
+import PollResult from './components/pages/PollResult/PollResult'
+
 // name is display name on button/link
 export const routes = [
   {
@@ -78,6 +81,12 @@ export const routes = [
     element: <HooksPreview />,
     hideInNavBar: true,
   },
+
+  {
+    path: '/pollresult',
+    name: 'Poll Result',
+    element: <PollResult/>
+  }
 ];
 
 // gets the route path by filtering the routes array. Returns null if name isn't 

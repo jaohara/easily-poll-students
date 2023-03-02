@@ -252,6 +252,16 @@
           ]
         }
       }
+    },
+    "PermissionForAppSyncToInvokeLambda": {
+      "Type": "AWS::Lambda::Permission",
+      "Properties": {
+        "FunctionName": {
+          "Ref": "LambdaFunction"
+        },
+        "Action": "lambda:InvokeFunction",
+        "Principal": "appsync.amazonaws.com"
+      }
     }
   },
   "Outputs": {

@@ -18,8 +18,12 @@ const AWS_REGION = process.env.AWS_REGION || 'us-east-1'
 const { Sha256 } = crypto
 
 const query = /* GraphQL */ `
-  query ListUsers {
-    listUsers {
+  query ListUsers(
+    $filter: ModelUserFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
         id
         email
@@ -28,6 +32,7 @@ const query = /* GraphQL */ `
         createdAt
         updatedAt
       }
+      nextToken
     }
   }
 `
@@ -60,7 +65,6 @@ export const handler = async (event) => {
   })
 
   const signed = await signer.sign(requestToBeSigned)
-  console.log(signed)
   const request = new Request(endpoint, signed)
 
   let statusCode = 200
