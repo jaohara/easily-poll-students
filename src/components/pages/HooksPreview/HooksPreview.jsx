@@ -64,7 +64,8 @@ const HooksPreview = () => {
     // currentPollId,
     currentQuestionData,
     currentQuestionId, 
-    currentQuestionIsLoaded, 
+    currentQuestionIsLoaded,
+    generatePollReport, // this... might blow up
     pollData,
     pollGuestsData,
     // pollIdParam,
@@ -116,6 +117,11 @@ const HooksPreview = () => {
                 onClick={() => console.log("guestData:", pollGuestsData)}
               >
                 Log pollGuestsData
+              </EpButton>
+              <EpButton
+                onClick={async () => console.log("pollReport:", await generatePollReport())}
+              >
+                Log pollReport
               </EpButton>
             </div>
             <div className="hooks-preview-container">
