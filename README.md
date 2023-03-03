@@ -1,6 +1,10 @@
 # easily-poll-students
 A simple poll application created for AD440.
 
+# Repo Docs
+- [Handoff Documentation](https://coda.io/d/Easily-Poll-Students-in-Class_dyjfJn4pZSM/Github-Info_sumyd#Significant-Commits_tuKsA/r1)
+- [Excalidraw Dependency Chart](https://excalidraw.com/#room=a7caaeaff0dafc4cea62,sHnAApiaQcFmr51IALVA2g)
+
 ## Repo Workflow
 Use this approach when sitting down to work on the project:
 

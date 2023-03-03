@@ -6,6 +6,7 @@
 import { useState, useEffect } from "react";
 import useApi from "./useApi";
 import { graphqlOperation } from "@aws-amplify/api";
+import { listAnswers } from "../graphql/queries";
 import {
   createAnswer,
   updateAnswer,
@@ -86,19 +87,19 @@ function useQuestionData({
   const parseAnswerOptions = (answerOptionsData) => Array.isArray(answerOptionsData) ?
     answerOptionsData : JSON.parse(answerOptionsData);
 
-  
-  // calculates answer tally in a form for charts and saves it in state
-  const calculateAndSetAnswerTally = () => {
-    if (!answerData) {
+  // calculates answer tally in a form for charts from an answerData array and returns
+  //  the object. answerData is an array of the Objects returned by the getAnswer query.
+  const calculateAnswerTallyFromAnswerData = (data = answerData) => {
+    if (!data) {
       return;
     }
 
     const answerCount = {};
 
-    for (let i = 0; i < answerData.length; i++) {
+    for (let i = 0; i < data.length; i++) {
       //TODO: we will need to rework this for multiple choice questions
       //  gross, but nested for loop to iterate through the internal array?
-      const currentAnswer = answerData[i].answer[0];
+      const currentAnswer = data[i].answer[0];
   
       if (!answerCount[currentAnswer]) {
         // does not exist in answerCount object, so create it
@@ -108,12 +109,15 @@ function useQuestionData({
         answerCount[currentAnswer]++;
       }
     }
-  
-    setAnswerTally({
+
+    return {
+      data: Object.values(answerCount),
       labels: Object.keys(answerCount),
-      data: Object.values(answerCount)
-    });
+    }
   };
+  
+  // calculates answer tally in a form for charts and saves it in state
+  const calculateAndSetAnswerTally = () => setAnswerTally(calculateAnswerTallyFromAnswerData());
 
 
   // JSON.parse(questionResponseData.answerOptions);
@@ -289,6 +293,7 @@ function useQuestionData({
     addGuestAnswer,
     answerData,
     answerTally,
+    calculateAnswerTallyFromAnswerData,
     questionData,
     questionIsLoaded,
     updateQuestionData,

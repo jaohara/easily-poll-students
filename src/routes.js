@@ -14,7 +14,12 @@ import Register from './components/pages/Register/Register'
 
 // testing hook stuff
 import HooksPreview from './components/pages/HooksPreview/HooksPreview'
+
+// can be removed in the future
 import VerifyEmail from './components/pages/VerifyEmail/VerifyEmail'
+
+//poll result test
+import PollResult from './components/pages/PollResult/PollResult'
 
 // name is display name on button/link
 export const routes = [
@@ -83,6 +88,12 @@ export const routes = [
     name: 'verify',
     element: <VerifyEmail />,
     hideInNavBar: false,
+  },
+  {
+    path: '/results/:targetPollId',
+    name: 'Poll Result',
+    element: <PollResult />,
+    hideInNavBar: true,
   },
 ]
 
