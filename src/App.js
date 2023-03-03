@@ -4,6 +4,8 @@ import config from "./aws-exports";
 import { Amplify } from "aws-amplify";
 Amplify.configure(config);
 
+import { Authenticator } from "@aws-amplify/ui-react";
+
 
 // style-related imports
 import { ThemeProvider } from '@mui/material';
@@ -27,25 +29,27 @@ import EpNavBar from './components/UI/EpNavBar/EpNavBar';
 
 function App () {
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <AuthContextProvider>
+    <Authenticator.Provider>
+      <BrowserRouter>
+       <ThemeProvider theme={theme}>
+          <AuthContextProvider>
 
-          <div className="App">
+           <div className="App">
             <h1>Easy Poll App!</h1>
-            <EpNavBar />
+              <EpNavBar />
 
-            <Routes>
-              {
-                routes.map((route, index) => (
-                  <Route path={route.path} element={route.element} key={`route-${index}`}/>
-                  ))
-                }
-            </Routes>
-          </div>
-        </AuthContextProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+             <Routes>
+                {
+                 routes.map((route, index) => (
+                   <Route path={route.path} element={route.element} key={`route-${index}`}/>
+                    ))
+                 }
+             </Routes>
+           </div>
+          </AuthContextProvider>
+        </ThemeProvider>
+     </BrowserRouter>
+    </Authenticator.Provider>
   );
 }
 
