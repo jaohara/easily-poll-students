@@ -69,7 +69,7 @@ const PollResult = () => {
     }
   }, [pollIsLoaded])
 
-  const reportReady =  !pollReportLoading && pollIsLoaded 
+  const reportReady = !pollReportLoading && pollIsLoaded 
     && !pollIsLoading && pollReport && pollReport.id === targetPollId;
   
   return (

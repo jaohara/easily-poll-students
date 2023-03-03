@@ -89,6 +89,7 @@ function AppDataContextProvider(props) {
       });
 
       console.log("All user polls: ", pollsResponse.data.listPolls.items);
+      //sort by date
       setAllUserPollsData(pollsResponse.data.listPolls.items);
     }
     catch (err) {
@@ -164,7 +165,6 @@ function AppDataContextProvider(props) {
     const pollReport = {
       title: pollData.title,
       createdAt: pollData.createdAt,
-      id: pollData.id,
       questions: questions,
     };
 
