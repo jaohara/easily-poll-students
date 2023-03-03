@@ -109,7 +109,8 @@ function usePollData({
   const {
     addGuestAnswer: addGuestAnswerToCurrentQuestion,
     answerData: currentAnswerData,
-    answerTally: currentAnswerTally, 
+    answerTally: currentAnswerTally,
+    calculateAnswerTallyFromAnswerData, 
     questionData: currentQuestionData, 
     questionIsLoaded: currentQuestionIsLoaded, 
     updateQuestionData: updateCurrentQuestionData, 
@@ -165,6 +166,7 @@ function usePollData({
       setPollData(pollResponseData);
       setPollGuestsData(pollResponseGuestData);
       setPollQuestionsData(pollResponseQuestionData);
+      setCurrentQuestionId(pollResponseQuestionData[0].id);
       setPollIsLoaded(true);
     }
     catch (err) {
@@ -407,14 +409,14 @@ function usePollData({
   // };
 
   useEffect(() => {
-    // if (pollId === null) {
     if (!pollId) {
       return;
     }
 
-    // console.log("in initial useEffect, pollId:", pollId);
     console.log("in useEffect for pollId changing:", pollId);
 
+    setPollData(null);
+    setPollIsLoaded(false);
     fetchAndSetPollData();
 
     if (subscribeToChanges) {
@@ -429,21 +431,18 @@ function usePollData({
     }
   }, [pollId]);
 
+  // Not sure if I want to handle this like this. questionId should probably 
+  //  not be pulled from a param but instead set to the first questionId of questionData 
+  //  like in fetchAndSetPollData
   useEffect(() => {
     setCurrentQuestionId(questionId);
   }, [questionId])
-  
-  // This was causing errors with data being pulled twice - seeing as
-  // we should only have data pull when a pollId is set, I made the above
-  // hook use that dependency. 
-  // useEffect(() => {
-  //   !pollIsLoaded && fetchAndSetPollData();
-  // }, [pollId]);
 
   return {
     //...(condition && { objKey: objValue }), // <- conditionally add an object property
     addGuestAnswerToCurrentQuestion,
     addNewPollGuest,
+    calculateAnswerTallyFromAnswerData,
     currentAnswerData,
     currentAnswerTally, 
     currentQuestionData,

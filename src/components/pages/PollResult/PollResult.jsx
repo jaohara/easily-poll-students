@@ -1,100 +1,103 @@
+import {
+  useContext,
+  useEffect,
+  useState,
+  React,
+} from 'react'
+import {
+  useNavigate,
+  useParams,  
+} from 'react-router-dom';
 
-import React from 'react'
-//import{useContext } from 'react'
+import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
+
 import EpChart from "../../UI/EpChart/EpChart";
-//import useQuestionData from '../../../hooks/useQuestionData';
-//import pollReport from '../pollReportTestData';
-
-//import usePollData from '../../../hooks/usePollData';
-//import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
-
-const pollReport = {
-  title: "Test Poll Report", // poll.title
-  createdAt: "02-23-2023", //poll.createdAt - this is an arbitrary datetime string right now
-  questions: [
-    {
-      prompt: "Are you left-handed or right-handed?", //question.prompt
-      answerTally: {
-        labels: ["Right-handed", "Left-handed"], // generated from question.answerOptions
-        data: [13,7], // maps to sum of each answer 
-      }
-    },
-    {
-      prompt: "Yankees or Mets?", //question.prompt
-      answerTally: {
-        labels: ["Yankees", "Mets"], // generated from question.answerOptions
-        data: [3,17], // maps to sum of each answer 
-      }
-    },
-    {
-      prompt: "Which instrument do you want to study?", //question.prompt
-      answerTally: {
-        labels: ["Guitar", "Bass", "Piano", "Drums"], // generated from question.answerOptions
-        data: [6,4,3,7], // maps to sum of each answer 
-      }
-    },
-    {
-      prompt: "What's your favorite major US sport?", //question.prompt
-      answerTally: {
-        labels: ["Baseball", "Football", "Basketball", "Soccer"], // generated from question.answerOptions
-        data: [7,3,5,5], // maps to sum of each answer 
-      }
-    },
-    {
-      prompt: "Where is your favorite place to live?", //question.prompt
-      answerTally: {
-        labels: ["City", "Suburbs", "Country"], // generated from question.answerOptions
-        data: [8,5,7], // maps to sum of each answer 
-      }
-    },
-  ]
-};
-
-/*const { answerTally} = useQuestionData({
-  questionId: "5e4d07c6-d6a6-4257-b4a8-6edc4d8a68fa"
-});*/
-
-/*const { questions } = usePollData({
-  pollId: '5f0b6335-712e-4555-91f4-43410e682fc7'
-})*/
-
-
-/*const {
-  currentQuestion,
-} = useContext(AppDataContext);*/
-
-
-
-//Get current  poll Id 
-//Loop through poll to retrive questions
-//Hook p
+import EpContainer from '../../UI/EpContainer/EpContainer';
+import EpLoading from '../../UI/EpLoading/EpLoading';
 
 const PollResult = () => {
+  const [ pollReportLoading, setPollReportLoading ] = useState(true);
+  const [ pollReport, setPollReport ] = useState();
 
+  const navigate = useNavigate();
+  const { targetPollId } = useParams();
 
+  const {
+    generatePollReport,
+    pollIsLoaded,
+    pollIsLoading,
+    selectPollById,
+  } = useContext(AppDataContext);
 
-  return (
+  const generateAndSetPollReport = async () => {
+    console.log("in generateAndSetPollReport, calling generatePollReport")
+    const report = await generatePollReport();
+    setPollReport(report);
+    setPollReportLoading(false);
+  };
 
-    <>
-    
-    <h1>Poll Results</h1>
+  /*
+    Implementation notes:
+      - create an async arrow function "generateAndSetPollReport" that awaits
+        the result of "generatePollReport". 
+        - Upon successful receipt, call setPollReport with the pollReport result as an arg
+          and call setPollResultsLoading to false
+      - on page load, have a useEffect hook that calls "selectPollById" with the 
+        pollId pulled from useParams
+  */
 
-    {pollReport.questions.map((question, index) => (
-    <div key={index}>
-    <h2>{question.prompt}</h2>
-   
-    <EpChart  labels={question.answerTally.labels} data={question.answerTally.data} />
-  </div>
+  useEffect(() => {
+    if (!targetPollId) {
+      // TODO: Maybe have a component that displays a message about not having a valid 
+      //  poll id?
+      navigate("/");
+    }
+
+    console.log(`selecting poll: ${targetPollId}`);
+    selectPollById(targetPollId);
+  }, []);
+
+  useEffect(() => {
+    if (pollIsLoaded) {
+      console.log("In pollIsLoaded callback, calling generateAndSetPollReport");
+      
+      const getReport = async () => {
+        generateAndSetPollReport();
+      }
+      
+      getReport();
+    }
+  }, [pollIsLoaded])
+
+  const reportReady = !pollReportLoading && pollIsLoaded 
+    && !pollIsLoading && pollReport && pollReport.id === targetPollId;
   
-    ))}
-      
+  return (
+    <div className="poll-results">
+      {
+        !reportReady ? (
+        // pollReportLoading && !pollReport ? (
+          <EpLoading />
+        ) : (
+          <>
+            <h1>Poll Results</h1>
 
-      
-    </>
+            <EpContainer>
+              {
+                pollReport.questions.map((question, index) => (
+                  <div key={index}>
+                    <h2>{question.prompt}</h2>
+                
+                    <EpChart  labels={question.answerTally.labels} data={question.answerTally.data} />
+                  </div>
+                ))
+              }
+            </EpContainer>
+          </>
+        )
+      }
+    </div>
   )
-}
+};
 
 export default PollResult
-
-
-

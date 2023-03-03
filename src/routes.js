@@ -81,12 +81,12 @@ export const routes = [
     element: <HooksPreview />,
     hideInNavBar: true,
   },
-
   {
-    path: '/pollresult',
+    path: '/results/:targetPollId',
     name: 'Poll Result',
-    element: <PollResult/>
-  }
+    element: <PollResult/>,
+    hideInNavBar: true,
+  },
 ];
 
 // gets the route path by filtering the routes array. Returns null if name isn't 
