@@ -3,6 +3,7 @@ import { createBrowserRouter } from 'react-router-dom'
 
 import Home from './components/pages/Home/Home'
 import CreatePoll from './components/pages/CreatePoll/CreatePoll'
+import GuestVoting from './components/pages/GuestVoting/GuestVoting'
 import UserDashboard from './components/pages/UserDashboard/UserDashboard'
 
 // demo-related pages
@@ -36,16 +37,16 @@ export const routes = [
     element: <UserDashboard />,
     // hideInNavBar: true,
   },
-  // {
-  //  // TODO: Make this go to "GuestVoting", which forwards to
-  //  //  "PollReport" if the poll is not active (or the room is locked?)
-  //  // TODO: This should also forward to "CurrentPollSession" if User is authorized
-  //  //  - should this all be conditional rendering within the overall poll page?
-  //   path: "/poll/:targetPollId",
-  //   name: "Poll Voting",
-  //   element: < />,
-  //   hideInNavBar: true,
-  // },
+  {
+   // TODO: Make this go to "GuestVoting", which forwards to
+   //  "PollReport" if the poll is not active (or the room is locked?)
+   // TODO: This should also forward to "CurrentPollSession" if User is authorized
+   //  - should this all be conditional rendering within the overall poll page?
+    path: "/poll/:targetPollId",
+    name: "Poll Voting",
+    element: <GuestVoting />,
+    hideInNavBar: true,
+  },
   {
     path: '/create-poll',
     name: 'Create Poll',
