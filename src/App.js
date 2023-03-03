@@ -24,6 +24,7 @@ import {
 import { AuthContextProvider } from "./contexts/AuthContext/AuthContext";
 import { AppDataContextProvider } from './contexts/AuthContext/AppDataContext';
 
+import EpLogo from './components/UI/EpLogo/EpLogo';
 import EpNavBar from './components/UI/EpNavBar/EpNavBar';
 
 function App () {
@@ -33,7 +34,10 @@ function App () {
         <AuthContextProvider>
           <AppDataContextProvider>
             <div className="App">
-              <h1>Easy Poll App!</h1>
+              {
+                // TODO: Remove Logo from here, move to finished EpNavBar as link home
+              }
+              <EpLogo />
               <EpNavBar />
 
               <Routes>

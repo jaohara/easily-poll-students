@@ -27,6 +27,7 @@ export const routes = [
     path: '/',
     name: 'Home',
     element: <Home />,
+    hideInNavBar: true,
   },
   {
     // TODO: Make this redirected from "Home" on auth, hide in navbar when auth on home page works
@@ -74,7 +75,7 @@ export const routes = [
     path: '/hooks',
     name: 'Hooks Preview',
     element: <HooksPreview />,
-    // hideInNavBar: true,
+    hideInNavBar: true,
   },
   {
     // and this, I suppose
