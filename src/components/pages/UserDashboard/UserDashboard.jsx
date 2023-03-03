@@ -75,6 +75,7 @@ const UserDashboard = () => {
                 // TODO: Update route from HooksPreview to CurrentPollSession when page is finished
                 // Is hardcoding this the best approach? Maybe...
                 navHandler={() => {navigate(`/hooks/${poll.id}`)}}
+                guestVotingNavHandler={() => navigate(`/poll/${poll.id}`)}
                 pollResultsNavHandler={() => navigate(`/results/${poll.id}`)}
                 isActive={poll.isActive}
                 isLocked={poll.isLocked}
@@ -101,6 +102,7 @@ function UserDashBoardNoPolls () {
 function UserDashBoardPollItem ({ 
   createdAt,
   navHandler,
+  guestVotingNavHandler,
   pollResultsNavHandler,
   isActive,
   isLocked,
@@ -134,7 +136,17 @@ function UserDashBoardPollItem ({
             isLocked ? ("Locked") : ("Unlocked")
           }
         </EpPill>
+      </div>
+      <div className="dashboard-item-temp-controls-container">
+        <EpButton
+          key="vote-button"
+          onClick={guestVotingNavHandler}
+        >
+          Guest Voting Page
+        </EpButton>
         <EpButton 
+          // TODO: remove this test buttonwhen conditional nav based on isActive works 
+          key="results-button"
           onClick={pollResultsNavHandler}
         >
           Poll Results

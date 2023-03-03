@@ -25,6 +25,10 @@ function AppDataContextProvider(props) {
   const [ allUserPollsData, setAllUserPollsData ] = useState();
   const [ allUserPollsLoading, setAllUserPollsLoading ] = useState(false);
   const [ currentPollId, setCurrentPollId ] = useState();
+  const [ guest, setGuest ] = useState();
+  const [ guestIsLoaded, setGuestIsLoaded ] = useState(false);
+
+
   // TODO: How do I access user auth data in here? props.user?
   //  This probably won't be handled via state here but read from the 
   //  context provided by AuthContext
@@ -106,6 +110,20 @@ function AppDataContextProvider(props) {
     });
   };
 
+  // TODO: We'll need to reimplement how this works when the actual guest creation stuff
+  //  is finished
+  // wraps addNewPollGuest from usePollData so that the new guest becomes the current guest
+  const joinPollAsGuest = (paramsObject) => {
+    const submitData = async () => {
+      const newGuestResponse = await addNewPollGuest(paramsObject);
+      const newGuest = newGuestResponse.data.createGuest;
+      setGuest(newGuest);
+      setGuestIsLoaded(true);
+    };
+
+    submitData();
+  }
+
   // generates and returns a pollReport
   const generatePollReport = async () => {
     if (!pollData) {
@@ -123,14 +141,17 @@ function AppDataContextProvider(props) {
       //   console.error("generatePollReport: Cannot create pollReport on an active poll.");
       //   return;
     // }
+
+    console.log("generatePollReport: pollData looks good, generating report...")
     
     const getData = async () => {
       const result = [];
-
+      
       // iterate through each question, using listAnswers to get an array of answerData,
       //  and then using calculateAnswerTallyFromAnswerData to generate a 
       for (let i = 0; i < pollQuestionsData.length; i++) {
         const question = pollQuestionsData[i];
+        console.log("generatePollReport: starting getData call...")
 
         try {
           const answersResponse = await API.graphql({
@@ -150,6 +171,8 @@ function AppDataContextProvider(props) {
             prompt: question.prompt,
           };
 
+          console.log("generatePollReport: getData: created questionObject: ", questionObject);
+
           result.push(questionObject);
         }
         catch (err) {
@@ -160,21 +183,38 @@ function AppDataContextProvider(props) {
       return result;
     };
     
-    const questions =  await getData();
+    const questions = await getData();
     
     const pollReport = {
-      title: pollData.title,
       createdAt: pollData.createdAt,
+      id: pollData.id,
+      title: pollData.title,
       questions: questions,
     };
 
+    console.log("generatePollReport: generated poll report: ", pollReport);
+
     return pollReport;
   };
-  
 
   useEffect(() => {
     fetchAndSetAllUserPollsData();
   }, [user]);
+
+  // Debug function to dump all app state values
+  const dumpCurrentAppData = () => ({
+    allUserPollsData: allUserPollsData,
+    currentAnswerData: currentAnswerData,
+    currentAnswerTally: currentAnswerTally,
+    currentQuestionData: currentQuestionData,
+    currentQuestionIsLoaded: currentQuestionIsLoaded,
+    guest,
+    guestIsLoaded,
+    pollData: pollData,
+    pollGuestsData: pollGuestsData,
+    pollIsLoaded: pollIsLoaded,
+    pollQuestionsData: pollQuestionsData,
+  }); 
 
   return (
     <AppDataContext.Provider
@@ -189,7 +229,11 @@ function AppDataContextProvider(props) {
         currentQuestionData,
         currentQuestionId, 
         currentQuestionIsLoaded,
+        dumpCurrentAppData,
         generatePollReport, 
+        guest,
+        guestIsLoaded,
+        joinPollAsGuest,
         pollData,
         pollGuestsData,
         pollIsLoaded,

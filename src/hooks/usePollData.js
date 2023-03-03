@@ -99,12 +99,12 @@ function usePollData({
   subscribeToChanges = false,
   userId = null,
 }) {
+  const [ currentQuestionId, setCurrentQuestionId ] = useState();
   const [ pollIsLoaded, setPollIsLoaded ] = useState(false);
   const [ pollIsLoading, setPollIsLoading ] = useState(false);
   const [ pollData, setPollData ] = useState();
   const [ pollQuestionsData, setPollQuestionsData ] = useState();
   const [ pollGuestsData, setPollGuestsData ] = useState();
-  const [ currentQuestionId, setCurrentQuestionId ] = useState();
 
   const {
     addGuestAnswer: addGuestAnswerToCurrentQuestion,
@@ -269,10 +269,10 @@ function usePollData({
     console.log("addNewPollGuest with newGuestDataObject:", newGuestDataObject);
 
     const submitData = async () => {
-      await API.graphql(graphqlOperation(createGuest, newGuestDataObject));
+      return await API.graphql(graphqlOperation(createGuest, newGuestDataObject));
     };
 
-    submitData();
+    return submitData();
   };
 
   // TODO: Test
