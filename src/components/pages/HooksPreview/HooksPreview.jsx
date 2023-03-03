@@ -3,20 +3,14 @@
 //TODO: Remove eslint-disable!  ... or not, this isn't a real page.
 
 import "./HooksPreview.scss";
-
-
 import { React, useState, useEffect, useContext } from 'react';
 import { useParams } from "react-router-dom"; 
-
-import useQuestionData from '../../../hooks/useQuestionData';
-import usePollData from "../../../hooks/usePollData";
 
 import { AppDataContext } from "../../../contexts/AuthContext/AppDataContext";
 
 import EpButton from "../../UI/EpButton/EpButton";
 import EpChart from "../../UI/EpChart/EpChart";
 import EpTextInput from "../../UI/EpTextInput/EpTextInput";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 const HooksPreview = () => {
@@ -102,7 +96,7 @@ const HooksPreview = () => {
       }
 
       {
-        (!pollIsLoaded && pollData === undefined) ? (
+        (!pollIsLoaded && !pollData) ? (
           <DataLoading dataName="poll"/>
         ) : (
           <div className="poll-data-container">

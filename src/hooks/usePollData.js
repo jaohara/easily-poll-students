@@ -415,6 +415,8 @@ function usePollData({
 
     console.log("in useEffect for pollId changing:", pollId);
 
+    setPollData(null);
+    setPollIsLoaded(false);
     fetchAndSetPollData();
 
     if (subscribeToChanges) {
@@ -435,13 +437,6 @@ function usePollData({
   useEffect(() => {
     setCurrentQuestionId(questionId);
   }, [questionId])
-  
-  // This was causing errors with data being pulled twice - seeing as
-  // we should only have data pull when a pollId is set, I made the above
-  // hook use that dependency. 
-  // useEffect(() => {
-  //   !pollIsLoaded && fetchAndSetPollData();
-  // }, [pollId]);
 
   return {
     //...(condition && { objKey: objValue }), // <- conditionally add an object property

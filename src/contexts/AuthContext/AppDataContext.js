@@ -164,6 +164,7 @@ function AppDataContextProvider(props) {
     const pollReport = {
       title: pollData.title,
       createdAt: pollData.createdAt,
+      id: pollData.id,
       questions: questions,
     };
 
