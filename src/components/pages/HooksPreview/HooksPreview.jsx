@@ -3,24 +3,20 @@
 //TODO: Remove eslint-disable!  ... or not, this isn't a real page.
 
 import "./HooksPreview.scss";
-
-
-import { React, useState, useEffect } from 'react';
+import { React, useState, useEffect, useContext } from 'react';
 import { useParams } from "react-router-dom"; 
 
-import useQuestionData from '../../../hooks/useQuestionData';
-import usePollData from "../../../hooks/usePollData";
+import { AppDataContext } from "../../../contexts/AuthContext/AppDataContext";
 
 import EpButton from "../../UI/EpButton/EpButton";
 import EpChart from "../../UI/EpChart/EpChart";
 import EpTextInput from "../../UI/EpTextInput/EpTextInput";
-import Select from "@mui/material/Select";
 import MenuItem from "@mui/material/MenuItem";
 
 const HooksPreview = () => {
 
   const [ currentGuestId, setCurrentGuestId ] = useState(null);
-  const [ currentQuestionId, setCurrentQuestionId ] = useState(null);
+  // const [ currentQuestionId, setCurrentQuestionId ] = useState(null);
 
   // const {
   //   addGuestAnswer,
@@ -31,31 +27,53 @@ const HooksPreview = () => {
   // } = useQuestionData({subscribeToChanges: true, questionId: "001"});
 
   const { targetPollId } = useParams(); 
-  const DEFAULT_POLL_ID = "001"
+  // const DEFAULT_POLL_ID = "001"
 
+  // const {
+  //   addGuestAnswerToCurrentQuestion,
+  //   addNewPollGuest,
+  //   currentAnswerData,
+  //   currentAnswerTally, 
+  //   currentQuestionData, 
+  //   currentQuestionIsLoaded, 
+  //   pollData,
+  //   pollGuestsData,
+  //   pollIsLoaded,
+  //   pollQuestionsData,
+  //   updateCurrentQuestionData, 
+  //   updatePollData,
+  // } = usePollData({
+  //   subscribeToChanges: true, 
+  //   pollId: targetPollId === undefined ? DEFAULT_POLL_ID : targetPollId, 
+  //   questionId: currentQuestionId,
+  // });
+
+  // Destructuring everything here to test if it's working, but we'll probably assign
+  // this object to "AppData" or something
   const {
     addGuestAnswerToCurrentQuestion,
     addNewPollGuest,
     currentAnswerData,
     currentAnswerTally, 
-    currentQuestionData, 
-    currentQuestionIsLoaded, 
+    // currentPollId,
+    currentQuestionData,
+    currentQuestionId, 
+    currentQuestionIsLoaded,
+    generatePollReport, // this... might blow up
     pollData,
     pollGuestsData,
+    // pollIdParam,
     pollIsLoaded,
     pollQuestionsData,
+    selectPollById,
+    setCurrentQuestionId, // Do I need this?
     updateCurrentQuestionData, 
     updatePollData,
-  } = usePollData({
-    subscribeToChanges: true, 
-    pollId: targetPollId === undefined ? DEFAULT_POLL_ID : targetPollId, 
-    questionId: currentQuestionId,
-  });
+  } = useContext(AppDataContext);
 
   const [ newAnswer, setNewAnswer ] = 
     useState(currentQuestionData ? currentQuestionData.answerOptions[0] : "");
   const [ newGuestName, setNewGuestName ] = useState("");
-  const [ newPrompt, setNewPrompt ] = useState("");
   const [ newTitle, setNewTitle ] = useState("");
 
   const formatIdString = (idString) => 
@@ -63,12 +81,22 @@ const HooksPreview = () => {
 
   useEffect(() => {console.log("targetPollID:", targetPollId)}, [])
 
+  useEffect(() => {
+    // to get a new poll if this id is set
+    selectPollById(targetPollId);
+  }, [targetPollId]);
+
   return ( 
     <div className="hooks-preview">
       <h1>Hooks Preview</h1>
+      {
+        targetPollId && (
+          <h3>targetPollId: {targetPollId}</h3>
+        )
+      }
 
       {
-        (!pollIsLoaded && pollData === undefined) ? (
+        (!pollIsLoaded && !pollData) ? (
           <DataLoading dataName="poll"/>
         ) : (
           <div className="poll-data-container">
@@ -83,6 +111,11 @@ const HooksPreview = () => {
                 onClick={() => console.log("guestData:", pollGuestsData)}
               >
                 Log pollGuestsData
+              </EpButton>
+              <EpButton
+                onClick={async () => console.log("pollReport:", await generatePollReport())}
+              >
+                Log pollReport
               </EpButton>
             </div>
             <div className="hooks-preview-container">
@@ -127,12 +160,6 @@ const HooksPreview = () => {
 
               <div className="hooks-preview-card-container data-container">
                 <h1>Poll Data</h1>
-                {
-                  targetPollId === undefined && 
-                  (<div className="default-poll-message">
-                    No poll specified, using default of "{DEFAULT_POLL_ID}"
-                  </div>)
-                }
                 <ul className="question-data-list">
                   <DataListItem
                     dataKey={"id"}
@@ -318,7 +345,8 @@ const HooksPreview = () => {
                 <h1>Answer Data</h1>
                 {
                   currentAnswerTally && (
-                    <DemoEpChart
+                    <EpChart
+                      chartType="pie"
                       data={currentAnswerTally.data}
                       labels={currentAnswerTally.labels}
                     />
@@ -361,31 +389,31 @@ const DataLoading = ({dataName}) => {
   )
 }
 
-const DemoEpChart = ({labels, data}) => (
-  <div className="demo-chart-container">
-    <div className="demo-chart-wrapper">
-      <EpChart
-        chartData={{
-          labels: labels, 
-          datasets: [
-            {
-              label: "",
-              data: data,
-              backgroundColor: [
-                "#519e8a",
-                "#FF785A",
-                "#EC0B43",
-                "#6A7FDB",
-                "#F4B942",
-              ],
-              borderColor: "black",
-              borderWidth: 2, 
-            }
-          ]
-        }}
-      />
-    </div>
-  </div>
-);
+// const DemoEpChart = ({labels, data}) => (
+//   <div className="demo-chart-container">
+//     <div className="demo-chart-wrapper">
+//       <EpChart
+//         chartData={{
+//           labels: labels, 
+//           datasets: [
+//             {
+//               label: "",
+//               data: data,
+//               backgroundColor: [
+//                 "#519e8a",
+//                 "#FF785A",
+//                 "#EC0B43",
+//                 "#6A7FDB",
+//                 "#F4B942",
+//               ],
+//               borderColor: "black",
+//               borderWidth: 2, 
+//             }
+//           ]
+//         }}
+//       />
+//     </div>
+//   </div>
+// );
  
 export default HooksPreview;

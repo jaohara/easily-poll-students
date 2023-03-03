@@ -1,9 +1,9 @@
 # This "input" configures a global authorization rule to enable public access to
 # all models in this schema. Learn more about authorization rules here: https://docs.amplify.aws/cli/graphql/authorization-rules
-input AMPLIFY {
-  globalAuthRule: AuthRule = { allow: public }
-} # FOR TESTING ONLY!
-type User @model {
+# input AMPLIFY {
+#   globalAuthRule: AuthRule = { allow: public }
+# } # FOR TESTING ONLY!
+type User @model @auth(rules: [{ allow: public }, { allow: custom }]) {
   polls: [Poll!]! @hasMany
   id: ID!
   email: String!
@@ -11,7 +11,7 @@ type User @model {
   lastName: String!
 }
 
-type Poll @model {
+type Poll @model @auth(rules: [{ allow: public }]) {
   user: User! @belongsTo
   questions: [Question!]! @hasMany
   #guestsIn: [Guest!]! @manyToMany(relationName: "PollGuestIn")
@@ -25,7 +25,7 @@ type Poll @model {
   roomSize: Int!
 }
 
-type Question @model {
+type Question @model @auth(rules: [{ allow: public }]) {
   poll: Poll! @belongsTo
   answers: [Answer!]! @hasMany
   id: ID!
@@ -34,14 +34,14 @@ type Question @model {
   questionType: String!
 }
 
-type Answer @model {
+type Answer @model @auth(rules: [{ allow: public }]) {
   question: Question! @belongsTo
   # maybe ambiguous - change from "owner" to "guest"?
   owner: Guest! @belongsTo
   answer: [String!]!
 }
 
-type Guest @model {
+type Guest @model @auth(rules: [{ allow: public }]) {
   #pollsIncluded: [Poll!]! @manyToMany(relationName: "PollGuestIn")
   #pollsExcluded: [Poll!]! @manyToMany(relationName: "PollGuestExcluded")
   poll: Poll! @belongsTo
@@ -52,19 +52,27 @@ type Guest @model {
   key: String!
 }
 
-type LinkName @model {
+type LinkName @model @auth(rules: [{ allow: public }]) {
   poll: Poll! @belongsTo
   name: String!
 }
 
 # Custom subscriptions to enable updates on associated types
 type Subscription {
-  onCreateAnswerForQuestion(questionAnswersId: ID!): Answer @aws_subscribe(mutations: ["createAnswer"])
-  onCreateGuestForPoll(pollGuestsId: ID!): Guest @aws_subscribe(mutations: ["createGuest"])
-  onCreateLinkNameForPoll(linkNamePollId: ID!): LinkName @aws_subscribe(mutations: ["createLinkName"])
-  onCreateQuestionForPoll(pollQuestionsId: ID!): Question @aws_subscribe(mutations: ["createQuestion"])
-  onUpdateAnswerForQuestion(questionAnswersId: ID!): Answer @aws_subscribe(mutations: ["updateAnswer"])
-  onUpdateGuestForPoll(pollGuestsId: ID!): Guest @aws_subscribe(mutations: ["updateGuest"])
-  onUpdateLinkNameForPoll(linkNamePollId: ID!): LinkName @aws_subscribe(mutations: ["updateLinkName"])
-  onUpdateQuestionForPoll(pollQuestionsId: ID!): Question @aws_subscribe(mutations: ["updateQuestion"])
+  onCreateAnswerForQuestion(questionAnswersId: ID!): Answer
+    @aws_subscribe(mutations: ["createAnswer"])
+  onCreateGuestForPoll(pollGuestsId: ID!): Guest
+    @aws_subscribe(mutations: ["createGuest"])
+  onCreateLinkNameForPoll(linkNamePollId: ID!): LinkName
+    @aws_subscribe(mutations: ["createLinkName"])
+  onCreateQuestionForPoll(pollQuestionsId: ID!): Question
+    @aws_subscribe(mutations: ["createQuestion"])
+  onUpdateAnswerForQuestion(questionAnswersId: ID!): Answer
+    @aws_subscribe(mutations: ["updateAnswer"])
+  onUpdateGuestForPoll(pollGuestsId: ID!): Guest
+    @aws_subscribe(mutations: ["updateGuest"])
+  onUpdateLinkNameForPoll(linkNamePollId: ID!): LinkName
+    @aws_subscribe(mutations: ["updateLinkName"])
+  onUpdateQuestionForPoll(pollQuestionsId: ID!): Question
+    @aws_subscribe(mutations: ["updateQuestion"])
 }

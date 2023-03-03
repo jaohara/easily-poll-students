@@ -24,32 +24,34 @@ import {
 
 
 import { AuthContextProvider } from "./contexts/AuthContext/AuthContext";
+import { AppDataContextProvider } from './contexts/AuthContext/AppDataContext';
 
 import EpNavBar from './components/UI/EpNavBar/EpNavBar';
 
 function App () {
   return (
-    <Authenticator.Provider>
-      <BrowserRouter>
-       <ThemeProvider theme={theme}>
-          <AuthContextProvider>
-
-           <div className="App">
-            <h1>Easy Poll App!</h1>
+  <Authenticator.Provider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <AuthContextProvider>
+          <AppDataContextProvider>
+            <div className="App">
+              <h1>Easy Poll App!</h1>
               <EpNavBar />
 
-             <Routes>
+              <Routes>
                 {
-                 routes.map((route, index) => (
-                   <Route path={route.path} element={route.element} key={`route-${index}`}/>
-                    ))
-                 }
-             </Routes>
-           </div>
-          </AuthContextProvider>
-        </ThemeProvider>
-     </BrowserRouter>
-    </Authenticator.Provider>
+                  routes.map((route, index) => (
+                    <Route path={route.path} element={route.element} key={`route-${index}`}/>
+                  ))
+                }
+              </Routes>
+            </div>
+          </AppDataContextProvider>
+        </AuthContextProvider>
+      </ThemeProvider>
+    </BrowserRouter>
+  </Authenticator.Provider>
   );
 }
 

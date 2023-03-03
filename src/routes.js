@@ -1,60 +1,94 @@
-import React from 'react';
-import { createBrowserRouter } from "react-router-dom";
+import React from 'react'
+import { createBrowserRouter } from 'react-router-dom'
 
-import Home from "./components/pages/Home/Home";
-import CreatePoll from './components/pages/CreatePoll/CreatePoll';
+
+import Home from './components/pages/Home/Home'
+import CreatePoll from './components/pages/CreatePoll/CreatePoll'
+import UserDashboard from './components/pages/UserDashboard/UserDashboard'
 import Dashboard from './components/pages/Dashboard/Dashboard';
 
-// demo-related pages
-import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo';
 
+// demo-related pages
+import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo'
 
 // testing login stuff
-import Login from "./components/pages/Login/Login";
 import AmplifyLogin from "./components/pages/Login/AmplifyLogin";
-import Register from "./components/pages/Register/Register";
+import Login from './components/pages/Login/Login'
+import Register from './components/pages/Register/Register'
+
 
 // testing hook stuff
-import HooksPreview from './components/pages/HooksPreview/HooksPreview';
+import HooksPreview from './components/pages/HooksPreview/HooksPreview'
+
+// can be removed in the future
+import VerifyEmail from './components/pages/VerifyEmail/VerifyEmail'
+
+//poll result test
+import PollResult from './components/pages/PollResult/PollResult'
 
 import { AuthRequired } from "./AuthRequired";
 
 // name is display name on button/link
 export const routes = [
   {
-    path: "/",
-    name: "Home",
-    element: <Home />
+    path: '/',
+    name: 'Home',
+    element: <Home />,
   },
   {
-    path: "/create-poll",
-    name: "Create Poll",
-    element: <AuthRequired> <CreatePoll /> </AuthRequired>
+    // TODO: Make this redirected from "Home" on auth, hide in navbar when auth on home page works
+    path: '/polls',
+    name: 'User Dashboard',
+    element: <UserDashboard />,
+    // hideInNavBar: true,
+  },
+  // {
+  //  // TODO: Make this go to "GuestVoting", which forwards to
+  //  //  "PollReport" if the poll is not active (or the room is locked?)
+  //  // TODO: This should also forward to "CurrentPollSession" if User is authorized
+  //  //  - should this all be conditional rendering within the overall poll page?
+  //   path: "/poll/:targetPollId",
+  //   name: "Poll Voting",
+  //   element: < />,
+  //   hideInNavBar: true,
+  // },
+  {
+    path: '/create-poll',
+    name: 'Create Poll',
+    element: <AuthRequired> <CreatePoll /> </AuthRequired>,
+    // TODO: Hide when app workflow is finalized (only available if logged in)
+    hideInNavBar: true,
   },
   {
-    path: "/epchart-demo",
-    name: "Chart Demo",
-    element: <AuthRequired> <EpChartDemo /> </AuthRequired>
+    // TODO: Remove this when gutting demo code
+    path: '/epchart-demo',
+    name: 'Chart Demo',
+    element: <AuthRequired> <EpChartDemo /> </AuthRequired>,
+    hideInNavBar: true,
   },
   {
-    path: "/login",
-    name: "Login",
-    element: <Login />
+    path: '/login',
+    name: 'Login',
+    element: <Login />,
   },
   {
+
     path: "/amplify_login",
     name: "Amplify Login",
     element: <AmplifyLogin />
   },
   {
-    path: "/register",
-    name: "Register",
-    element: <Register />
+    path: '/register',
+    name: 'Register',
+    element: <Register />,
+
   },
   {
-    path: "/hooks",
-    name: "Hooks Preview",
+    // TODO: ultimately remove this when gutting demo code
+    path: '/hooks',
+    name: 'Hooks Preview',
     element: <HooksPreview />,
+    // hideInNavBar: true,
   },
   {
     path: "/dashboard",
@@ -62,28 +96,44 @@ export const routes = [
     element: <Dashboard />,
   },
   {
-    path: "/hooks/:targetPollId",
-    name: "Hooks Preview",
+    // and this, I suppose
+    path: '/hooks/:targetPollId',
+    name: 'Hooks Preview',
     element: <HooksPreview />,
     hideInNavBar: true,
   },
-];
+  {
+    path: '/verify',
+    name: 'verify',
+    element: <VerifyEmail />,
+    hideInNavBar: false,
+  },
+  {
+    path: '/results/:targetPollId',
+    name: 'Poll Result',
+    element: <PollResult />,
+    hideInNavBar: true,
+  },
+]
 
-// create router, filtering out names
-// export const router = createBrowserRouter(routes.map(route => {route.path, route.element}));
-export const router = createBrowserRouter(routes);
+// gets the route path by filtering the routes array. Returns null if name isn't
+//  present.
+export const getRoutePathByName = (name) => {
+  let routePath = null
 
-// export const router = createBrowserRouter([
-//   {
-//     path: "/",
-//     element: <Home />
-//   },
-//   {
-//     path: "/material-demo",
-//     element: <MaterialUISwatch />
-//   },
-//   {
-//     path: "/color-swatch-demo",
-//     element: <ColorSwatchTest />
-//   }
-// ]);
+  for (let i = 0; i < routes.length; i++) {
+    if (routes[i].name === name) {
+      routePath = routes[i].path
+    }
+  }
+
+  if (routePath === null) {
+    console.error(
+      `getRoutePathByName: route name '${name}' not present in routes.`
+    )
+  }
+
+  return routePath
+}
+
+export const router = createBrowserRouter(routes)

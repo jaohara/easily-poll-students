@@ -1,33 +1,34 @@
 import React from 'react';
-import { useState } from "react";
-import { Data } from "./SampleData";
+//import { useState } from "react";
+//import { Data } from "./SampleData";
 import EpChart from '../../UI/EpChart/EpChart';
 
+import useQuestionData from '../../../hooks/useQuestionData';
+
 const EpChartDemo = () => {
-  const [chartData] = useState({
-    labels: Data.map((data) => data.year), 
-    datasets: [
-      {
-        label: "Users Gained ",
-        data: Data.map((data) => data.userGain),
-        backgroundColor: [
-          "rgba(75,192,192,1)",
-          "#ecf0f1",
-          "#50AF95",
-          "#f3ba2f",
-          "#2a71d0"
-        ],
-        borderColor: "black",
-        borderWidth: 2,
-        
-      }
-    ]
+  const { answerTally } = useQuestionData({
+    questionId: "5e4d07c6-d6a6-4257-b4a8-6edc4d8a68fa"
   });
 
   return (
+    <>
+    {
+      answerTally && (
     <div className="App">
-      <EpChart chartData={chartData} />
+      <EpChart 
+        chartType={'pie'} 
+        data={answerTally.data}
+        labels={answerTally.labels}        
+      />
+      <EpChart 
+        chartType={'bar'} 
+        data={answerTally.data}
+        labels={answerTally.labels}
+      />
     </div>
+      )
+    }
+    </>
   );
 }
    

@@ -1,0 +1,12 @@
+{
+  "version": 1,
+  "paths": {
+    "/guest": {
+      "name": "/guest",
+      "lambdaFunction": "guestRegister",
+      "permissions": {
+        "setting": "open"
+      }
+    }
+  }
+}

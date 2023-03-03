@@ -26,15 +26,11 @@ import {
   poll is created via the "addNewPoll" function. I wrote more thoughts in the comment
   above commented-out "subscribeToQuestions" function stub.
 
-  We can return to this later if this is 
+  We can return to this later if this is something we want to do.
 */
 
 import useApi from "./useApi";
 import useQuestionData from "./useQuestionData";
-
-// TODO: REMOVE DUMMY DATA
-const USER_ID = "001";
-
 
 // TODO: similar to "useQuestionData", I'm going to need to create a custom query -
 //  probably something like "getPollWithQuestionsAndGuests"?
@@ -101,7 +97,7 @@ function usePollData({
   pollId = null, // null before poll has been created
   questionId = null,
   subscribeToChanges = false,
-  userId = USER_ID,
+  userId = null,
 }) {
   const [ pollIsLoaded, setPollIsLoaded ] = useState(false);
   const [ pollIsLoading, setPollIsLoading ] = useState(false);
@@ -113,7 +109,8 @@ function usePollData({
   const {
     addGuestAnswer: addGuestAnswerToCurrentQuestion,
     answerData: currentAnswerData,
-    answerTally: currentAnswerTally, 
+    answerTally: currentAnswerTally,
+    calculateAnswerTallyFromAnswerData, 
     questionData: currentQuestionData, 
     questionIsLoaded: currentQuestionIsLoaded, 
     updateQuestionData: updateCurrentQuestionData, 
@@ -144,7 +141,8 @@ function usePollData({
   };
 
   const fetchAndSetPollData = async () => {
-    if (pollId === null || pollIsLoading) {
+    // if (!pollId === null || pollIsLoading) {
+    if (!pollId || pollIsLoading) {
       return;
     }
 
@@ -168,17 +166,23 @@ function usePollData({
       setPollData(pollResponseData);
       setPollGuestsData(pollResponseGuestData);
       setPollQuestionsData(pollResponseQuestionData);
+      setCurrentQuestionId(pollResponseQuestionData[0].id);
+      setPollIsLoaded(true);
     }
     catch (err) {
       console.error("Error fetching poll data:", err);
     }
 
-    setPollIsLoaded(true);
     setPollIsLoading(false);
   };
 
   // TODO: Finish implementing question adding portion and test
-  const createNewPoll = ({ roomSize = 10, title, questions }) => {
+  const createNewPoll = ({ roomSize = 10, title, questions }, callback = async () => {}) => {
+    if (!userId) {
+      console.error("createNewPoll: Cannot create poll - user isn't logged in");
+      return;
+    }
+
     const newPollDataObject = {
       input: {
         isActive: true,
@@ -211,6 +215,7 @@ function usePollData({
         }
 
         await API.graphql(graphqlOperation(createQuestion, newQuestionDataObject));
+        await callback();
       }
 
       return newPollData;
@@ -220,6 +225,10 @@ function usePollData({
   };
 
   const updatePollData = (newData) => {
+    if (!userId) {
+      console.error("updatePollData: Cannot update poll data, user is not logged in");
+    }
+
     if (pollId === null) {
       console.warn("updatePollData: Cannot update poll data, poll has not been created.");
       return;
@@ -268,6 +277,11 @@ function usePollData({
 
   // TODO: Test
   const togglePollGuestLock = (guestId) => {
+    if (!userId) {
+      console.error("togglePollGuestLock: Cannot toggle guest, user is not logged in.");
+      return;
+    }
+
     // first ensure guest exists
     let guestData = null;
 
@@ -395,13 +409,14 @@ function usePollData({
   // };
 
   useEffect(() => {
-    if (pollId === null) {
+    if (!pollId) {
       return;
     }
 
-    // console.log("in initial useEffect, pollId:", pollId);
     console.log("in useEffect for pollId changing:", pollId);
 
+    setPollData(null);
+    setPollIsLoaded(false);
     fetchAndSetPollData();
 
     if (subscribeToChanges) {
@@ -416,30 +431,29 @@ function usePollData({
     }
   }, [pollId]);
 
+  // Not sure if I want to handle this like this. questionId should probably 
+  //  not be pulled from a param but instead set to the first questionId of questionData 
+  //  like in fetchAndSetPollData
   useEffect(() => {
     setCurrentQuestionId(questionId);
   }, [questionId])
-  
-  // This was causing errors with data being pulled twice - seeing as
-  // we should only have data pull when a pollId is set, I made the above
-  // hook use that dependency. 
-  // useEffect(() => {
-  //   !pollIsLoaded && fetchAndSetPollData();
-  // }, [pollId]);
 
   return {
     //...(condition && { objKey: objValue }), // <- conditionally add an object property
     addGuestAnswerToCurrentQuestion,
     addNewPollGuest,
+    calculateAnswerTallyFromAnswerData,
     currentAnswerData,
     currentAnswerTally, 
-    currentQuestionData, 
+    currentQuestionData,
+    currentQuestionId, 
     currentQuestionIsLoaded,
     createNewPoll,
     pollData,
     pollGuestsData,
     pollIsLoaded,
     pollQuestionsData,
+    setCurrentQuestionId,
     togglePollGuestLock,
     updateCurrentQuestionData, 
     updatePollData,
