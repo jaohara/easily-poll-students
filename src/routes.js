@@ -1,35 +1,37 @@
-import React from 'react';
-import { createBrowserRouter } from "react-router-dom";
+import React from 'react'
+import { createBrowserRouter } from 'react-router-dom'
 
-import Home from "./components/pages/Home/Home";
-import CreatePoll from './components/pages/CreatePoll/CreatePoll';
-import UserDashboard from './components/pages/UserDashboard/UserDashboard';
+import Home from './components/pages/Home/Home'
+import CreatePoll from './components/pages/CreatePoll/CreatePoll'
+import UserDashboard from './components/pages/UserDashboard/UserDashboard'
 
 // demo-related pages
-import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo';
-
+import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo'
 
 // testing login stuff
-import Login from "./components/pages/Login/Login";
-import Register from "./components/pages/Register/Register";
+import Login from './components/pages/Login/Login'
+import Register from './components/pages/Register/Register'
 
 // testing hook stuff
-import HooksPreview from './components/pages/HooksPreview/HooksPreview';
+import HooksPreview from './components/pages/HooksPreview/HooksPreview'
 
-//poll result test 
+// can be removed in the future
+import VerifyEmail from './components/pages/VerifyEmail/VerifyEmail'
+
+//poll result test
 import PollResult from './components/pages/PollResult/PollResult'
 
 // name is display name on button/link
 export const routes = [
   {
-    path: "/",
-    name: "Home",
-    element: <Home />
+    path: '/',
+    name: 'Home',
+    element: <Home />,
   },
   {
     // TODO: Make this redirected from "Home" on auth, hide in navbar when auth on home page works
-    path: "/polls",
-    name: "User Dashboard",
+    path: '/polls',
+    name: 'User Dashboard',
     element: <UserDashboard />,
     // hideInNavBar: true,
   },
@@ -44,67 +46,75 @@ export const routes = [
   //   hideInNavBar: true,
   // },
   {
-    path: "/create-poll",
-    name: "Create Poll",
+    path: '/create-poll',
+    name: 'Create Poll',
     element: <CreatePoll />,
     // TODO: Hide when app workflow is finalized (only available if logged in)
     hideInNavBar: true,
   },
   {
     // TODO: Remove this when gutting demo code
-    path: "/epchart-demo",
-    name: "Chart Demo",
+    path: '/epchart-demo',
+    name: 'Chart Demo',
     element: <EpChartDemo />,
     hideInNavBar: true,
   },
   {
-    path: "/login",
-    name: "Login",
-    element: <Login />
+    path: '/login',
+    name: 'Login',
+    element: <Login />,
   },
   {
-    path: "/register",
-    name: "Register",
-    element: <Register />
+    path: '/register',
+    name: 'Register',
+    element: <Register />,
   },
   {
     // TODO: ultimately remove this when gutting demo code
-    path: "/hooks",
-    name: "Hooks Preview",
+    path: '/hooks',
+    name: 'Hooks Preview',
     element: <HooksPreview />,
     // hideInNavBar: true,
   },
   {
     // and this, I suppose
-    path: "/hooks/:targetPollId",
-    name: "Hooks Preview",
+    path: '/hooks/:targetPollId',
+    name: 'Hooks Preview',
     element: <HooksPreview />,
     hideInNavBar: true,
   },
   {
+    path: '/verify',
+    name: 'verify',
+    element: <VerifyEmail />,
+    hideInNavBar: false,
+  },
+  {
     path: '/results/:targetPollId',
     name: 'Poll Result',
-    element: <PollResult/>,
+    element: <PollResult />,
     hideInNavBar: true,
   },
-];
+]
 
-// gets the route path by filtering the routes array. Returns null if name isn't 
+// gets the route path by filtering the routes array. Returns null if name isn't
 //  present.
 export const getRoutePathByName = (name) => {
-  let routePath = null;
+  let routePath = null
 
   for (let i = 0; i < routes.length; i++) {
     if (routes[i].name === name) {
-      routePath = routes[i].path;
+      routePath = routes[i].path
     }
   }
 
   if (routePath === null) {
-    console.error(`getRoutePathByName: route name '${name}' not present in routes.`);
+    console.error(
+      `getRoutePathByName: route name '${name}' not present in routes.`
+    )
   }
 
-  return routePath;
-};
+  return routePath
+}
 
-export const router = createBrowserRouter(routes);
+export const router = createBrowserRouter(routes)
