@@ -1,3 +1,53 @@
+@use "../../../styles/globals.scss" as g;
+
 .ep-nav-bar {
+  align-items: center;
+  background: g.$background-gray;
+  display: flex;
+  justify-content: space-between;
   margin-bottom: 2rem;
+  // position: fixed;
+
+  & button {
+    margin-right: 0rem;
+    margin-left: 1rem;
+  }
+}
+
+.ep-nav-bar .ep-diagnostic-button {
+  font-size: 1.5rem;
+}
+
+.ep-diagnostics-window {
+  background: g.$dark-green-gray;
+  border-radius: g.$common-border-radius;
+  color: g.$background-gray;
+  font-family: "JetBrains Mono", monospace;
+  height: 75vh;
+  overflow-y: scroll;
+  padding: 1rem 2rem;
+  position: fixed;
+  right: -10px;
+  top: 100px;
+  transition: transform 300ms;
+  transform: translateX(110%);
+  width: 50%;
+
+  &.active {
+    transform: translateX(0px);
+  }
+}
+
+.ep-diagnostics-item {
+  margin-bottom: 0rem;
+  word-wrap: break-word;
+
+  .ep-diagnostics-key {
+    font-weight: bold;
+    color: g.$shallow-space-sparkle;
+  }
+
+  .ep-diagnostics-item {
+    margin-left: 1rem;
+  }
 }
