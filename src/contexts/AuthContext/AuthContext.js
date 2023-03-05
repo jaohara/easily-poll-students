@@ -82,6 +82,7 @@ function AuthContextProvider(props) {
         })
           .then((res) => {
             setUser(res.data.getUser)
+            navigate('/')
           })
           .catch((err) => {
             // TODO: explanations
