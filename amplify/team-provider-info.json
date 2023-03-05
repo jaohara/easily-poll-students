@@ -20,6 +20,10 @@
           "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
           "s3Key": "amplify-builds/guestRegister-45473167525569682f61-build.zip"
         }
+      },
+      "api": {
+        "easilypollstudents": {},
+        "guest": {}
       }
     }
   }

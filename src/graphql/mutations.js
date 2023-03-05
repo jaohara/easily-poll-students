@@ -75,13 +75,6 @@ export const createPoll = /* GraphQL */ `
       guests {
         nextToken
       }
-      linkName {
-        name
-        id
-        createdAt
-        updatedAt
-        linkNamePollId
-      }
       id
       title
       isActive
@@ -90,7 +83,6 @@ export const createPoll = /* GraphQL */ `
       createdAt
       updatedAt
       userPollsId
-      pollLinkNameId
     }
   }
 `;
@@ -114,13 +106,6 @@ export const updatePoll = /* GraphQL */ `
       guests {
         nextToken
       }
-      linkName {
-        name
-        id
-        createdAt
-        updatedAt
-        linkNamePollId
-      }
       id
       title
       isActive
@@ -129,7 +114,6 @@ export const updatePoll = /* GraphQL */ `
       createdAt
       updatedAt
       userPollsId
-      pollLinkNameId
     }
   }
 `;
@@ -153,13 +137,6 @@ export const deletePoll = /* GraphQL */ `
       guests {
         nextToken
       }
-      linkName {
-        name
-        id
-        createdAt
-        updatedAt
-        linkNamePollId
-      }
       id
       title
       isActive
@@ -168,7 +145,6 @@ export const deletePoll = /* GraphQL */ `
       createdAt
       updatedAt
       userPollsId
-      pollLinkNameId
     }
   }
 `;
@@ -187,7 +163,6 @@ export const createQuestion = /* GraphQL */ `
         createdAt
         updatedAt
         userPollsId
-        pollLinkNameId
       }
       answers {
         nextToken
@@ -217,7 +192,6 @@ export const updateQuestion = /* GraphQL */ `
         createdAt
         updatedAt
         userPollsId
-        pollLinkNameId
       }
       answers {
         nextToken
@@ -247,7 +221,6 @@ export const deleteQuestion = /* GraphQL */ `
         createdAt
         updatedAt
         userPollsId
-        pollLinkNameId
       }
       answers {
         nextToken
@@ -376,7 +349,6 @@ export const createGuest = /* GraphQL */ `
         createdAt
         updatedAt
         userPollsId
-        pollLinkNameId
       }
       canVote
       answers {
@@ -406,7 +378,6 @@ export const updateGuest = /* GraphQL */ `
         createdAt
         updatedAt
         userPollsId
-        pollLinkNameId
       }
       canVote
       answers {
@@ -436,7 +407,6 @@ export const deleteGuest = /* GraphQL */ `
         createdAt
         updatedAt
         userPollsId
-        pollLinkNameId
       }
       canVote
       answers {
@@ -448,81 +418,6 @@ export const deleteGuest = /* GraphQL */ `
       createdAt
       updatedAt
       pollGuestsId
-    }
-  }
-`;
-export const createLinkName = /* GraphQL */ `
-  mutation CreateLinkName(
-    $input: CreateLinkNameInput!
-    $condition: ModelLinkNameConditionInput
-  ) {
-    createLinkName(input: $input, condition: $condition) {
-      poll {
-        id
-        title
-        isActive
-        isLocked
-        roomSize
-        createdAt
-        updatedAt
-        userPollsId
-        pollLinkNameId
-      }
-      name
-      id
-      createdAt
-      updatedAt
-      linkNamePollId
-    }
-  }
-`;
-export const updateLinkName = /* GraphQL */ `
-  mutation UpdateLinkName(
-    $input: UpdateLinkNameInput!
-    $condition: ModelLinkNameConditionInput
-  ) {
-    updateLinkName(input: $input, condition: $condition) {
-      poll {
-        id
-        title
-        isActive
-        isLocked
-        roomSize
-        createdAt
-        updatedAt
-        userPollsId
-        pollLinkNameId
-      }
-      name
-      id
-      createdAt
-      updatedAt
-      linkNamePollId
-    }
-  }
-`;
-export const deleteLinkName = /* GraphQL */ `
-  mutation DeleteLinkName(
-    $input: DeleteLinkNameInput!
-    $condition: ModelLinkNameConditionInput
-  ) {
-    deleteLinkName(input: $input, condition: $condition) {
-      poll {
-        id
-        title
-        isActive
-        isLocked
-        roomSize
-        createdAt
-        updatedAt
-        userPollsId
-        pollLinkNameId
-      }
-      name
-      id
-      createdAt
-      updatedAt
-      linkNamePollId
     }
   }
 `;

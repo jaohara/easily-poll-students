@@ -44,11 +44,12 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2023-03-01T22:02:14.545Z",
+      "lastPushTimeStamp": "2023-03-03T22:06:24.437Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apieasilypollstudents"
-      }
+      },
+      "lastPushDirHash": "fSApEipGl13DKDtkiMjXf1mRabk="
     },
     "guest": {
       "dependsOn": [
@@ -68,7 +69,7 @@
         "RootUrl": "https://4lofxuc3fc.execute-api.us-west-2.amazonaws.com/staging",
         "ApiId": "4lofxuc3fc"
       },
-      "lastPushTimeStamp": "2023-03-01T22:02:14.546Z",
+      "lastPushTimeStamp": "2023-03-03T22:06:23.520Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/guest-cloudformation-template.json",
         "logicalId": "apiguest"
@@ -110,7 +111,7 @@
         "IdentityPoolName": "easilypollstudentsb7118bae_identitypool_b7118bae__staging",
         "UserPoolName": "easilypollstudentsb7118bae_userpool_b7118bae"
       },
-      "lastPushTimeStamp": "2023-03-01T22:02:14.547Z",
+      "lastPushTimeStamp": "2023-03-03T22:06:23.521Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/auth/easilypollstudentsb7118bae-cloudformation-template.json",
         "logicalId": "autheasilypollstudentsb7118bae"
@@ -140,7 +141,7 @@
         "Name": "guestRegister-staging",
         "LambdaExecutionRole": "easilypollstudentsLambdaRole1c988000-staging"
       },
-      "lastPushTimeStamp": "2023-03-01T22:02:14.548Z",
+      "lastPushTimeStamp": "2023-03-03T22:06:23.522Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestRegister-cloudformation-template.json",
         "logicalId": "functionguestRegister"
