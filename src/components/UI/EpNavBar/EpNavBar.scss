@@ -19,16 +19,19 @@
 }
 
 .ep-diagnostics-window {
+  $diagnostics-window-top: 100px;
+
   background: g.$dark-green-gray;
   border-radius: g.$common-border-radius;
   color: g.$background-gray;
   font-family: "JetBrains Mono", monospace;
-  height: 75vh;
+  // height: 90vh;
+  height: calc(101vh - $diagnostics-window-top);
   overflow-y: scroll;
   padding: 1rem 2rem;
   position: fixed;
   right: -10px;
-  top: 100px;
+  top: $diagnostics-window-top;
   transition: transform 300ms;
   transform: translateX(110%);
   width: 50%;
