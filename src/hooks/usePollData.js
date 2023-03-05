@@ -32,8 +32,7 @@ import {
 import useApi from "./useApi";
 import useQuestionData from "./useQuestionData";
 
-// TODO: similar to "useQuestionData", I'm going to need to create a custom query -
-//  probably something like "getPollWithQuestionsAndGuests"?
+// 3/5/23 - commented out LinkName stuff for updated schema
 const getPollWithQuestionsAndGuests = /* GraphQL */ `
 query GetPoll($id: ID!) {
   getPoll(id: $id) {
@@ -68,13 +67,13 @@ query GetPoll($id: ID!) {
         pollGuestsId
       }
     }
-    linkName {
-      name
-      id
-      createdAt
-      updatedAt
-      linkNamePollId
-    }
+    # linkName {
+    #   name
+    #   id
+    #   createdAt
+    #   updatedAt
+    #   linkNamePollId
+    # }
     id
     title
     isActive
@@ -83,7 +82,7 @@ query GetPoll($id: ID!) {
     createdAt
     updatedAt
     userPollsId
-    pollLinkNameId
+    # pollLinkNameId
   }
 }
 `;

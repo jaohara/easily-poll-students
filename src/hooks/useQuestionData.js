@@ -18,6 +18,7 @@ import {
   onUpdateQuestion,
 } from "../graphql/subscriptions";
 
+// 3/5/23 - commented out LinkName stuff for updated schema
 // Modified graphQL query to include answer data with the question data
 const getQuestionWithAnswers = /* GraphQL */ `
   query GetQuestion($id: ID!) {
@@ -31,7 +32,7 @@ const getQuestionWithAnswers = /* GraphQL */ `
         createdAt
         updatedAt
         userPollsId
-        pollLinkNameId
+        # pollLinkNameId
       }
       answers {
         nextToken
