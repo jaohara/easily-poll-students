@@ -1,5 +1,6 @@
-import React, { createContext, useState } from 'react'
-import { API } from 'aws-amplify'
+/*eslint-disable */
+import React, { createContext, useEffect, useState } from 'react'
+import { API, Hub } from 'aws-amplify'
 import { Auth } from 'aws-amplify'
 import * as mutations from '../../graphql/mutations'
 import * as queries from '../../graphql/queries'
@@ -11,13 +12,22 @@ function AuthContextProvider(props) {
   const navigate = useNavigate()
 
   const [user, setUser] = useState(null)
-  const [err, setErr] = useState('')
-  const [verifyEmail, setVerifyEmail] = useState('')
+  const [userCognito, setUserCognito] = useState(null)
+  const [registerUserData, setRegisterUserData] = useState(null)
+  const [error, setError] = useState('')
 
-  const register = async (email, pwd, firstName, lastName) => {
-    await Auth.signUp({
+  useEffect(() => {
+    if (!user) {
+      if (userCognito) {
+      }
+    }
+  })
+
+  const register = (email, password, firstName, lastName) => {
+    setRegisterUserData({ email, firstName, lastName })
+    Auth.signUp({
       username: email,
-      password: pwd,
+      password,
       attributes: {
         email,
       },
@@ -25,56 +35,21 @@ function AuthContextProvider(props) {
         enabled: true,
       },
     })
-      .then(async (res) => {
-        console.log(res)
-        console.log(res.userSub)
-        await API.graphql({
-          query: mutations.createUser,
-          variables: {
-            input: {
-              id: res.userSub,
-              firstName,
-              lastName,
-              email,
-            },
-          },
-        })
-          .then(() => {
-            setVerifyEmail(email)
-            navigate('/verify')
-          })
-          .catch(async (err) => {
-            console.log('Failed to upload user data to DynamoDB')
-            console.log(err)
-            await Auth.deleteUser().catch((err) => {
-              setErr('Unexpected behavior: contact help center')
-              console.log(err)
-              // TODO: UI explanations
-            })
-          })
-      })
-      .catch((err) => {
-        console.log('Failed to create a new user with cognito')
-        console.log(err)
-        // TODO: UI explanations
-      })
-  }
-
-  const verify = async (email, code) => {
-    await Auth.confirmSignUp(email, code)
-      .then(() => {
-        navigate('/')
+      .then((res) => {
+        setRegisterUserData((old) => ({ ...old, id: res.userSub }))
+        navigate('/verify')
       })
       .catch((err) => {
         console.log(err)
-        // TODO: UI explanations
+        // TODO: UI
       })
   }
 
-  const login = (email, pwd) => {
-    Auth.signIn(email, pwd)
-      .then(async (res) => {
-        await API.graphql({
+  const login = (email, password) => {
+    Auth.signIn(email, password)
+      .then((res) => {
+        setUserCognito(res)
+        API.graphql({
           query: queries.getUser,
           variables: {
             id: res.username,
@@ -82,41 +57,64 @@ function AuthContextProvider(props) {
         })
           .then((res) => {
             setUser(res.data.getUser)
+            navigate('/')
           })
           .catch((err) => {
-            // TODO: explanations
             console.log(err)
-            Auth.signOut()
+            navigate('/register-step')
           })
       })
       .catch((err) => {
-        // TODO: explanations
         console.log(err)
-        setErr('error')
+        // TODO: UI
+      })
+  }
+
+  const verify = (email, code) => {
+    Auth.confirmSignUp(email, code)
+      .then((res) => {
+        if (registerUserData) {
+          API.graphql({
+            query: mutations.createUser,
+            variables: {
+              input: {
+                ...registerUserData,
+              },
+            },
+          })
+            .then((res) => {
+              setUser(res.data.createUser)
+              navigate('/')
+            })
+            .catch((err) => {
+              console.log(err)
+            })
+        } else {
+          navigate('/register-step')
+        }
+      })
+      .catch((err) => {
+        console.log(err)
+        setError('')
+        // TODO: UI explanations
       })
   }
 
   const logout = () => {
+    setUser(null)
     Auth.signOut()
-      .then(() => {
-        setUser(null)
-        setErr('')
-      })
-      .catch((err) => {
-        setErr(err)
-      })
   }
 
   return (
     <AuthContext.Provider
       value={{
         user,
-        err,
-        verifyEmail,
-        setVerifyEmail,
-        login,
+        userCognito,
+        registerUserData,
+        error,
         register,
         verify,
+        login,
         logout,
       }}
     >

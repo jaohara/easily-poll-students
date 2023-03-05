@@ -3,34 +3,30 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
-import FormControlLabel from '@mui/material/FormControlLabel'
-import Checkbox from '@mui/material/Checkbox'
 import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-// import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import Navbar from "../../../components/Navbar/Navbar";
-import { AuthContext } from '../../../contexts/AuthContext/AuthContext'
-import { useNavigate } from 'react-router-dom'
+import { AuthContext } from '../../../../contexts/AuthContext/AuthContext'
 
-import EpCopyright from '../../UI/EpCopyright/EpCopyright'
-
-export default function Login() {
-  const navigate = useNavigate()
+export default function VerifyEmail() {
   const Auth = React.useContext(AuthContext)
+
+  const [firstLoad, setFirstLoad] = React.useState(true)
+  const [email, setEmail] = React.useState('')
+  const [code, setCode] = React.useState('')
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    const data = new FormData(event.currentTarget)
-    await Auth.login(data.get('email'), data.get('password'))
+    Auth.verify(email, code)
   }
 
   React.useEffect(() => {
-    if (Auth.user) {
-      navigate('/')
+    if (firstLoad) {
+      setFirstLoad(false)
+      setEmail(Auth.registerUserData.email)
     }
   })
 
@@ -49,7 +45,7 @@ export default function Login() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Sign in
+          Verify Email
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -61,20 +57,18 @@ export default function Login() {
             name="email"
             autoComplete="email"
             autoFocus
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             margin="normal"
             required
             fullWidth
-            name="password"
-            label="Password"
-            type="password"
+            name="code"
+            label="Verification Code"
             id="password"
-            autoComplete="current-password"
-          />
-          <FormControlLabel
-            control={<Checkbox value="remember" color="primary" />}
-            label="Remember me"
+            value={code}
+            onChange={(e) => setCode(e.target.value)}
           />
           <Button
             type="submit"
@@ -82,7 +76,7 @@ export default function Login() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            Sign In
+            verify
           </Button>
           <Grid container>
             <Grid item xs>
@@ -98,7 +92,6 @@ export default function Login() {
           </Grid>
         </Box>
       </Box>
-      <EpCopyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   )
 }

@@ -10,14 +10,14 @@ import UserDashboard from './components/pages/UserDashboard/UserDashboard'
 import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo'
 
 // testing login stuff
-import Login from './components/pages/Login/Login'
-import Register from './components/pages/Register/Register'
+import Login from './components/pages/Auth/Login/Login'
+import Register from './components/pages/Auth/Register/Register'
 
 // testing hook stuff
 import HooksPreview from './components/pages/HooksPreview/HooksPreview'
 
 // can be removed in the future
-import VerifyEmail from './components/pages/VerifyEmail/VerifyEmail'
+import VerifyEmail from './components/pages/Auth/VerifyEmail/VerifyEmail'
 
 //poll result test
 import PollResult from './components/pages/PollResult/PollResult'
@@ -38,12 +38,12 @@ export const routes = [
     // hideInNavBar: true,
   },
   {
-   // TODO: Make this go to "GuestVoting", which forwards to
-   //  "PollReport" if the poll is not active (or the room is locked?)
-   // TODO: This should also forward to "CurrentPollSession" if User is authorized
-   //  - should this all be conditional rendering within the overall poll page?
-    path: "/poll/:targetPollId",
-    name: "Poll Voting",
+    // TODO: Make this go to "GuestVoting", which forwards to
+    //  "PollReport" if the poll is not active (or the room is locked?)
+    // TODO: This should also forward to "CurrentPollSession" if User is authorized
+    //  - should this all be conditional rendering within the overall poll page?
+    path: '/poll/:targetPollId',
+    name: 'Poll Voting',
     element: <GuestVoting />,
     hideInNavBar: true,
   },

@@ -10,13 +10,8 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-// import { createTheme, ThemeProvider } from "@mui/material/styles";
-// import Navbar from "../../../components/Navbar/Navbar";
-
-import EpCopyright from '../../UI/EpCopyright/EpCopyright'
-import { AuthContext } from '../../../contexts/AuthContext/AuthContext'
-
-// const theme = createTheme();
+import EpCopyright from '../../../UI/EpCopyright/EpCopyright'
+import { AuthContext } from '../../../../contexts/AuthContext/AuthContext'
 
 export default function Register() {
   const Auth = React.useContext(AuthContext)
@@ -49,7 +44,7 @@ export default function Register() {
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
-            Sign up
+            Register
           </Typography>
           <Box
             component="form"
@@ -107,12 +102,12 @@ export default function Register() {
               variant="contained"
               sx={{ mt: 3, mb: 2 }}
             >
-              Sign Up
+              Register
             </Button>
             <Grid container justifyContent="flex-end">
               <Grid item>
                 <Link href="#" variant="body2">
-                  Already have an account? Sign in
+                  Already have an account? Login
                 </Link>
               </Grid>
             </Grid>

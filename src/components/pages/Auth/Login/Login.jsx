@@ -3,32 +3,26 @@ import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
 import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
+import FormControlLabel from '@mui/material/FormControlLabel'
+import Checkbox from '@mui/material/Checkbox'
 import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import { AuthContext } from '../../../contexts/AuthContext/AuthContext'
+import { AuthContext } from '../../../../contexts/AuthContext/AuthContext'
 
-export default function VerifyEmail() {
+import EpCopyright from '../../../UI/EpCopyright/EpCopyright'
+
+export default function Login() {
   const Auth = React.useContext(AuthContext)
-
-  const [email, setEmail] = React.useState('')
-  const [code, setCode] = React.useState('')
 
   const handleSubmit = async (event) => {
     event.preventDefault()
-    Auth.verify(email, code)
+    const data = new FormData(event.currentTarget)
+    await Auth.login(data.get('email'), data.get('password'))
   }
-
-  React.useEffect(() => {
-    if (Auth.VerifyEmail) {
-      const emailTemp = Auth.verifyEmail
-      Auth.setVerifyEmail('')
-      setEmail(emailTemp)
-    }
-  })
 
   return (
     <Container component="main" maxWidth="xs">
@@ -45,7 +39,7 @@ export default function VerifyEmail() {
           <LockOutlinedIcon />
         </Avatar>
         <Typography component="h1" variant="h5">
-          Verify Email
+          Login
         </Typography>
         <Box component="form" onSubmit={handleSubmit} noValidate sx={{ mt: 1 }}>
           <TextField
@@ -57,18 +51,20 @@ export default function VerifyEmail() {
             name="email"
             autoComplete="email"
             autoFocus
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
           />
           <TextField
             margin="normal"
             required
             fullWidth
-            name="code"
-            label="Verification Code"
+            name="password"
+            label="Password"
+            type="password"
             id="password"
-            value={code}
-            onChange={(e) => setCode(e.target.value)}
+            autoComplete="current-password"
+          />
+          <FormControlLabel
+            control={<Checkbox value="remember" color="primary" />}
+            label="Remember me"
           />
           <Button
             type="submit"
@@ -76,7 +72,7 @@ export default function VerifyEmail() {
             variant="contained"
             sx={{ mt: 3, mb: 2 }}
           >
-            verify
+            Login
           </Button>
           <Grid container>
             <Grid item xs>
@@ -92,6 +88,7 @@ export default function VerifyEmail() {
           </Grid>
         </Box>
       </Box>
+      <EpCopyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   )
 }

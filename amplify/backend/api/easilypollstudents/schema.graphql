@@ -17,7 +17,6 @@ type Poll @model @auth(rules: [{ allow: public }]) {
   #guestsIn: [Guest!]! @manyToMany(relationName: "PollGuestIn")
   #guestsExcluded: [Guest!] @manyToMany(relationName: "PollGuestExcluded")
   guests: [Guest!]! @hasMany
-  linkName: LinkName @hasOne
   id: ID!
   title: String!
   isActive: Boolean!
@@ -52,27 +51,18 @@ type Guest @model @auth(rules: [{ allow: public }]) {
   key: String!
 }
 
-type LinkName @model @auth(rules: [{ allow: public }]) {
-  poll: Poll! @belongsTo
-  name: String!
-}
-
 # Custom subscriptions to enable updates on associated types
 type Subscription {
   onCreateAnswerForQuestion(questionAnswersId: ID!): Answer
     @aws_subscribe(mutations: ["createAnswer"])
   onCreateGuestForPoll(pollGuestsId: ID!): Guest
     @aws_subscribe(mutations: ["createGuest"])
-  onCreateLinkNameForPoll(linkNamePollId: ID!): LinkName
-    @aws_subscribe(mutations: ["createLinkName"])
   onCreateQuestionForPoll(pollQuestionsId: ID!): Question
     @aws_subscribe(mutations: ["createQuestion"])
   onUpdateAnswerForQuestion(questionAnswersId: ID!): Answer
     @aws_subscribe(mutations: ["updateAnswer"])
   onUpdateGuestForPoll(pollGuestsId: ID!): Guest
     @aws_subscribe(mutations: ["updateGuest"])
-  onUpdateLinkNameForPoll(linkNamePollId: ID!): LinkName
-    @aws_subscribe(mutations: ["updateLinkName"])
   onUpdateQuestionForPoll(pollQuestionsId: ID!): Question
     @aws_subscribe(mutations: ["updateQuestion"])
 }
