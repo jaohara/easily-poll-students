@@ -17,6 +17,9 @@ import EpContainer from '../../UI/EpContainer/EpContainer';
 import EpPill from '../../UI/EpPill/EpPill';
 import EpLoading from '../../UI/EpLoading/EpLoading';
 
+import EpChart from '../../UI/EpChart/EpChart';
+import EpTextInput from '../../UI/EpTextInput/EpTextInput';
+
 const GuestVoting = () => {
   const [ pollIsLoading, setPollIsLoading ] = useState(true);
 
@@ -27,8 +30,9 @@ const GuestVoting = () => {
   // Think about the minimum amount of things the guests need
   const {
     // addNewPollGuest,
-    // addGuestAnswerToCurrentQuestion,
-    dumpCurrentAppData,
+    addGuestAnswerToCurrentQuestion,
+    currentAnswerTally,
+    currentQuestionData,
     guest,
     guestIsLoaded,
     joinPollAsGuest,
@@ -63,11 +67,10 @@ const GuestVoting = () => {
 
   return ( 
     <div className="guest-voting">
-      <h1>Guest Voting Page</h1>
       {
-        targetPollId && (
-          <h1>targetPollId: {targetPollId}</h1>
-        )
+        // targetPollId && (
+        //   <h1>targetPollId: {targetPollId}</h1>
+        // )
       }
 
       <div className="implementation-details">
@@ -103,17 +106,15 @@ const GuestVoting = () => {
         ) : (
           !guestIsReady ? (
             <GuestVotingCreateGuest
-              tempJoinPollCallback={()=>{
-                joinPollAsGuest({
-                  name: "Test Guest",
-                  key: `guest-key-${Date.now()}`,
-                })
-              }}
+              joinPollAsGuest={joinPollAsGuest}
             />
           ) : (
             <GuestVotingBallot
+              pollData={pollData}
+              currentAnswerTally={currentAnswerTally}
+              currentQuestionData={currentQuestionData}
               guest={guest}
-              dumpAppDataCallback={() => console.log(dumpCurrentAppData())}
+              addGuestAnswerToCurrentQuestion={addGuestAnswerToCurrentQuestion}
             />
           )
         )
@@ -124,15 +125,26 @@ const GuestVoting = () => {
 
 // This is the "Join Poll" form that is displayed with no guest
 function GuestVotingCreateGuest ({
-  tempJoinPollCallback,
+  joinPollAsGuest,
 }) {
+  const [ newGuestName, setNewGuestName ] = useState("");
   return (
-    <EpContainer>
-      No guest created, we should make one!
+    <EpContainer narrow centered>
+      <EpTextInput 
+        fullWidth
+        label="New guest name"
+        onChange={e => setNewGuestName(e.target.value)}
+        value={newGuestName}
+      />
       <EpButton
-        onClick={tempJoinPollCallback}
+        onClick={()=>{
+          joinPollAsGuest({
+            name: newGuestName,
+            key: `guest-key-${Date.now()}`,
+          })
+        }}
       >
-        Make &quot;Test Guest&quot;
+        Join Poll
       </EpButton>
     </EpContainer>
   );
@@ -140,21 +152,42 @@ function GuestVotingCreateGuest ({
 
 // this is the "Ballot" form that is displayed when a guest is in the poll
 function GuestVotingBallot ({
+  addGuestAnswerToCurrentQuestion,
+  pollData,
+  currentAnswerTally,
   guest, 
-  dumpAppDataCallback,
+  currentQuestionData
 }) {
   return (
-    <EpContainer>
-      <h1>I will eventually be the question prompt?</h1>
-      <p>
-        Voting as <EpPill>{guest.name} - {guest.id}</EpPill>
-      </p>
-      <EpButton
-        onClick={dumpAppDataCallback}
-      >
-        Log dumpCurrentAppData Result
-      </EpButton>
-    </EpContainer>
+    <>
+      <h1>{pollData.title}</h1>
+      <EpContainer>
+        <h1>{currentQuestionData.prompt}</h1>
+        <EpChart 
+          chartType="pie"
+          data={currentAnswerTally.data}
+          labels={currentAnswerTally.labels}
+        />
+        <p>
+          Voting as <EpPill>{guest.name} - {guest.id}</EpPill>
+        </p>
+        {
+          //TODO: we should check to see if answerOptions exists and is not empty
+          currentQuestionData.answerOptions.map((answer, index) => (
+            <EpButton
+              key={`answerOption-${index}`}
+              //TODO: replace temporary voting implementation in final version
+              onClick={() => 
+                addGuestAnswerToCurrentQuestion({guestId: guest.id, answerValue: answer})
+              }
+            >
+              {answer}
+            </EpButton>
+          )
+          )
+        }
+      </EpContainer>
+    </>
   );
 }
 
