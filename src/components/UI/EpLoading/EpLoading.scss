@@ -1,4 +1,26 @@
+@use "../../../styles/globals.scss" as g;
+
 .ep-loading {
-  font-weight: bold;
-  text-align: center;
+  
+}
+
+.ep-loading-spinner {
+  display: flex;
+  justify-content: center;
+}
+
+.ep-loading-spinner::after {
+  animation: loading 1s ease infinite;
+  border: 10px solid g.$background-gray;
+  border-radius: 50%;
+  border-top-color: g.$shallow-space-sparkle;
+  content: "";
+  width: 100px;
+  height: 100px;
+}
+
+@keyframes loading {
+  to {
+    transform: rotate(360deg);
+  }
 }

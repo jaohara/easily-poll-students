@@ -1,21 +1,5 @@
 @use "../../../styles/globals.scss" as g;
 
-// TODO: potentially move to App.scss if this looks good
-ul {
-  list-style-type: none;
-  padding-left: 1rem;
-  margin: 0 0 1rem;
-
-  li::before {
-    color: g.$shallow-space-sparkle;
-    content: "\2022";
-    display: inline-block;
-    font-weight: bold;
-    margin-left: 1rem;
-    width: 1rem;
-  }
-}
-
 .data-container h1 {
   margin-bottom: .5rem;
 }

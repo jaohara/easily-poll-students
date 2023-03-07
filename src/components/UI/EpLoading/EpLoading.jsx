@@ -7,7 +7,9 @@ import EpContainer from "../EpContainer/EpContainer";
 const EpLoading = () => {
   return ( 
     <EpContainer className="ep-loading">
-      Loading...
+      <div className="ep-loading-spinner">
+        
+      </div>
     </EpContainer>
   );
 }

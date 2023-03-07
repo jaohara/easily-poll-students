@@ -4,6 +4,16 @@
   background-color: #fff;
   border-radius: g.$common-border-radius;
   box-shadow: g.$common-box-shadow;
+  margin-bottom: 2rem;
   padding: 2rem;
   width: 100%;
+
+  &.narrow {
+    min-width: 480px;
+    width: 66%;
+  }
+
+  &.centered {
+    margin: 0 auto;
+  }
 }
