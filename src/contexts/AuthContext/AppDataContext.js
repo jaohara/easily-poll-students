@@ -1,4 +1,9 @@
-import React, { createContext, useEffect, useState } from "react";
+import React, { 
+  createContext,
+  useContext, 
+  useEffect, 
+  useState 
+} from "react";
 
 import { 
   listAnswers,
@@ -7,17 +12,18 @@ import {
 
 import usePollData from "../../hooks/usePollData";
 import useApi from "../../hooks/useApi";
+import { AuthContext } from "./AuthContext";
 
 const AppDataContext = createContext(undefined);
 
 // no idea if this is the final shape of the data, but this
 // mimics the data for the "001" test user
-const DEFAULT_TEST_USER = {
-  email: "johnoharaa@gmail.com",
-  firstName: "Test",
-  id: "001",
-  lastName: "User",
-};
+// const DEFAULT_TEST_USER = {
+//   email: "johnoharaa@gmail.com",
+//   firstName: "Test",
+//   id: "001",
+//   lastName: "User",
+// };
 
 function AppDataContextProvider(props) {
   const API = useApi();
@@ -32,7 +38,10 @@ function AppDataContextProvider(props) {
   // TODO: How do I access user auth data in here? props.user?
   //  This probably won't be handled via state here but read from the 
   //  context provided by AuthContext
-  const [ user, ] = useState(DEFAULT_TEST_USER);
+  // const [ user, ] = useState(DEFAULT_TEST_USER);
+
+  const { user } = useContext(AuthContext)
+
 
   // TODO: REMOVE THIS DEFAULT - this is the pollId of the test poll
   // const TEST_POLL_ID = "76854b69-9bf1-409c-88bf-e20192d62111";
@@ -64,7 +73,7 @@ function AppDataContextProvider(props) {
   } = usePollData({
     subscribeToChanges: true, 
     pollId: currentPollId,
-    userId: user ? user.id : null, 
+    user: user ? user : null, 
   });
 
   // TODO: This needs to run when a new poll is created
