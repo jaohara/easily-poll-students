@@ -42,7 +42,9 @@
 }
 
 .ep-diagnostics-item {
+  // border-left: 1px dotted g.$shallow-space-sparkle;
   margin-bottom: 0rem;
+  // padding-left: .5rem;
   word-wrap: break-word;
 
   .ep-diagnostics-key {
