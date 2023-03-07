@@ -1,0 +1,38 @@
+@use "../../../styles/globals.scss" as g;
+
+.ep-logo { 
+  align-items: baseline;
+  border-radius: g.$common-border-radius;
+  display: flex;
+  transition: g.$common-transition-time color;
+  width: 13rem;
+
+  &:hover {
+    cursor: pointer;
+
+    .ep-logo-icon-wrapper {
+      // background-color: #eee;
+      color: g.$deep-space-sparkle;
+    }
+  }
+}
+
+.ep-logo-icon-wrapper {
+  background-color: transparent;
+  border-radius: 2rem;
+  color: g.$shallow-space-sparkle;
+  font-size: 2.25rem;
+  margin-right: .5rem;
+  // transition: 400ms background-color;
+  transition: 400ms color;
+  width: 3rem;
+  
+  svg {
+    transform: translateY(.3rem) translateX(.3rem);
+  }
+}
+
+.ep-logo-header-wrapper h1 {
+  border-bottom: 4px solid transparent;
+  margin-bottom: -4px;
+}

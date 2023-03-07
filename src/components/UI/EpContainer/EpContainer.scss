@@ -1,0 +1,9 @@
+@use "../../../styles/globals.scss" as g;
+
+.ep-container {
+  background-color: #fff;
+  border-radius: g.$common-border-radius;
+  box-shadow: g.$common-box-shadow;
+  padding: 2rem;
+  width: 100%;
+}

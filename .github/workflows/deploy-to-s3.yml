@@ -38,10 +38,13 @@ jobs:
       run: |
         node --version
         npm ci --production
-        
+
     - name: Build static website
       run: npm run build
-      
+
+    - name: Run app unit tests
+      run: npm test
+
     - name: Copy files to the production website via AWS CLI
       run: |
         aws s3 sync --delete ${{ env.DIST }} s3://${{ env.AWS_S3_BUCKET }}

@@ -9,8 +9,8 @@ export const getUser = /* GraphQL */ `
       }
       id
       email
-      name_first
-      name_last
+      firstName
+      lastName
       createdAt
       updatedAt
     }
@@ -26,8 +26,8 @@ export const listUsers = /* GraphQL */ `
       items {
         id
         email
-        name_first
-        name_last
+        firstName
+        lastName
         createdAt
         updatedAt
       }
@@ -41,35 +41,25 @@ export const getPoll = /* GraphQL */ `
       user {
         id
         email
-        name_first
-        name_last
+        firstName
+        lastName
         createdAt
         updatedAt
       }
       questions {
         nextToken
       }
-      guests_in {
+      guests {
         nextToken
-      }
-      guests_waiting {
-        nextToken
-      }
-      link_name {
-        name
-        id
-        createdAt
-        updatedAt
-        linkNamePollId
       }
       id
       title
-      free_join
+      isActive
+      isLocked
+      roomSize
       createdAt
       updatedAt
       userPollsId
-      guestPollsId
-      pollLink_nameId
     }
   }
 `;
@@ -83,12 +73,12 @@ export const listPolls = /* GraphQL */ `
       items {
         id
         title
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
-        pollLink_nameId
       }
       nextToken
     }
@@ -100,24 +90,23 @@ export const getQuestion = /* GraphQL */ `
       poll {
         id
         title
-        free_join
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
         userPollsId
-        guestPollsId
-        pollLink_nameId
       }
       answers {
         nextToken
       }
       id
       prompt
-      answer_options
-      question_type
+      answerOptions
+      questionType
       createdAt
       updatedAt
       pollQuestionsId
-      guestQuestionsId
     }
   }
 `;
@@ -131,12 +120,11 @@ export const listQuestions = /* GraphQL */ `
       items {
         id
         prompt
-        answer_options
-        question_type
+        answerOptions
+        questionType
         createdAt
         updatedAt
         pollQuestionsId
-        guestQuestionsId
       }
       nextToken
     }
@@ -148,21 +136,20 @@ export const getAnswer = /* GraphQL */ `
       question {
         id
         prompt
-        answer_options
-        question_type
+        answerOptions
+        questionType
         createdAt
         updatedAt
         pollQuestionsId
-        guestQuestionsId
       }
       owner {
+        canVote
         id
         name
         key
         createdAt
         updatedAt
-        pollGuests_inId
-        pollGuests_waitingId
+        pollGuestsId
       }
       answer
       id
@@ -195,12 +182,17 @@ export const listAnswers = /* GraphQL */ `
 export const getGuest = /* GraphQL */ `
   query GetGuest($id: ID!) {
     getGuest(id: $id) {
-      polls {
-        nextToken
+      poll {
+        id
+        title
+        isActive
+        isLocked
+        roomSize
+        createdAt
+        updatedAt
+        userPollsId
       }
-      questions {
-        nextToken
-      }
+      canVote
       answers {
         nextToken
       }
@@ -209,8 +201,7 @@ export const getGuest = /* GraphQL */ `
       key
       createdAt
       updatedAt
-      pollGuests_inId
-      pollGuests_waitingId
+      pollGuestsId
     }
   }
 `;
@@ -222,52 +213,13 @@ export const listGuests = /* GraphQL */ `
   ) {
     listGuests(filter: $filter, limit: $limit, nextToken: $nextToken) {
       items {
+        canVote
         id
         name
         key
         createdAt
         updatedAt
-        pollGuests_inId
-        pollGuests_waitingId
-      }
-      nextToken
-    }
-  }
-`;
-export const getLinkName = /* GraphQL */ `
-  query GetLinkName($id: ID!) {
-    getLinkName(id: $id) {
-      poll {
-        id
-        title
-        free_join
-        createdAt
-        updatedAt
-        userPollsId
-        guestPollsId
-        pollLink_nameId
-      }
-      name
-      id
-      createdAt
-      updatedAt
-      linkNamePollId
-    }
-  }
-`;
-export const listLinkNames = /* GraphQL */ `
-  query ListLinkNames(
-    $filter: ModelLinkNameFilterInput
-    $limit: Int
-    $nextToken: String
-  ) {
-    listLinkNames(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
-        name
-        id
-        createdAt
-        updatedAt
-        linkNamePollId
+        pollGuestsId
       }
       nextToken
     }

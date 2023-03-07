@@ -12,9 +12,12 @@ import { MdRemoveCircleOutline } from "react-icons/md";
 const CurrentPollContainer = ({
   addAnswer,
   addQuestion,
+  handleSubmitPoll,
+  pollTitle,
   questions,
   removeAnswer,
   removeQuestion,
+  setPollTitle,
   updateAnswer,
   updateQuestion,
 }) => {
@@ -48,6 +51,25 @@ const CurrentPollContainer = ({
       >
         Log Questions Array
       </EpButton>
+
+      {
+        // TODO: Probably not where this lives in the end
+      }
+      <EpButton
+        disabled={questions === null || questions === undefined || questions.length === 0}
+        onClick={() => handleSubmitPoll()}
+      >
+        Submit Poll
+      </EpButton>
+
+      <div className="poll-title-wrapper">
+        <EpTextInput
+          fullWidth
+          label="New Poll Title"
+          onChange={e => setPollTitle(e.target.value)}
+          value={pollTitle}
+        />
+      </div>
 
       {
         questions.length > 0 ?  
@@ -103,10 +125,10 @@ function CurrentPollQuestion ({
         />
       </div>
   
-      <div className="current-poll-question-answers">
+      <div className="current-poll-question-answerOptions">
         {
-          question.answers.length > 0 ? 
-            question.answers.map((answer, answerIndex) => (
+          question.answerOptions.length > 0 ? 
+            question.answerOptions.map((answer, answerIndex) => (
               <CurrentPollAnswer
                 answer={answer}
                 answerIndex={answerIndex}
@@ -117,7 +139,7 @@ function CurrentPollQuestion ({
               />
             )) :
             (
-              <span className="no-answers">There aren&apos;t any answers for this question.</span>
+              <span className="no-answerOptions">There aren&apos;t any answerOptions for this question.</span>
             )
         }
 
@@ -133,7 +155,7 @@ function CurrentPollQuestion ({
 } 
 
 /*
-  A component to represent the editable answers in the current poll.
+  A component to represent the editable answerOptions in the current poll.
 */
 function CurrentPollAnswer ({ 
   answer, 
@@ -165,7 +187,7 @@ function CurrentPollElementDeleteButton ({onClick}) {
     <EpButton
       className="current-poll-delete-element"
       onClick={onClick}
-      tabIndex="-1"
+      tabIndex={-1}
     >
       <MdRemoveCircleOutline />
     </EpButton>

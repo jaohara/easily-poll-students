@@ -1,5 +1,10 @@
 import React from 'react';
 
+import config from "./aws-exports";
+import { Amplify } from "aws-amplify";
+Amplify.configure(config);
+
+
 // style-related imports
 import { ThemeProvider } from '@mui/material';
 import './styles/App.scss';
@@ -15,26 +20,36 @@ import {
   routes
 } from './routes';
 
+
+import { AuthContextProvider } from "./contexts/AuthContext/AuthContext";
+import { AppDataContextProvider } from './contexts/AuthContext/AppDataContext';
+
+// import EpLogo from './components/UI/EpLogo/EpLogo';
 import EpNavBar from './components/UI/EpNavBar/EpNavBar';
 
 function App () {
   return (
     <BrowserRouter>
       <ThemeProvider theme={theme}>
-        <div className="App">
-          <h1>Easy Poll App!</h1>
-          <EpNavBar />
+        <AuthContextProvider>
+          <AppDataContextProvider>
+            <div className="App">
+              {
+                // TODO: Remove Logo from here, move to finished EpNavBar as link home
+              }
+              {/* <EpLogo /> */}
+              <EpNavBar />
 
-          <p>This is <strong>another test</strong> of the new CI/CD approach.</p>
-
-          <Routes>
-            {
-              routes.map((route, index) => (
-                <Route path={route.path} element={route.element} key={`route-${index}`}/>
-              ))
-            }
-          </Routes>
-        </div>
+              <Routes>
+                {
+                  routes.map((route, index) => (
+                    <Route path={route.path} element={route.element} key={`route-${index}`}/>
+                  ))
+                }
+              </Routes>
+            </div>
+          </AppDataContextProvider>
+        </AuthContextProvider>
       </ThemeProvider>
     </BrowserRouter>
   );

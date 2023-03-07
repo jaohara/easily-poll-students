@@ -155,26 +155,53 @@
     "apieasilypollstudents": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/api/cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "Parameters": {
           "AppSyncApiName": "easilypollstudents",
           "DynamoDBBillingMode": "PAY_PER_REQUEST",
           "DynamoDBEnableServerSideEncryption": false,
-          "S3DeploymentBucket": "amplify-amplify918ba012a4234-staging-171536-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/954686583c4656afbeaf4d5474c1218b5912f65d",
+          "authRoleName": {
+            "Ref": "AuthRoleName"
+          },
+          "unauthRoleName": {
+            "Ref": "UnauthRoleName"
+          },
+          "S3DeploymentBucket": "amplify-amplify6042e93342d44-staging-222909-deployment",
+          "S3DeploymentRootKey": "amplify-appsync-files/0e379c1dd5dcad05c14a67b60e9191d38c9e8250",
           "env": "staging"
         }
       }
     },
-    "autheasilypollstudents834464d1": {
+    "apiguest": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify918ba012a4234-staging-171536-deployment/amplify-cfn-templates/auth/easilypollstudents834464d1-cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/guest-cloudformation-template.json",
         "Parameters": {
-          "identityPoolName": "easilypollstudents834464d1_identitypool_834464d1",
+          "functionguestRegisterName": {
+            "Fn::GetAtt": [
+              "functionguestRegister",
+              "Outputs.Name"
+            ]
+          },
+          "functionguestRegisterArn": {
+            "Fn::GetAtt": [
+              "functionguestRegister",
+              "Outputs.Arn"
+            ]
+          },
+          "env": "staging"
+        }
+      }
+    },
+    "autheasilypollstudentsb7118bae": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/auth/easilypollstudentsb7118bae-cloudformation-template.json",
+        "Parameters": {
+          "identityPoolName": "easilypollstudentsb7118bae_identitypool_b7118bae",
           "allowUnauthenticatedIdentities": false,
-          "resourceNameTruncated": "easily834464d1",
-          "userPoolName": "easilypollstudents834464d1_userpool_834464d1",
+          "resourceNameTruncated": "easilyb7118bae",
+          "userPoolName": "easilypollstudentsb7118bae_userpool_b7118bae",
           "autoVerifiedAttributes": "email",
           "mfaConfiguration": "OFF",
           "mfaTypes": "SMS Text Message",
@@ -191,10 +218,10 @@
           "userpoolClientRefreshTokenValidity": 30,
           "userpoolClientWriteAttributes": "email",
           "userpoolClientReadAttributes": "email",
-          "userpoolClientLambdaRole": "easily834464d1_userpoolclient_lambda_role",
+          "userpoolClientLambdaRole": "easilyb7118bae_userpoolclient_lambda_role",
           "userpoolClientSetAttributes": false,
-          "sharedId": "834464d1",
-          "resourceName": "easilypollstudents834464d1",
+          "sharedId": "b7118bae",
+          "resourceName": "easilypollstudentsb7118bae",
           "authSelections": "identityPoolAndUserPool",
           "useDefault": "default",
           "usernameAttributes": "email",
@@ -220,11 +247,40 @@
         }
       }
     },
+    "functionguestRegister": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestRegister-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
+          "s3Key": "amplify-builds/guestRegister-45473167525569682f61-build.zip",
+          "apieasilypollstudentsGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apieasilypollstudents",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "apieasilypollstudentsGraphQLAPIEndpointOutput": {
+            "Fn::GetAtt": [
+              "apieasilypollstudents",
+              "Outputs.GraphQLAPIEndpointOutput"
+            ]
+          },
+          "apieasilypollstudentsGraphQLAPIKeyOutput": {
+            "Fn::GetAtt": [
+              "apieasilypollstudents",
+              "Outputs.GraphQLAPIKeyOutput"
+            ]
+          },
+          "env": "staging"
+        }
+      }
+    },
     "UpdateRolesWithIDPFunction": {
       "DependsOn": [
         "AuthRole",
         "UnauthRole",
-        "autheasilypollstudents834464d1"
+        "autheasilypollstudentsb7118bae"
       ],
       "Type": "AWS::Lambda::Function",
       "Properties": {
@@ -319,7 +375,7 @@
         },
         "idpId": {
           "Fn::GetAtt": [
-            "autheasilypollstudents834464d1",
+            "autheasilypollstudentsb7118bae",
             "Outputs.IdentityPoolId"
           ]
         },
