@@ -21,3 +21,23 @@ $shallow-space-sparkle: #519e8a;
 $soft-orange: #FF785A;
 $simple-gray: #eee;
 
+// mixins
+@mixin responsive-widths {
+  //375px
+  width: 100%;
+
+  //768px
+  @media (min-width: 768px) {
+    // margin: 0 auto;
+    width: 768px;
+  }
+  //1280px
+  @media (min-width: 1280px) {
+    width: 1024px;
+  }
+  //1920px
+  @media (min-width: 1920px) {
+    width: 1440px;
+  }
+}
+

@@ -34,21 +34,23 @@ function App () {
         <AuthContextProvider>
           <AppDataContextProvider>
             <div className="App">
-              {
-                // TODO: Remove Logo from here, move to finished EpNavBar as link home
-              }
-              {/* <EpLogo /> */}
-              <EpNavBar />
-
-              <Routes>
-                {
-                  routes.map((route, index) => (
-                    <Route path={route.path} element={route.element} key={`route-${index}`}/>
-                  ))
-                }
-              </Routes>
-
-              <EpCopyright />
+              <div className="app-wrapper">
+                <div className="content-wrapper">
+                  <EpNavBar />
+                  <Routes>
+                    {
+                      routes.map((route, index) => (
+                        <Route 
+                          path={route.path} 
+                          element={route.element} 
+                          key={`route-${index}`}
+                        />
+                      ))
+                    }
+                  </Routes>
+                </div>
+                <EpCopyright />
+              </div>
             </div>
           </AppDataContextProvider>
         </AuthContextProvider>

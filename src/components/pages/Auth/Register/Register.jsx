@@ -2,15 +2,15 @@ import * as React from 'react'
 
 import Avatar from '@mui/material/Avatar'
 import Button from '@mui/material/Button'
-import CssBaseline from '@mui/material/CssBaseline'
 import TextField from '@mui/material/TextField'
 import Link from '@mui/material/Link'
 import Grid from '@mui/material/Grid'
 import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
-import Container from '@mui/material/Container'
 import { AuthContext } from '../../../../contexts/AuthContext/AuthContext'
+
+import EpContainer from '../../../UI/EpContainer/EpContainer'
 
 export default function Register() {
   const Auth = React.useContext(AuthContext)
@@ -28,9 +28,8 @@ export default function Register() {
 
   return (
     <>
-      {/* <Navbar /> */}
-      <Container component="main" maxWidth="xs">
-        <CssBaseline />
+      <EpContainer narrow centered>
+
         <Box
           sx={{
             marginTop: 8,
@@ -39,7 +38,7 @@ export default function Register() {
             alignItems: 'center',
           }}
         >
-          <Avatar sx={{ m: 1, bgcolor: 'secondary.main' }}>
+          <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
           <Typography component="h1" variant="h5">
@@ -81,7 +80,7 @@ export default function Register() {
                   label="Email Address"
                   name="email"
                   autoComplete="email"
-                />
+                  />
               </Grid>
               <Grid item xs={12}>
                 <TextField
@@ -112,7 +111,7 @@ export default function Register() {
             </Grid>
           </Box>
         </Box>
-      </Container>
+      </EpContainer>
     </>
   )
 }

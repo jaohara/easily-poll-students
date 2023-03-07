@@ -1,26 +1,27 @@
 import React from 'react'
-import { createBrowserRouter } from 'react-router-dom'
+import { createBrowserRouter } from 'react-router-dom';
 
-import Home from './components/pages/Home/Home'
-import CreatePoll from './components/pages/CreatePoll/CreatePoll'
-import GuestVoting from './components/pages/GuestVoting/GuestVoting'
-import UserDashboard from './components/pages/UserDashboard/UserDashboard'
+import Home from './components/pages/Home/Home';
+import CreatePoll from './components/pages/CreatePoll/CreatePoll';
+import GuestVoting from './components/pages/GuestVoting/GuestVoting';
+import UserDashboard from './components/pages/UserDashboard/UserDashboard';
 
 // demo-related pages
-import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo'
+import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo';
+import LoadingTest from './components/Demo/LoadingTest';
 
 // testing login stuff
-import Login from './components/pages/Auth/Login/Login'
-import Register from './components/pages/Auth/Register/Register'
+import Login from './components/pages/Auth/Login/Login';
+import Register from './components/pages/Auth/Register/Register';
 
 // testing hook stuff
-import HooksPreview from './components/pages/HooksPreview/HooksPreview'
+import HooksPreview from './components/pages/HooksPreview/HooksPreview';
 
 // can be removed in the future
-import VerifyEmail from './components/pages/Auth/VerifyEmail/VerifyEmail'
+import VerifyEmail from './components/pages/Auth/VerifyEmail/VerifyEmail';
 
 //poll result test
-import PollResult from './components/pages/PollResult/PollResult'
+import PollResult from './components/pages/PollResult/PollResult';
 
 // name is display name on button/link
 export const routes = [
@@ -102,7 +103,14 @@ export const routes = [
     element: <PollResult />,
     hideInNavBar: true,
   },
-]
+  //TODO: Remove this temp test route
+  {
+    path: '/loading-test',
+    name: 'Loading Test',
+    element: <LoadingTest />,
+    hideInNavBar: true,
+  },
+];
 
 // gets the route path by filtering the routes array. Returns null if name isn't
 //  present.
@@ -122,6 +130,6 @@ export const getRoutePathByName = (name) => {
   }
 
   return routePath
-}
+};
 
-export const router = createBrowserRouter(routes)
+export const router = createBrowserRouter(routes);
