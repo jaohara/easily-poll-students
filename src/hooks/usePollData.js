@@ -96,7 +96,7 @@ function usePollData({
   pollId = null, // null before poll has been created
   questionId = null,
   subscribeToChanges = false,
-  userId = null,
+  user = null,
 }) {
   const [ currentQuestionId, setCurrentQuestionId ] = useState();
   const [ pollIsLoaded, setPollIsLoaded ] = useState(false);
@@ -177,7 +177,7 @@ function usePollData({
 
   // TODO: Finish implementing question adding portion and test
   const createNewPoll = ({ roomSize = 10, title, questions }, callback = async () => {}) => {
-    if (!userId) {
+    if (!user.id) {
       console.error("createNewPoll: Cannot create poll - user isn't logged in");
       return;
     }
@@ -188,7 +188,7 @@ function usePollData({
         isLocked: false,
         roomSize: roomSize,
         title: title,
-        userPollsId: userId,
+        userPollsId: user.id,
       }
     };
 
@@ -224,7 +224,7 @@ function usePollData({
   };
 
   const updatePollData = (newData) => {
-    if (!userId) {
+    if (!user.id) {
       console.error("updatePollData: Cannot update poll data, user is not logged in");
     }
 
@@ -276,7 +276,7 @@ function usePollData({
 
   // TODO: Test
   const togglePollGuestLock = (guestId) => {
-    if (!userId) {
+    if (!user.id) {
       console.error("togglePollGuestLock: Cannot toggle guest, user is not logged in.");
       return;
     }

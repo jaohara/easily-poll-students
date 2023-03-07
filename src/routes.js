@@ -34,6 +34,7 @@ export const routes = [
     // TODO: Make this redirected from "Home" on auth, hide in navbar when auth on home page works
     path: '/polls',
     name: 'User Dashboard',
+    disableWhenUnauthorized: true,
     element: <UserDashboard />,
     // hideInNavBar: true,
   },
@@ -63,12 +64,16 @@ export const routes = [
   },
   {
     path: '/login',
-    name: 'Login',
+    name: 'Login/Register',
+    hideWhenAuthorized: true,
     element: <Login />,
   },
   {
     path: '/register',
     name: 'Register',
+    // maybe just hide this route altogether?
+    hideInNavBar: true,
+    hideWhenAuthorized: true,
     element: <Register />,
   },
   {
@@ -89,7 +94,7 @@ export const routes = [
     path: '/verify',
     name: 'verify',
     element: <VerifyEmail />,
-    hideInNavBar: false,
+    hideInNavBar: true,
   },
   {
     path: '/results/:targetPollId',
