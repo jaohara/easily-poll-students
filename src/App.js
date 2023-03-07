@@ -24,7 +24,7 @@ import {
 import { AuthContextProvider } from "./contexts/AuthContext/AuthContext";
 import { AppDataContextProvider } from './contexts/AuthContext/AppDataContext';
 
-// import EpLogo from './components/UI/EpLogo/EpLogo';
+import EpCopyright from './components/UI/EpCopyright/EpCopyright';
 import EpNavBar from './components/UI/EpNavBar/EpNavBar';
 
 function App () {
@@ -47,6 +47,8 @@ function App () {
                   ))
                 }
               </Routes>
+
+              <EpCopyright />
             </div>
           </AppDataContextProvider>
         </AuthContextProvider>

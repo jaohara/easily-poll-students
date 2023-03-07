@@ -10,7 +10,6 @@ import Box from '@mui/material/Box'
 import LockOutlinedIcon from '@mui/icons-material/LockOutlined'
 import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
-import EpCopyright from '../../../UI/EpCopyright/EpCopyright'
 import { AuthContext } from '../../../../contexts/AuthContext/AuthContext'
 
 export default function Register() {
@@ -113,7 +112,6 @@ export default function Register() {
             </Grid>
           </Box>
         </Box>
-        <EpCopyright sx={{ mt: 8, mb: 4 }} />
       </Container>
     </>
   )

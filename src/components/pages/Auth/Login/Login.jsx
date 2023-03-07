@@ -13,8 +13,6 @@ import Typography from '@mui/material/Typography'
 import Container from '@mui/material/Container'
 import { AuthContext } from '../../../../contexts/AuthContext/AuthContext'
 
-import EpCopyright from '../../../UI/EpCopyright/EpCopyright'
-
 export default function Login() {
   const Auth = React.useContext(AuthContext)
 
@@ -88,7 +86,6 @@ export default function Login() {
           </Grid>
         </Box>
       </Box>
-      <EpCopyright sx={{ mt: 8, mb: 4 }} />
     </Container>
   )
 }

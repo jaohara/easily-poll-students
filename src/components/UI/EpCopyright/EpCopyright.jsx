@@ -1,24 +1,17 @@
 import React from 'react';
 
-import Link from "@mui/material/Link";
-import Typography from "@mui/material/Typography";
 
-
-function EpCopyright(props) {
+function EpCopyright () {
   return (
-    <Typography
-      variant="body2"
-      color="text.secondary"
-      align="center"
-      {...props}
-    >
-      {"Copyright © "}
-      <Link color="inherit" href="https://mui.com/">
-        Your Website
-      </Link>{" "}
-      {new Date().getFullYear()}
-      {"."}
-    </Typography>
+    <div className="ep-copyright">
+      <p>
+        Made by John, Vlad, Namuna, Taylor, Lizzie, and Paul in {new Date().getFullYear()}
+      </p>
+
+      <p>
+        <a href="https://github.com/jaohara/easily-poll-students">Github</a>
+      </p>
+    </div>
   );
 }
 
