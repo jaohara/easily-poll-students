@@ -1,15 +1,9 @@
-/*eslint-disable*/
-
-//TODO: Remove eslint-disable!
-
-
 import { useState, useEffect } from "react";
 import useApi from "./useApi";
 import { graphqlOperation } from "@aws-amplify/api";
-import { listAnswers } from "../graphql/queries";
 import {
   createAnswer,
-  updateAnswer,
+  // updateAnswer,
   updateQuestion,
 } from "../graphql/mutations";
 import {
@@ -82,7 +76,9 @@ function useQuestionData({
     }
   };
 
+  // ================
   // Helper functions
+  // ================
   
   // parses answer options if array was stored as string
   const parseAnswerOptions = (answerOptionsData) => Array.isArray(answerOptionsData) ?
@@ -120,9 +116,7 @@ function useQuestionData({
   // calculates answer tally in a form for charts and saves it in state
   const calculateAndSetAnswerTally = () => setAnswerTally(calculateAnswerTallyFromAnswerData());
 
-
-  // JSON.parse(questionResponseData.answerOptions);
-
+  // gets question data from server and saves it in client state
   const fetchAndSetQuestionData = async () => {
     if (questionId === null || questionIsLoading) {
       return;
@@ -177,7 +171,11 @@ function useQuestionData({
     submitData();
   }
 
-  // logic for subscription - is this as useful as the answers subscription?
+  // =============
+  // Subscriptions
+  // =============
+
+  // is this as useful as the answers subscription?
   const subscribeToQuestion = () => {
     return API.graphql({
       query: onUpdateQuestion,
@@ -237,6 +235,8 @@ function useQuestionData({
     });
   };
 
+  // adds a guest answer to this question. Does not check if guest is in poll - 
+  //  this function is wrapped in usePollData
   const addGuestAnswer = ({ guestId, answerValue }) => {
     const guestAnswerDataObject = {
       input: {

@@ -16,15 +16,6 @@ import { AuthContext } from "./AuthContext";
 
 const AppDataContext = createContext(undefined);
 
-// no idea if this is the final shape of the data, but this
-// mimics the data for the "001" test user
-// const DEFAULT_TEST_USER = {
-//   email: "johnoharaa@gmail.com",
-//   firstName: "Test",
-//   id: "001",
-//   lastName: "User",
-// };
-
 function AppDataContextProvider(props) {
   const API = useApi();
 
@@ -34,23 +25,12 @@ function AppDataContextProvider(props) {
   const [ guest, setGuest ] = useState();
   const [ guestIsLoaded, setGuestIsLoaded ] = useState(false);
 
+  const { user } = useContext(AuthContext);
 
-  // TODO: How do I access user auth data in here? props.user?
-  //  This probably won't be handled via state here but read from the 
-  //  context provided by AuthContext
-  // const [ user, ] = useState(DEFAULT_TEST_USER);
-
-  const { user } = useContext(AuthContext)
-
-
-  // TODO: REMOVE THIS DEFAULT - this is the pollId of the test poll
-  // const TEST_POLL_ID = "76854b69-9bf1-409c-88bf-e20192d62111";
-
-
-  // TODO : needs to check if poll is a valid poll by the user - 
-  //    probably whether or not it exists in "allUserPollsData" 
   const selectPollById = (pollId) => {
     setCurrentPollId(pollId);
+    setGuest(null);
+    setGuestIsLoaded(false);
   };
 
   const {
@@ -76,7 +56,7 @@ function AppDataContextProvider(props) {
     user: user ? user : null, 
   });
 
-  // TODO: This needs to run when a new poll is created
+  // gets a list of all polls for the given user
   const fetchAndSetAllUserPollsData = async () => {
     if (!user) {
       console.error("fetchAndSetAllUserPollsData: Cannot fetch user polls, user is not logged in");
@@ -114,6 +94,11 @@ function AppDataContextProvider(props) {
 
   // wraps createNewPoll from usePollData so that the list of polls is updated when
   const addPoll = (paramsObject) => {
+    if (!user) {
+      console.error("AppDataContext: addPoll: cannot create poll, user is not logged in.");
+      return
+    }
+
     return createNewPoll(paramsObject, async () => {
       await fetchAndSetAllUserPollsData();
     });
@@ -160,7 +145,7 @@ function AppDataContextProvider(props) {
       //  and then using calculateAnswerTallyFromAnswerData to generate a 
       for (let i = 0; i < pollQuestionsData.length; i++) {
         const question = pollQuestionsData[i];
-        console.log("generatePollReport: starting getData call...")
+        console.log("generatePollReport: starting getData call...");
 
         try {
           const answersResponse = await API.graphql({
@@ -206,6 +191,7 @@ function AppDataContextProvider(props) {
     return pollReport;
   };
 
+  // updates the userPollsData when the user changes
   useEffect(() => {
     fetchAndSetAllUserPollsData();
   }, [user]);
@@ -234,7 +220,6 @@ function AppDataContextProvider(props) {
         allUserPollsData,
         currentAnswerData,
         currentAnswerTally, 
-        // currentPollId,
         currentQuestionData,
         currentQuestionId, 
         currentQuestionIsLoaded,
@@ -248,7 +233,6 @@ function AppDataContextProvider(props) {
         pollIsLoaded,
         pollQuestionsData,
         selectPollById,
-        // setCurrentPollId,
         setCurrentQuestionId, // Do I need this?
         updateCurrentQuestionData, 
         updatePollData,
