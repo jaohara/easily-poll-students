@@ -34,7 +34,7 @@ export default function Login() {
             flexDirection: 'column',
             alignItems: 'center',
           }}
-          >
+        >
           <Avatar sx={{ m: 1, bgcolor: 'primary.main' }}>
             <LockOutlinedIcon />
           </Avatar>
