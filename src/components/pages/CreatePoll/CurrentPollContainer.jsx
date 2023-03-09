@@ -42,16 +42,6 @@ const CurrentPollContainer = ({
         Import Questions
       </EpButton>
 
-
-      {
-        // TODO: Debug placeholder, remove
-      }
-      <EpButton
-        onClick={() => console.log(questions)}
-      >
-        Log Questions Array
-      </EpButton>
-
       {
         // TODO: Probably not where this lives in the end
       }
@@ -64,6 +54,9 @@ const CurrentPollContainer = ({
 
       <div className="poll-title-wrapper">
         <EpTextInput
+          className={`
+            ${pollTitle.length === 0 ? "invalid" : ""}
+          `}
           fullWidth
           label="New Poll Title"
           onChange={e => setPollTitle(e.target.value)}

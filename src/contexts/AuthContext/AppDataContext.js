@@ -48,6 +48,9 @@ function AppDataContextProvider(props) {
     pollIsLoaded,
     pollQuestionsData,
     setCurrentQuestionId,
+    togglePollActive,
+    togglePollGuestLock,
+    togglePollLock,
     updateCurrentQuestionData, 
     updatePollData,
   } = usePollData({
@@ -234,6 +237,9 @@ function AppDataContextProvider(props) {
         pollQuestionsData,
         selectPollById,
         setCurrentQuestionId, // Do I need this?
+        togglePollActive,
+        togglePollGuestLock,
+        togglePollLock,
         updateCurrentQuestionData, 
         updatePollData,
       }}

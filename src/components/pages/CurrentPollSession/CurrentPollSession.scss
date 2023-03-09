@@ -1,0 +1,54 @@
+@use "../../../styles/globals.scss" as g;
+
+.current-poll-guest { 
+  display: flex;
+  height: 2rem;
+  justify-content: space-between;
+  margin-bottom: 2rem;
+}
+
+.guest-info {
+  align-items: center;
+  display: flex;
+  opacity: 100%;
+  transition: opacity g.$common-transition-time;
+  width: 80%;
+
+  .banned > & {
+    opacity: 50%;
+  }
+}
+
+.guest-icon-wrapper, .guest-lock-wrapper {
+  align-items: center;
+  display: flex;
+  justify-content: center;
+  width: 10%;
+}
+
+.guest-lock-button {
+  height: 3rem;
+  padding: .5rem !important;
+  font-size: 2rem !important;
+  width: 2rem !important;
+
+  & svg {
+    width: 1.5rem;
+  }
+}
+
+.guest-icon {
+  border-radius: 50%;
+  background-color: g.$shallow-space-sparkle;
+  color: #fff;
+  font-size: 2rem;
+  height: 48px;
+  padding: .5rem;
+  transition: opacity g.$common-transition-time;
+  width: 48px;
+
+  .banned > .guest-icon-wrapper & {
+    // background-color: g.$red-crayola;
+    opacity: 15%;
+  }
+}
