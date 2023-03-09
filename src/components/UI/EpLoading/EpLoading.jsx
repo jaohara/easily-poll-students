@@ -4,9 +4,16 @@ import "./EpLoading.scss";
 
 import EpContainer from "../EpContainer/EpContainer";
 
-const EpLoading = () => {
+const EpLoading = ({
+  centered = false,
+  narrow = false,
+}) => {
   return ( 
-    <EpContainer className="ep-loading">
+    <EpContainer
+      centered={centered}
+      className="ep-loading"
+      narrow={narrow}
+    >
       <div className="ep-loading-spinner">
         
       </div>
