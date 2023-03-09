@@ -5,40 +5,28 @@
 import { 
   React,
   useContext,
+  useEffect,
   useState,
 } from 'react';
 import { useNavigate } from "react-router-dom";
 
-// import usePollData from '../../../hooks/usePollData';
 import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
+import { AuthContext } from '../../../contexts/AuthContext/AuthContext';
 
 import CurrentPollContainer from './CurrentPollContainer';
 
 import "./CreatePoll.scss";
 
 
-
-// TODO: Remove this after functionality is demonstrated
-const testQuestion = { 
-  prompt: "Are you left handed or right handed?", 
-  answerOptions: ["Left-handed", "Right-handed"],
-}
-
-
-/*
-  This is the component for the Create Poll (formerly Admin) page.
-*/
 const CreatePoll = () => {
   const navigate = useNavigate();
 
   const [ pollTitle, setPollTitle ] = useState("New Poll");
   const [ questions, setQuestions ] = useState([testQuestion]);
 
-  //TODO: Remove dummy data and pull from auth
-  // const TEST_USER_ID = "001"
-
-  // const { createNewPoll } = usePollData({userId: TEST_USER_ID});
   const { addPoll } = useContext(AppDataContext);
+
+  const { user } = useContext(AuthContext);
 
   // add question 
   const addQuestion = (questionText) => {
