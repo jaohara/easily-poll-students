@@ -113,8 +113,8 @@ function AuthContextProvider(props) {
   }
 
   const logout = () => {
-    setUser(null)
     Auth.signOut()
+    setUser(null)
   }
 
   return (

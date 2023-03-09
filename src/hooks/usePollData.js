@@ -46,6 +46,7 @@ query GetPoll($id: ID!) {
         id
         name
         key
+        canVote
         createdAt
         updatedAt
         pollGuestsId
