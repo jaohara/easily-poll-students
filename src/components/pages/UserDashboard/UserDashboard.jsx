@@ -74,8 +74,9 @@ const UserDashboard = () => {
                 key={`poll-${index}`}
                 // TODO: Update route from HooksPreview to CurrentPollSession when page is finished
                 // Is hardcoding this the best approach? Maybe...
-                navHandler={() => {navigate(`/hooks/${poll.id}`)}}
-                guestVotingNavHandler={() => navigate(`/poll/${poll.id}`)}
+                // navHandler={() => {navigate(`/hooks/${poll.id}`)}}
+                navHandler={() => {navigate(`/poll/${poll.id}`)}}
+                guestVotingNavHandler={() => navigate(`/vote/${poll.id}`)}
                 pollResultsNavHandler={() => navigate(`/results/${poll.id}`)}
                 isActive={poll.isActive}
                 isLocked={poll.isLocked}

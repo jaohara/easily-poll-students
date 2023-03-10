@@ -27,11 +27,11 @@ import { AppDataContextProvider } from './contexts/AuthContext/AppDataContext';
 import EpCopyright from './components/UI/EpCopyright/EpCopyright';
 import EpNavBar from './components/UI/EpNavBar/EpNavBar';
 
-import { Authenticator } from "@aws-amplify/ui-react";
+// import { Authenticator } from "@aws-amplify/ui-react";
 
 function App() {
   return (
-    <Authenticator.Provider>
+    // <Authenticator.Provider>
       <BrowserRouter>
         <ThemeProvider theme={theme}>
           <AuthContextProvider>
@@ -59,7 +59,7 @@ function App() {
           </AuthContextProvider>
         </ThemeProvider>
       </BrowserRouter>
-    </Authenticator.Provider>
+    // </Authenticator.Provider>
   );
 }
 

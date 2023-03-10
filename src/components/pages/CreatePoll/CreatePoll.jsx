@@ -77,6 +77,12 @@ const CreatePoll = () => {
   const handleSubmitPoll = async () => {
     if (questions.length === 0) {
       console.error("handleSubmitPoll: Cannot submit a poll without any questions, aborting");
+      return;
+    }
+
+    if (pollTitle.length === 0) {
+      console.error("handleSubmitPoll: poll title cannot be 0");
+      return;
     }
 
     // TODO: Have some way to filter out questions without valid answerOptions
@@ -88,7 +94,7 @@ const CreatePoll = () => {
     console.log("handleSubmitPoll: newPolldata:", newPollData);
 
     // assuming a lot here - this was successful, so we'll redirect
-    navigate(`/hooks/${newPollData.id}`);
+    navigate(`/poll/${newPollData.id}`);
   }
 
   return ( 

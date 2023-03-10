@@ -18,17 +18,22 @@ import "../Auth.scss";
 import EpContainer from "../../../UI/EpContainer/EpContainer";
 import EpLoading from '../../../UI/EpLoading/EpLoading'
 
+import { useLocation } from 'react-router-dom';
+
 export default function Login() {
   const [ loginSubmitted, setLoginSubmitted ] = useState(false);
+
+  const location = useLocation();
 
   const Auth = React.useContext(AuthContext);
 
   const handleSubmit = async (event) => {
+    const from = location.state ? location.state.from : null;
     //TODO: reset this if login goes bad
     setLoginSubmitted(true);
     event.preventDefault()
     const data = new FormData(event.currentTarget)
-    await Auth.login(data.get('email'), data.get('password'))
+    await Auth.login(data.get('email'), data.get('password'), from);
   }
 
   return (
