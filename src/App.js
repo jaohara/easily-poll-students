@@ -11,12 +11,12 @@ import './styles/App.scss';
 import theme from './styles/theme';
 
 // router-related imports
-import { 
-  BrowserRouter, 
+import {
+  BrowserRouter,
   Route,
-  Routes 
+  Routes
 } from "react-router-dom";
-import { 
+import {
   routes
 } from './routes';
 
@@ -27,35 +27,39 @@ import { AppDataContextProvider } from './contexts/AuthContext/AppDataContext';
 import EpCopyright from './components/UI/EpCopyright/EpCopyright';
 import EpNavBar from './components/UI/EpNavBar/EpNavBar';
 
-function App () {
+import { Authenticator } from "@aws-amplify/ui-react";
+
+function App() {
   return (
-    <BrowserRouter>
-      <ThemeProvider theme={theme}>
-        <AuthContextProvider>
-          <AppDataContextProvider>
-            <div className="App">
-              <div className="app-wrapper">
-                <div className="content-wrapper">
-                  <EpNavBar />
-                  <Routes>
-                    {
-                      routes.map((route, index) => (
-                        <Route 
-                          path={route.path} 
-                          element={route.element} 
-                          key={`route-${index}`}
-                        />
-                      ))
-                    }
-                  </Routes>
+    <Authenticator.Provider>
+      <BrowserRouter>
+        <ThemeProvider theme={theme}>
+          <AuthContextProvider>
+            <AppDataContextProvider>
+              <div className="App">
+                <div className="app-wrapper">
+                  <div className="content-wrapper">
+                    <EpNavBar />
+                    <Routes>
+                      {
+                        routes.map((route, index) => (
+                          <Route
+                            path={route.path}
+                            element={route.element}
+                            key={`route-${index}`}
+                          />
+                        ))
+                      }
+                    </Routes>
+                  </div>
+                  <EpCopyright />
                 </div>
-                <EpCopyright />
               </div>
-            </div>
-          </AppDataContextProvider>
-        </AuthContextProvider>
-      </ThemeProvider>
-    </BrowserRouter>
+            </AppDataContextProvider>
+          </AuthContextProvider>
+        </ThemeProvider>
+      </BrowserRouter>
+    </Authenticator.Provider>
   );
 }
 
