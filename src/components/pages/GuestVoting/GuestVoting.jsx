@@ -4,20 +4,20 @@ import {
   useEffect,
   useState,
 } from 'react';
-import { useParams } from 'react-router-dom';
-
-import { useNavigate } from 'react-router-dom';
+import { 
+  useNavigate,
+  useParams,
+} from 'react-router-dom';
 
 import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
 
 import "./GuestVoting.scss";
 
 import EpButton from '../../UI/EpButton/EpButton';
-import EpContainer from '../../UI/EpContainer/EpContainer';
-import EpPill from '../../UI/EpPill/EpPill';
-import EpLoading from '../../UI/EpLoading/EpLoading';
-
 import EpChart from '../../UI/EpChart/EpChart';
+import EpContainer from '../../UI/EpContainer/EpContainer';
+import EpLoading from '../../UI/EpLoading/EpLoading';
+import EpPill from '../../UI/EpPill/EpPill';
 import EpTextInput from '../../UI/EpTextInput/EpTextInput';
 
 const GuestVoting = () => {
@@ -37,9 +37,9 @@ const GuestVoting = () => {
     guestIsLoaded,
     joinPollAsGuest,
     pollData,
+    pollGuestsData,
     pollIsLoaded,
     selectPollById,
-    // pollGuestsData,
   } = useContext(AppDataContext);
 
 
@@ -68,45 +68,14 @@ const GuestVoting = () => {
   return ( 
     <div className="guest-voting">
       {
-        // targetPollId && (
-        //   <h1>targetPollId: {targetPollId}</h1>
-        // )
-      }
-
-      <div className="implementation-details">
-        <p>
-          This is the guest voting page. This will pull the poll data and necessary
-          functions from the AppDataContext.
-        </p>
-
-        <p>
-          If the guest hasn&apos;t submitted a name, it will render the form for submitting a
-          name. If they have, it will display the interface for voting.
-        </p>
-
-        <p>
-          We will probably need <strong>a component for creating a new guest</strong> (probably 
-          using addNewPollGuest from the context/hook) and <strong>a component for the voting
-          interface</strong> that uses EpChart.
-        </p>
-
-        <p>
-          Upon completion, this page will forward the user to the PollReport.
-        </p>
-
-        <p>
-          How would we check for completion? I&apos;m assuming we&apos;d have a useEffect callback 
-          that checks for pollData.isActive, and navigate if the poll is completed.
-        </p>
-      </div>
-
-      {
         !votingIsReady ? (
           <EpLoading />
         ) : (
           !guestIsReady ? (
             <GuestVotingCreateGuest
               joinPollAsGuest={joinPollAsGuest}
+              pollData={pollData}
+              pollGuestsData={pollGuestsData}
             />
           ) : (
             <GuestVotingBallot
@@ -126,17 +95,33 @@ const GuestVoting = () => {
 // This is the "Join Poll" form that is displayed with no guest
 function GuestVotingCreateGuest ({
   joinPollAsGuest,
+  pollData,
+  pollGuestsData,
 }) {
   const [ newGuestName, setNewGuestName ] = useState("");
   return (
-    <EpContainer narrow centered>
-      <EpTextInput 
-        fullWidth
-        label="New guest name"
-        onChange={e => setNewGuestName(e.target.value)}
-        value={newGuestName}
-      />
+    <EpContainer 
+      centered
+      className="guest-voting-create-guest-container"
+      narrow 
+    >
+      <div className="guest-voting-create-guest-metadata">
+        <h1>{pollData.title}</h1>
+        <h2>Shared by {`${pollData.user.firstName} ${pollData.user.lastName}`}</h2>
+        <EpPill>
+          {pollGuestsData.length} guest{pollGuestsData.length !== 1 ? "s" : ""} in poll
+        </EpPill>
+      </div>
+      <div className="guest-voting-create-guest-input-wrapper">
+        <EpTextInput
+          fullWidth
+          label="New guest name"
+          onChange={e => setNewGuestName(e.target.value)}
+          value={newGuestName}
+        />
+      </div>
       <EpButton
+        fullWidth
         onClick={()=>{
           joinPollAsGuest({
             name: newGuestName,
@@ -153,10 +138,10 @@ function GuestVotingCreateGuest ({
 // this is the "Ballot" form that is displayed when a guest is in the poll
 function GuestVotingBallot ({
   addGuestAnswerToCurrentQuestion,
-  pollData,
   currentAnswerTally,
+  currentQuestionData,
   guest, 
-  currentQuestionData
+  pollData,
 }) {
   return (
     <>

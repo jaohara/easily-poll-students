@@ -4,7 +4,8 @@ import "./EpContainer.scss";
 
 const EpContainer = ({
   centered = false, // centers container in containing div
-  children, 
+  children,
+  className, 
   narrow = false, // sets width to 66%
 }) => {
   return ( 
@@ -13,6 +14,7 @@ const EpContainer = ({
         ep-container 
         ${narrow ? "narrow" : ""}
         ${centered ? "centered" : ""}
+        ${className}
       `}
     >
       {children}

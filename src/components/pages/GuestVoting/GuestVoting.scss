@@ -1,3 +1,17 @@
-.implementation-details {
-  display: none;
+@use "../../../styles/globals.scss" as g;
+
+.guest-voting-create-guest-container {
+  min-height: 20vh;
+
+  h1, h2 {
+    margin-bottom: .5rem;
+  }
+}
+
+.guest-voting-create-guest-metadata {
+  margin-bottom: 1.5rem;
+}
+
+.guest-voting-create-guest-input-wrapper {
+  margin-bottom: 1rem;
 }
