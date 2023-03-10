@@ -17,6 +17,11 @@ import CurrentPollContainer from './CurrentPollContainer';
 
 import "./CreatePoll.scss";
 
+const testQuestion = { 
+  prompt: "Are you left handed or right handed?", 
+  answerOptions: ["Left-handed", "Right-handed"],
+}
+
 
 const CreatePoll = () => {
   const navigate = useNavigate();
