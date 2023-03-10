@@ -94,7 +94,7 @@ const CreatePoll = () => {
     console.log("handleSubmitPoll: newPolldata:", newPollData);
 
     // assuming a lot here - this was successful, so we'll redirect
-    navigate(`/hooks/${newPollData.id}`);
+    navigate(`/poll/${newPollData.id}`);
   }
 
   return ( 
