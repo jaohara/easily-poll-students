@@ -18,8 +18,20 @@ function AuthContextProvider(props) {
 
   useEffect(() => {
     if (!user) {
-      if (userCognito) {
-      }
+      Auth.currentAuthenticatedUser().then((res) => {
+        API.graphql({
+          query: queries.getUser,
+          variables: {
+            id: res.username,
+          },
+        })
+          .then((res) => {
+            setUser(res.data.getUser)
+          })
+          .catch(() => {
+            // TODO: finish register (enter first name, last name)
+          })
+      })
     }
   })
 
