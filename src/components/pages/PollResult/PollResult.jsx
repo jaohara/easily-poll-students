@@ -16,7 +16,7 @@ import EpContainer from '../../UI/EpContainer/EpContainer';
 import EpLoading from '../../UI/EpLoading/EpLoading';
 
 const PollResult = () => {
-  const [ pollReportLoading, setPollReportLoading ] = useState(true);
+  const [ pollReportLoading, setPollReportLoading ] = useState(false);
   const [ pollReport, setPollReport ] = useState();
 
   const navigate = useNavigate();
@@ -30,9 +30,12 @@ const PollResult = () => {
   } = useContext(AppDataContext);
 
   const generateAndSetPollReport = async () => {
-    console.log("in generateAndSetPollReport, calling generatePollReport")
-    const report = await generatePollReport();
-    setPollReport(report);
+    if (!pollReportLoading) {
+      setPollReportLoading(true);
+      console.log("in generateAndSetPollReport, calling generatePollReport")
+      const report = await generatePollReport();
+      setPollReport(report);
+    }
     setPollReportLoading(false);
   };
 
@@ -58,8 +61,9 @@ const PollResult = () => {
   }, []);
 
   useEffect(() => {
-    if (pollIsLoaded) {
-      console.log("In pollIsLoaded callback, calling generateAndSetPollReport");
+    // if (pollIsLoaded) {
+    if (!pollIsLoading) {
+      console.log("JAO In pollIsLoaded callback, calling generateAndSetPollReport");
       
       const getReport = async () => {
         generateAndSetPollReport();

@@ -55,6 +55,7 @@ function useQuestionData({
 }) {
   const [ answerData, setAnswerData ] = useState();
   const [ answerTally, setAnswerTally ] = useState();
+  const [ calculatingAnswerTally, setCalculatingAnswerTally ] = useState(false);
   const [ questionIsLoaded, setQuestionIsLoaded ] = useState(false);
   const [ questionIsLoading, setQuestionIsLoading ] = useState(false);
   const [ questionData, setQuestionData ] = useState();
@@ -88,15 +89,23 @@ function useQuestionData({
   //  the object. answerData is an array of the Objects returned by the getAnswer query.
   const calculateAnswerTallyFromAnswerData = (data = answerData) => {
     if (!data) {
+      console.log("JAO calculateAnswerTallyFromAnswerData: no data provided")
       return;
     }
+
+    setCalculatingAnswerTally(true);
+
+    console.log("JAO useQuestionData: calculateAnswerTallyFromAnswerData: building answerTally from data:", data);
 
     const answerCount = {};
 
     for (let i = 0; i < data.length; i++) {
+      console.log("data is:", data)
       //TODO: we will need to rework this for multiple choice questions
       //  gross, but nested for loop to iterate through the internal array?
       const currentAnswer = data[i].answer[0];
+
+      console.log("recording current answer: ", currentAnswer);
   
       if (!answerCount[currentAnswer]) {
         // does not exist in answerCount object, so create it
@@ -105,7 +114,11 @@ function useQuestionData({
       else {
         answerCount[currentAnswer]++;
       }
+
+      console.log("answerCount is now: ", answerCount);
     }
+
+    setCalculatingAnswerTally(false);
 
     return {
       data: Object.values(answerCount),
@@ -114,7 +127,11 @@ function useQuestionData({
   };
   
   // calculates answer tally in a form for charts and saves it in state
-  const calculateAndSetAnswerTally = () => setAnswerTally(calculateAnswerTallyFromAnswerData());
+  const calculateAndSetAnswerTally = () => {
+    if (!calculatingAnswerTally) {
+      setAnswerTally(calculateAnswerTallyFromAnswerData())
+    }
+  };
 
   // gets question data from server and saves it in client state
   const fetchAndSetQuestionData = async () => {
@@ -281,6 +298,9 @@ function useQuestionData({
   }, [questionId]);
 
   useEffect(() => {
+    console.log("JAO in useEffect for answerData changing: calling calculateAndSetAnswerTally");
+    console.log("JAO in useEffect for answerData changing: questionData is:", questionData);
+    console.log("JAO in useEffect for answerData changing: answerData is:", answerData);
     calculateAndSetAnswerTally();
   }, [answerData]);
 

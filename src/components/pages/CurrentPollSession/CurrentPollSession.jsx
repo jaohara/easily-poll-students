@@ -91,7 +91,8 @@ const CurrentPollSession = () => {
   // }, [pollData]);
 
   const pollIsReady = !pollIsLoading && pollIsLoaded && pollData && user &&
-    pollData.id === targetPollId && pollData.userPollsId === user.id;
+    pollData.id === targetPollId && pollData.userPollsId === user.id &&
+    currentQuestionData && currentQuestionData.pollQuestionsId === targetPollId;
   
   const copyInviteLinkHandler = () => {
     const addToClipboard = async () => {
@@ -219,7 +220,7 @@ function CurrentPollQuestionAnswers ({
   answerTally,
   guestCount,
 }) {
-  const uniqueAnswers = [...new Set(answerData.map(answer => answer.pollGuestsId))].length;
+  const uniqueAnswers = [...new Set(answerData.map(answer => answer.guestAnswersId))].length;
 
   return (
     <div className="current-poll-question-answers">

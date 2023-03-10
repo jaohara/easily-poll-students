@@ -162,6 +162,8 @@ function AppDataContextProvider(props) {
             }
           });
 
+          console.log("JAO generatePollReport: response data is: ", answersResponse.data.listAnswers.items);
+
           const questionObject = {
             answerTally: calculateAnswerTallyFromAnswerData(answersResponse.data.listAnswers.items),
             id: question.id,
