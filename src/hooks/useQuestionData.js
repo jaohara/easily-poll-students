@@ -122,7 +122,6 @@ function useQuestionData({
       console.log("answerCount is now: ", answerCount);
     }
 
-
     return {
       data: Object.values(answerCount),
       labels: Object.keys(answerCount),

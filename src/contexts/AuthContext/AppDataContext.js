@@ -221,7 +221,7 @@ function AppDataContextProvider(props) {
       answerTally: calculateAnswerTallyFromAnswerData(question),
       id: question.id,
       prompt: question.prompt,
-    }))
+    }));
     
     const pollReport = {
       createdAt: pollData.createdAt,
