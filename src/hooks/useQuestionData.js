@@ -34,6 +34,9 @@ const getQuestionWithAnswers = /* GraphQL */ `
           answer
           id
           createdAt
+          owner {
+            canVote
+          }
           updatedAt
           questionAnswersId
           guestAnswersId
@@ -55,7 +58,7 @@ function useQuestionData({
 }) {
   const [ answerData, setAnswerData ] = useState();
   const [ answerTally, setAnswerTally ] = useState();
-  const [ calculatingAnswerTally, setCalculatingAnswerTally ] = useState(false);
+  // const [ calculatingAnswerTally, setCalculatingAnswerTally ] = useState(false);
   const [ questionIsLoaded, setQuestionIsLoaded ] = useState(false);
   const [ questionIsLoading, setQuestionIsLoading ] = useState(false);
   const [ questionData, setQuestionData ] = useState();
@@ -93,32 +96,32 @@ function useQuestionData({
       return;
     }
 
-    setCalculatingAnswerTally(true);
-
     console.log("JAO useQuestionData: calculateAnswerTallyFromAnswerData: building answerTally from data:", data);
 
     const answerCount = {};
 
     for (let i = 0; i < data.length; i++) {
       console.log("data is:", data)
-      //TODO: we will need to rework this for multiple choice questions
-      //  gross, but nested for loop to iterate through the internal array?
-      const currentAnswer = data[i].answer[0];
-
-      console.log("recording current answer: ", currentAnswer);
+      
+      if (data[i].owner.canVote) {
+        //TODO: we will need to rework this for multiple choice questions
+        //  gross, but nested for loop to iterate through the internal array?
+        const currentAnswer = data[i].answer[0];
   
-      if (!answerCount[currentAnswer]) {
-        // does not exist in answerCount object, so create it
-        answerCount[currentAnswer] = 1;
-      }
-      else {
-        answerCount[currentAnswer]++;
+        console.log("recording current answer: ", currentAnswer);
+    
+        if (!answerCount[currentAnswer]) {
+          // does not exist in answerCount object, so create it
+          answerCount[currentAnswer] = 1;
+        }
+        else {
+          answerCount[currentAnswer]++;
+        }
       }
 
       console.log("answerCount is now: ", answerCount);
     }
 
-    setCalculatingAnswerTally(false);
 
     return {
       data: Object.values(answerCount),
@@ -128,9 +131,7 @@ function useQuestionData({
   
   // calculates answer tally in a form for charts and saves it in state
   const calculateAndSetAnswerTally = () => {
-    if (!calculatingAnswerTally) {
-      setAnswerTally(calculateAnswerTallyFromAnswerData())
-    }
+    setAnswerTally(calculateAnswerTallyFromAnswerData())
   };
 
   // gets question data from server and saves it in client state

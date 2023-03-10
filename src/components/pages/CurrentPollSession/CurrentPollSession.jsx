@@ -230,10 +230,18 @@ function CurrentPollQuestionAnswers ({
           {uniqueAnswers} / {guestCount} Guest Votes Recorded
         </EpPill>
       </div>
-      <EpChart
-        data={answerTally.data}
-        labels={answerTally.labels}
-      />
+      {
+        answerTally ? (
+          <EpChart
+            data={answerTally.data}
+            labels={answerTally.labels}
+          />
+        ) : (
+          <div className="current-poll-question-answers-no-answers">
+            No answers have been recorded for this poll.
+          </div>
+        )
+      }
     </div>
   )
 }

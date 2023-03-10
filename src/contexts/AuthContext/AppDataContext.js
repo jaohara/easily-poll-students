@@ -6,7 +6,7 @@ import React, {
 } from "react";
 
 import { 
-  listAnswers,
+  // listAnswers,
   listPolls, 
 } from "../../graphql/queries";
 
@@ -15,6 +15,29 @@ import useApi from "../../hooks/useApi";
 import { AuthContext } from "./AuthContext";
 
 const AppDataContext = createContext(undefined);
+
+export const listAnswersWithOwner = /* GraphQL */ `
+  query ListAnswers(
+    $filter: ModelAnswerFilterInput
+    $limit: Int
+    $nextToken: String
+  ) {
+    listAnswers(filter: $filter, limit: $limit, nextToken: $nextToken) {
+      items {
+        answer
+        id
+        createdAt
+        updatedAt
+        questionAnswersId
+        guestAnswersId
+        owner {
+          canVote
+        }
+      }
+      nextToken
+    }
+  }
+`;
 
 function AppDataContextProvider(props) {
   const API = useApi();
@@ -139,43 +162,51 @@ function AppDataContextProvider(props) {
       //   return;
     // }
 
-    console.log("generatePollReport: pollData looks good, generating report...")
+    // console.log("generatePollReport: pollData looks good, generating report...")
     
     const getData = async () => {
       const result = [];
+      let waitingForResponse = false;
       
       // iterate through each question, using listAnswers to get an array of answerData,
       //  and then using calculateAnswerTallyFromAnswerData to generate a 
-      for (let i = 0; i < pollQuestionsData.length; i++) {
-        const question = pollQuestionsData[i];
-        console.log("generatePollReport: starting getData call...");
+      // for (let i = 0; i < pollQuestionsData.length; i++) {
+      for (let i = 0; i < pollQuestionsData.length; waitingForResponse ? i : i++) {
+        if (!waitingForResponse) {
+          waitingForResponse = true;
+          const question = pollQuestionsData[i];
+          // console.log("generatePollReport: starting getData call...");
 
-        try {
-          const answersResponse = await API.graphql({
-            query: listAnswers,
-            variables: {
-              filter: {
-                questionAnswersId: {
-                  eq: question.id,
+          try {
+            const answersResponse = await API.graphql({
+              query: listAnswersWithOwner,
+              variables: {
+                filter: {
+                  questionAnswersId: {
+                    eq: question.id,
+                  }
                 }
               }
-            }
-          });
+            });
 
-          console.log("JAO generatePollReport: response data is: ", answersResponse.data.listAnswers.items);
+            console.log("JAO generatePollReport: response data is: ", answersResponse.data.listAnswers.items);
 
-          const questionObject = {
-            answerTally: calculateAnswerTallyFromAnswerData(answersResponse.data.listAnswers.items),
-            id: question.id,
-            prompt: question.prompt,
-          };
+            // const questionObject = {
+            //   answerTally: calculateAnswerTallyFromAnswerData(answersResponse.data.listAnswers.items),
+            //   id: question.id,
+            //   prompt: question.prompt,
+            // };
 
-          console.log("generatePollReport: getData: created questionObject: ", questionObject);
+            // console.log("generatePollReport: getData: created questionObject: ", questionObject);
 
-          result.push(questionObject);
-        }
-        catch (err) {
-          console.error("Error listing answers for question: ", err);
+            // result.push(questionObject);
+            result.push(answersResponse.data.listAnswers.items);
+            waitingForResponse = false;
+          }
+          catch (err) {
+            console.error("Error listing answers for question: ", err);
+            waitingForResponse = false;
+          }
         }
       }
 
@@ -183,12 +214,21 @@ function AppDataContextProvider(props) {
     };
     
     const questions = await getData();
+
+    console.log("JAO questions data: ", questions);
+
+    const questionAnswerTallies = questions.map(question => ({
+      answerTally: calculateAnswerTallyFromAnswerData(question),
+      id: question.id,
+      prompt: question.prompt,
+    }))
     
     const pollReport = {
       createdAt: pollData.createdAt,
       id: pollData.id,
       title: pollData.title,
-      questions: questions,
+      // questions: questions,
+      questions: questionAnswerTallies,
     };
 
     console.log("generatePollReport: generated poll report: ", pollReport);
