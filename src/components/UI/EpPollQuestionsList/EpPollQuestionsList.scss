@@ -3,9 +3,12 @@
 .ep-poll-questions-list-item {
   border-radius: g.$common-border-radius;
   border: 2px solid transparent;
+  display: flex;
   font-size: 1.0rem;
   margin-bottom: .5rem;
   padding: 1rem;
+  padding-right: 3rem;
+  position: relative;
   transition: 
     background-color g.$common-transition-time, 
     border-color g.$common-transition-time;
@@ -18,5 +21,19 @@
   &:hover {
     background-color: g.$background-gray;
     cursor: pointer;
+  }
+}
+
+.question-answered-icon {
+  color: g.$shallow-space-sparkle;
+  font-size: 1.5rem;
+  opacity: 0%;
+  position: absolute;
+  right: 0;
+  transition: opacity g.$common-transition-time;
+  transform: translateX(-.5rem);
+
+  .answered & {
+    opacity: 100%;
   }
 }

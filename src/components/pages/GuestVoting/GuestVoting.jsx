@@ -9,6 +9,10 @@ import {
   useParams,
 } from 'react-router-dom';
 
+import {
+  BiLock
+} from "react-icons/bi";
+
 import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
 
 import "./GuestVoting.scss";
@@ -18,9 +22,11 @@ import EpChart from '../../UI/EpChart/EpChart';
 import EpContainer from '../../UI/EpContainer/EpContainer';
 import EpLoading from '../../UI/EpLoading/EpLoading';
 import EpPill from '../../UI/EpPill/EpPill';
+import EpPollQuestionsList from '../../UI/EpPollQuestionsList/EpPollQuestionsList';
 import EpTextInput from '../../UI/EpTextInput/EpTextInput';
 
 const GuestVoting = () => {
+  const [ answeredQuestions, setAnsweredQuestions ] = useState([]);
   const [ pollIsLoading, setPollIsLoading ] = useState(true);
 
   const navigate = useNavigate();
@@ -38,8 +44,10 @@ const GuestVoting = () => {
     joinPollAsGuest,
     pollData,
     pollGuestsData,
+    pollQuestionsData,
     pollIsLoaded,
     selectPollById,
+    setCurrentQuestionId,
   } = useContext(AppDataContext);
 
 
@@ -60,7 +68,7 @@ const GuestVoting = () => {
   }, [pollIsLoaded]);
 
   const votingIsReady = pollIsLoaded && !pollIsLoading && pollData 
-    && pollData.id === targetPollId;
+    && pollData.id === targetPollId && pollQuestionsData;
 
   // TODO: Add a check that guest.id is in pollGuestsData
   const guestIsReady = guest && guestIsLoaded;
@@ -72,18 +80,26 @@ const GuestVoting = () => {
           <EpLoading />
         ) : (
           !guestIsReady ? (
-            <GuestVotingCreateGuest
-              joinPollAsGuest={joinPollAsGuest}
-              pollData={pollData}
-              pollGuestsData={pollGuestsData}
-            />
+            pollData.isLocked ? (
+              <GuestVotingPollIsLocked />
+            ) : (
+              <GuestVotingCreateGuest
+                joinPollAsGuest={joinPollAsGuest}
+                pollData={pollData}
+                pollGuestsData={pollGuestsData}
+              />
+            )
           ) : (
             <GuestVotingBallot
-              pollData={pollData}
+              addGuestAnswerToCurrentQuestion={addGuestAnswerToCurrentQuestion}
+              answeredQuestions={answeredQuestions}
               currentAnswerTally={currentAnswerTally}
               currentQuestionData={currentQuestionData}
               guest={guest}
-              addGuestAnswerToCurrentQuestion={addGuestAnswerToCurrentQuestion}
+              pollData={pollData}
+              pollQuestionsData={pollQuestionsData}
+              setAnsweredQuestions={setAnsweredQuestions}
+              setCurrentQuestionId={setCurrentQuestionId}
             />
           )
         )
@@ -91,6 +107,23 @@ const GuestVoting = () => {
     </div>
   );
 };
+
+function GuestVotingPollIsLocked () {
+  return (
+    <EpContainer
+      centered
+      className="guest-voting-poll-is-locked"
+      narrow
+    >
+      <div className="guest-voting-poll-is-locked-icon-wrapper">
+        <BiLock />
+      </div>
+      <p>
+        Poll is locked and not accepting new guests.
+      </p>
+    </EpContainer>
+  )
+}
 
 // This is the "Join Poll" form that is displayed with no guest
 function GuestVotingCreateGuest ({
@@ -138,39 +171,91 @@ function GuestVotingCreateGuest ({
 // this is the "Ballot" form that is displayed when a guest is in the poll
 function GuestVotingBallot ({
   addGuestAnswerToCurrentQuestion,
+  answeredQuestions,
   currentAnswerTally,
   currentQuestionData,
   guest, 
   pollData,
+  pollQuestionsData,
+  setAnsweredQuestions,
+  setCurrentQuestionId,
 }) {
+  // TODO: we need to implement some sort of "increment question" function
+  const ballotActive = guest.canVote && pollData.isActive;
+
   return (
     <>
       <h1>{pollData.title}</h1>
       <EpContainer>
-        <h1>{currentQuestionData.prompt}</h1>
-        <EpChart 
-          chartType="pie"
-          data={currentAnswerTally.data}
-          labels={currentAnswerTally.labels}
-        />
-        <p>
-          Voting as <EpPill>{guest.name} - {guest.id}</EpPill>
-        </p>
-        {
-          //TODO: we should check to see if answerOptions exists and is not empty
-          currentQuestionData.answerOptions.map((answer, index) => (
-            <EpButton
-              key={`answerOption-${index}`}
-              //TODO: replace temporary voting implementation in final version
-              onClick={() => 
-                addGuestAnswerToCurrentQuestion({guestId: guest.id, answerValue: answer})
-              }
-            >
-              {answer}
-            </EpButton>
-          )
-          )
-        }
+        <div className="guest-poll-info">
+          {/* TODO: remove the id from this when we're done debugging */}
+          <EpPill
+            key="guest-name"
+          >
+            {guest.name} - {guest.id}
+          </EpPill>
+
+
+          {
+            !guest.canVote && (
+              <EpPill
+                key="guest-voting-status"
+              >
+                Guest Cannot Vote
+              </EpPill>
+            )
+          }
+
+          {
+            pollData.isLocked && (
+              <EpPill
+                key="guest-voting-status"
+              >
+                Poll Is Locked
+              </EpPill>
+            )
+          }
+        </div>
+        <div className="guest-voting-ballot-questions-wrapper">
+          <EpPollQuestionsList
+            answeredQuestions={answeredQuestions}
+            className="guest-voting-ballot-questions-list"
+            currentQuestionId={currentQuestionData.id}
+            pollQuestions={pollQuestionsData}
+            setCurrentQuestionId={setCurrentQuestionId}
+          />
+          <div className="guest-voting-ballot-question">
+            <h1>{currentQuestionData.prompt}</h1>
+            <EpChart 
+              chartType="pie"
+              data={currentAnswerTally.data}
+              labels={currentAnswerTally.labels}
+            />
+            {
+              //TODO: we should check to see if answerOptions exists and is not empty
+              currentQuestionData.answerOptions.map((answer, index) => (
+                <div 
+                  className="guest-voting-ballot-answer-button-wrapper"
+                  key={`answer-button-wrapper-${index}`}
+                >
+                  <EpButton
+                    disabled={!ballotActive}
+                    fullWidth
+                    key={`answerOption-${index}`}
+                    //TODO: replace temporary voting implementation in final version
+                    onClick={() => {
+                      addGuestAnswerToCurrentQuestion({guestId: guest.id, answerValue: answer});
+                      setAnsweredQuestions(previous => [...previous, currentQuestionData.id]);
+                    }}
+                    >
+                    {answer}
+                  </EpButton>
+                </div>
+              )
+              )
+            }
+          </div>
+        </div>
       </EpContainer>
     </>
   );

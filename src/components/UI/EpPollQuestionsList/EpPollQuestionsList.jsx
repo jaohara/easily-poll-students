@@ -1,8 +1,11 @@
 import React from "react";
 
+import { BiCheckCircle } from "react-icons/bi";
+
 import "./EpPollQuestionsList.scss";
 
 function EpPollQuestionsList ({
+  answeredQuestions = [],
   className,
   currentQuestionId,
   setCurrentQuestionId,
@@ -19,6 +22,7 @@ function EpPollQuestionsList ({
             className={`
               ep-poll-questions-list-item
               ${question.id === currentQuestionId ? "active" : ""}
+              ${answeredQuestions.includes(question.id) ? "answered" : ""}
             `}
             key={`ep-poll-questions-list-item-${index}`}
             onClick={e => {
@@ -27,6 +31,10 @@ function EpPollQuestionsList ({
             }}
           >
             {question.prompt}
+
+            <div className="question-answered-icon">
+              <BiCheckCircle />
+            </div>
           </div>
         ))
       }
