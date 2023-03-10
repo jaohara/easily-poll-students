@@ -23,6 +23,8 @@ import VerifyEmail from './components/pages/Auth/VerifyEmail/VerifyEmail';
 //poll result test
 import PollResult from './components/pages/PollResult/PollResult';
 
+import { AuthRequired } from "./AuthRequired";
+
 // name is display name on button/link
 export const routes = [
   {
@@ -36,7 +38,7 @@ export const routes = [
     path: '/polls',
     name: 'User Dashboard',
     disableWhenUnauthorized: true,
-    element: <UserDashboard />,
+    element: <AuthRequired> <UserDashboard /> </AuthRequired>,
     // hideInNavBar: true,
   },
   {
@@ -52,7 +54,7 @@ export const routes = [
   {
     path: '/create-poll',
     name: 'Create Poll',
-    element: <CreatePoll />,
+    element: <AuthRequired> <CreatePoll /> </AuthRequired>,
     // TODO: Hide when app workflow is finalized (only available if logged in)
     hideInNavBar: true,
   },
