@@ -4,6 +4,7 @@
   "private": true,
   "dependencies": {
     "@aws-amplify/api": "^5.0.12",
+    "@aws-amplify/ui-react": "^4.3.10",
     "@emotion/react": "^11.10.5",
     "@emotion/styled": "^11.10.5",
     "@fontsource/dm-sans": "^4.5.9",
