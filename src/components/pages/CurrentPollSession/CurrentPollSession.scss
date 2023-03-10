@@ -101,26 +101,26 @@
   margin-bottom: 1rem;
 }
 
-.current-poll-questions-list-item {
-  border-radius: g.$common-border-radius;
-  border: 2px solid transparent;
-  font-size: 1.1rem;
-  margin-bottom: .5rem;
-  padding: 1rem;
-  transition: 
-    background-color g.$common-transition-time, 
-    border-color g.$common-transition-time;
+// .current-poll-questions-list-item {
+//   border-radius: g.$common-border-radius;
+//   border: 2px solid transparent;
+//   font-size: 1.1rem;
+//   margin-bottom: .5rem;
+//   padding: 1rem;
+//   transition: 
+//     background-color g.$common-transition-time, 
+//     border-color g.$common-transition-time;
 
-  &.active {
-    background-color: g.$background-gray;
-    border-color: g.$shallow-space-sparkle;
-  }
+//   &.active {
+//     background-color: g.$background-gray;
+//     border-color: g.$shallow-space-sparkle;
+//   }
 
-  &:hover {
-    background-color: g.$background-gray;
-    cursor: pointer;
-  }
-}
+//   &:hover {
+//     background-color: g.$background-gray;
+//     cursor: pointer;
+//   }
+// }
 
 .current-poll-question-answers {
   // background-color: g.$background-gray;

@@ -33,6 +33,7 @@ import EpContainer from '../../UI/EpContainer/EpContainer';
 import EpChart from '../../UI/EpChart/EpChart';
 import EpLoading from '../../UI/EpLoading/EpLoading';
 import EpPill from '../../UI/EpPill/EpPill';
+import EpPollQuestionsList from "../../UI/EpPollQuestionsList/EpPollQuestionsList";
 import EpTextInput from '../../UI/EpTextInput/EpTextInput';
 
 const CurrentPollSession = () => {
@@ -167,7 +168,8 @@ const CurrentPollSession = () => {
 
             <EpContainer>
               <div className="current-poll-questions-wrapper">
-                <CurrentPollQuestionList
+                <EpPollQuestionsList
+                  className="current-poll-questions-list"
                   currentQuestionId={currentQuestionData.id}
                   setCurrentQuestionId={setCurrentQuestionId}
                   pollQuestions={pollQuestionsData}
@@ -187,34 +189,34 @@ const CurrentPollSession = () => {
   );
 };
 
-function CurrentPollQuestionList ({
-  currentQuestionId,
-  setCurrentQuestionId,
-  pollQuestions,
-}) {
-  return (
-    <div className="current-poll-questions-list">
-      <h1 className='current-poll-questions-header'>Questions</h1>
-      {
-        pollQuestions.length > 0 && pollQuestions.map((question, index) => (
-          <div 
-            className={`
-              current-poll-questions-list-item
-              ${question.id === currentQuestionId ? "active" : ""}
-            `}
-            key={`current-poll-questions-list-item-${index}`}
-            onClick={e => {
-              e.preventDefault();
-              setCurrentQuestionId(question.id);
-            }}
-          >
-            {question.prompt}
-          </div>
-        ))
-      }
-    </div>
-  )
-}
+// function CurrentPollQuestionList ({
+//   currentQuestionId,
+//   setCurrentQuestionId,
+//   pollQuestions,
+// }) {
+//   return (
+//     <div className="current-poll-questions-list">
+//       <h1 className='current-poll-questions-header'>Questions</h1>
+//       {
+//         pollQuestions.length > 0 && pollQuestions.map((question, index) => (
+//           <div 
+//             className={`
+//               current-poll-questions-list-item
+//               ${question.id === currentQuestionId ? "active" : ""}
+//             `}
+//             key={`current-poll-questions-list-item-${index}`}
+//             onClick={e => {
+//               e.preventDefault();
+//               setCurrentQuestionId(question.id);
+//             }}
+//           >
+//             {question.prompt}
+//           </div>
+//         ))
+//       }
+//     </div>
+//   )
+// }
 
 function CurrentPollQuestionAnswers ({
   answerData,

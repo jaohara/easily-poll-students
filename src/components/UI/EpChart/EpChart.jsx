@@ -5,6 +5,8 @@ import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale,
   Title} from 'chart.js';
 import { Bar, Pie } from "react-chartjs-2";
 
+import "./EpChart.scss";
+
 ChartJS.register(CategoryScale,
   LinearScale,
   BarElement,
@@ -36,7 +38,7 @@ function EpChart({
   };
 
   return (
-    <div className="chart-container">
+    <div className="ep-chart-wrapper">
       {
         chartType === 'pie' && (
           <Pie

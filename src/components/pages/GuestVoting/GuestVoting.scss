@@ -1,3 +1,61 @@
-.implementation-details {
-  display: none;
+@use "../../../styles/globals.scss" as g;
+
+.guest-voting-create-guest-container {
+  min-height: 20vh;
+
+  h1, h2 {
+    margin-bottom: .5rem;
+  }
+}
+
+.guest-voting-create-guest-metadata {
+  margin-bottom: 1.5rem;
+}
+
+.guest-voting-create-guest-input-wrapper {
+  margin-bottom: 1rem;
+}
+
+.guest-voting-ballot-questions-wrapper {
+  display: flex;
+  justify-content: space-between;
+}
+
+.guest-voting-ballot-questions-list {
+  width: 33%;
+}
+
+.guest-voting-ballot-question {
+  width: 60%;
+}
+
+.guest-voting-ballot-answer-button-wrapper {
+  font-size: 1.5rem;
+  margin-bottom: 1rem;
+}
+
+.guest-poll-info {
+  margin-bottom: 1rem;
+}
+
+.guest-voting-poll-is-locked {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.25rem;
+  justify-content: center;
+  min-height: 33vh;
+  // padding: 2rem 0rem;
+
+  .guest-voting-poll-is-locked-icon-wrapper {
+    align-items: center;
+    background-color: g.$shallow-space-sparkle;
+    border-radius: 50%;
+    color: g.$background-gray;
+    display: flex;
+    font-size: 3rem;
+    height: 64px;
+    justify-content: center;
+    width: 64px;
+  }
 }
