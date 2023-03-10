@@ -52,6 +52,7 @@ const CurrentPollSession = () => {
     pollGuestsData,
     pollData,
     pollIsLoaded,
+    pollQuestionsData,
     // togglePollActive,
     togglePollGuestLock,
     selectPollById,
@@ -169,7 +170,7 @@ const CurrentPollSession = () => {
                 <CurrentPollQuestionList
                   currentQuestionId={currentQuestionData.id}
                   setCurrentQuestionId={setCurrentQuestionId}
-                  pollQuestions={pollData.questions.items}
+                  pollQuestions={pollQuestionsData}
                 />
 
                 <CurrentPollQuestionAnswers

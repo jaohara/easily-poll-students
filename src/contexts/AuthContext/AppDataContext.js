@@ -59,7 +59,7 @@ function AppDataContextProvider(props) {
   const {
     addGuestAnswerToCurrentQuestion,
     addNewPollGuest,
-    calculateAnswerTallyFromAnswerData,
+    // calculateAnswerTallyFromAnswerData,
     createNewPoll, 
     currentAnswerData,
     currentAnswerTally, 
@@ -162,76 +162,100 @@ function AppDataContextProvider(props) {
       //   return;
     // }
 
-    // console.log("generatePollReport: pollData looks good, generating report...")
+    // custom query for getting data for pollreport
+    const listQuestionsWithAllAnswers = /* GraphQL */ `
+      query ListQuestions(
+        $filter: ModelQuestionFilterInput
+        $limit: Int
+        $nextToken: String
+      ) {
+        listQuestions(filter: $filter, limit: $limit, nextToken: $nextToken) {
+          items {
+            id
+            prompt
+            answerOptions
+            questionType
+            createdAt
+            updatedAt
+            pollQuestionsId
+            answers {
+              items {
+                answer
+                createdAt
+                guestAnswersId
+                id
+                questionAnswersId
+                updatedAt
+                owner {
+                  canVote
+                }
+              }
+            }
+          }
+          nextToken
+        }
+      }
+    `;
     
     const getData = async () => {
       const result = [];
-      let waitingForResponse = false;
-      
-      // iterate through each question, using listAnswers to get an array of answerData,
-      //  and then using calculateAnswerTallyFromAnswerData to generate a 
-      // for (let i = 0; i < pollQuestionsData.length; i++) {
-      for (let i = 0; i < pollQuestionsData.length; waitingForResponse ? i : i++) {
-        if (!waitingForResponse) {
-          waitingForResponse = true;
-          const question = pollQuestionsData[i];
-          // console.log("generatePollReport: starting getData call...");
 
-          try {
-            const answersResponse = await API.graphql({
-              query: listAnswersWithOwner,
-              variables: {
-                filter: {
-                  questionAnswersId: {
-                    eq: question.id,
-                  }
-                }
+      try {
+        const answersResponse = await API.graphql({
+          query: listQuestionsWithAllAnswers,
+          variables: {
+            filter: {
+              pollQuestionsId: {
+                eq: pollData.id
               }
-            });
-
-            console.log("JAO generatePollReport: response data is: ", answersResponse.data.listAnswers.items);
-
-            // const questionObject = {
-            //   answerTally: calculateAnswerTallyFromAnswerData(answersResponse.data.listAnswers.items),
-            //   id: question.id,
-            //   prompt: question.prompt,
-            // };
-
-            // console.log("generatePollReport: getData: created questionObject: ", questionObject);
-
-            // result.push(questionObject);
-            result.push(answersResponse.data.listAnswers.items);
-            waitingForResponse = false;
+            }
           }
-          catch (err) {
-            console.error("Error listing answers for question: ", err);
-            waitingForResponse = false;
-          }
-        }
+        });
+
+        const questionData = answersResponse.data.listQuestions.items;
+        
+        questionData.forEach(question => {
+          const answerCount = {};
+
+          question.answers.items.forEach(answerObject => {
+            if (answerObject.owner.canVote) {
+              // getting a little gross here, but this is how we account multiple-answer
+              //  q's
+              answerObject.answer.forEach(answer => {
+                answerCount[answer] = !answerCount[answer] ? 1 : answerCount[answer] + 1;
+              });
+            }
+          });
+
+          const questionObject = {
+            answerTally: {
+              data: Object.values(answerCount),
+              labels: Object.keys(answerCount),
+            },
+            id: question.id,
+            prompt: question.prompt,
+          };
+
+          result.push(questionObject);
+        });
+
       }
-
+      catch(err) {
+        console.error("Error fetching all questions with answers: ", err);
+      }
       return result;
     };
     
     const questions = await getData();
 
-    console.log("JAO questions data: ", questions);
-
-    const questionAnswerTallies = questions.map(question => ({
-      answerTally: calculateAnswerTallyFromAnswerData(question),
-      id: question.id,
-      prompt: question.prompt,
-    }));
-    
     const pollReport = {
       createdAt: pollData.createdAt,
       id: pollData.id,
       title: pollData.title,
-      // questions: questions,
-      questions: questionAnswerTallies,
+      questions: questions,
     };
 
-    console.log("generatePollReport: generated poll report: ", pollReport);
+    // console.log("generatePollReport: generated poll report: ", pollReport);
 
     return pollReport;
   };

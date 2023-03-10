@@ -300,6 +300,10 @@ function usePollData({
     }
 
     updatePollData({isLocked: !pollData.isLocked});
+    // setPollData(oldPollData => ({
+    //   ...oldPollData,
+    //   isLocked: oldPollData.isLocked,
+    // }))
   };
 
   const togglePollActive = () => {
