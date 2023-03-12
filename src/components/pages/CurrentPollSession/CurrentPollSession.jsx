@@ -9,6 +9,8 @@ import {
   useParams, 
 } from 'react-router-dom';
 
+import QRCode from "react-qr-code";
+
 import {
   BiCheckCircle,
   BiClipboard,
@@ -18,6 +20,7 @@ import {
   BiLockAlt,
   BiLockOpenAlt,
   // BiSearchAlt2,
+  BiQr,
   BiUser,
   BiUserPlus,
   BiUserX,
@@ -40,6 +43,7 @@ const CurrentPollSession = () => {
   const [ guestFilter, setGuestFilter ] = useState("")
   const [ guestListIsVisible, setGuestListIsVisible ] = useState(true);
   const [ pollIsLoading, setPollIsLoading ] = useState(true);
+  const [ qrcodeIsVisible, setQrcodeIsVisible ] = useState(false);
 
   const navigate = useNavigate();
   const { targetPollId } = useParams();
@@ -92,6 +96,8 @@ const CurrentPollSession = () => {
     
   // }, [pollData]);
 
+  const getInviteLink = () => location.href.replace("/poll/", "/vote/");
+
   const pollIsReady = !pollIsLoading && pollIsLoaded && pollData && user &&
     pollData.id === targetPollId && pollData.userPollsId === user.id &&
     currentQuestionData && currentQuestionData.pollQuestionsId === targetPollId;
@@ -100,7 +106,7 @@ const CurrentPollSession = () => {
     const addToClipboard = async () => {
       try {
         // TODO: make sure this works properly when deployed
-        await navigator.clipboard.writeText(location.href.replace("/poll/", "/vote/"));
+        await navigator.clipboard.writeText(getInviteLink());
       }
       catch (err) {
         console.error("copyInviteLinkHandler: failed to copy:", err)
@@ -123,7 +129,23 @@ const CurrentPollSession = () => {
               copyInviteLinkHandler={copyInviteLinkHandler}
               pollIsLocked={pollData.isLocked}
               togglePollLock={togglePollLock}
+              showQrCodeHandler={() => setQrcodeIsVisible(true)}
             />
+
+            <div 
+              className={`
+                current-poll-qrcode
+                ${qrcodeIsVisible ? "active" : ""}
+              `}
+              onClick={() => setQrcodeIsVisible(false)}
+            >
+              <EpContainer className="current-poll-qrcode-wrapper">
+                <QRCode 
+                  value={getInviteLink()}
+                />
+              <p>Click anywhere to hide.</p>
+              </EpContainer>
+            </div>
 
             <EpContainer
               className="current-poll-guests-container"
@@ -171,6 +193,7 @@ const CurrentPollSession = () => {
                 <EpPollQuestionsList
                   className="current-poll-questions-list"
                   currentQuestionId={currentQuestionData.id}
+                  hideIcon
                   setCurrentQuestionId={setCurrentQuestionId}
                   pollQuestions={pollQuestionsData}
                 />
@@ -188,35 +211,6 @@ const CurrentPollSession = () => {
     </div>
   );
 };
-
-// function CurrentPollQuestionList ({
-//   currentQuestionId,
-//   setCurrentQuestionId,
-//   pollQuestions,
-// }) {
-//   return (
-//     <div className="current-poll-questions-list">
-//       <h1 className='current-poll-questions-header'>Questions</h1>
-//       {
-//         pollQuestions.length > 0 && pollQuestions.map((question, index) => (
-//           <div 
-//             className={`
-//               current-poll-questions-list-item
-//               ${question.id === currentQuestionId ? "active" : ""}
-//             `}
-//             key={`current-poll-questions-list-item-${index}`}
-//             onClick={e => {
-//               e.preventDefault();
-//               setCurrentQuestionId(question.id);
-//             }}
-//           >
-//             {question.prompt}
-//           </div>
-//         ))
-//       }
-//     </div>
-//   )
-// }
 
 function CurrentPollQuestionAnswers ({
   answerData,
@@ -252,7 +246,8 @@ function CurrentPollQuestionAnswers ({
 function CurrentPollControls ({
   copyInviteLinkHandler,
   togglePollLock,
-  pollIsLocked
+  pollIsLocked,
+  showQrCodeHandler,
 }) {
   return (
     <EpContainer className="current-poll-controls">
@@ -261,6 +256,12 @@ function CurrentPollControls ({
       >
         <BiClipboard />&nbsp;
         Copy Invite Link
+      </EpButton>
+      <EpButton
+        onClick={showQrCodeHandler}
+      >
+        <BiQr />&nbsp;
+        Show QR Code
       </EpButton>
       <PollControlsLock
         onClick={togglePollLock}

@@ -35,7 +35,6 @@ const GuestVoting = () => {
   // TODO: What do I need to pull out of AppDataContext? 
   // Think about the minimum amount of things the guests need
   const {
-    // addNewPollGuest,
     addGuestAnswerToCurrentQuestion,
     currentAnswerTally,
     currentQuestionData,
@@ -183,6 +182,18 @@ function GuestVotingBallot ({
   // TODO: we need to implement some sort of "increment question" function
   const ballotActive = guest.canVote && pollData.isActive;
 
+  const questionIds = pollQuestionsData.map(question => question.id);
+
+  const goToNextQuestion = () => {
+    const currentIdIndex = questionIds.indexOf(currentQuestionData.id);
+
+    if (currentIdIndex === -1 || currentIdIndex === pollQuestionsData.length - 1) {
+      return;
+    }
+
+    setCurrentQuestionId(questionIds[currentIdIndex + 1]);
+  };
+
   return (
     <>
       <h1>{pollData.title}</h1>
@@ -194,8 +205,6 @@ function GuestVotingBallot ({
           >
             {guest.name} - {guest.id}
           </EpPill>
-
-
           {
             !guest.canVote && (
               <EpPill
@@ -205,7 +214,6 @@ function GuestVotingBallot ({
               </EpPill>
             )
           }
-
           {
             pollData.isLocked && (
               <EpPill
@@ -246,6 +254,7 @@ function GuestVotingBallot ({
                     onClick={() => {
                       addGuestAnswerToCurrentQuestion({guestId: guest.id, answerValue: answer});
                       setAnsweredQuestions(previous => [...previous, currentQuestionData.id]);
+                      goToNextQuestion();
                     }}
                     >
                     {answer}

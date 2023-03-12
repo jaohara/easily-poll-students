@@ -13,6 +13,10 @@
     background-color g.$common-transition-time, 
     border-color g.$common-transition-time;
 
+  &.no-icon {
+    padding-right: 1rem;
+  }
+
   &.active {
     background-color: g.$background-gray;
     border-color: g.$shallow-space-sparkle;
