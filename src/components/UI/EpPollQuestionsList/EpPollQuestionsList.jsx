@@ -8,6 +8,7 @@ function EpPollQuestionsList ({
   answeredQuestions = [],
   className,
   currentQuestionId,
+  hideIcon = false,
   setCurrentQuestionId,
   pollQuestions,
 }) {
@@ -23,6 +24,7 @@ function EpPollQuestionsList ({
               ep-poll-questions-list-item
               ${question.id === currentQuestionId ? "active" : ""}
               ${answeredQuestions.includes(question.id) ? "answered" : ""}
+              ${hideIcon ? "no-icon" : ""}
             `}
             key={`ep-poll-questions-list-item-${index}`}
             onClick={e => {
@@ -32,9 +34,14 @@ function EpPollQuestionsList ({
           >
             {question.prompt}
 
-            <div className="question-answered-icon">
-              <BiCheckCircle />
-            </div>
+            {
+              !hideIcon && (
+                <div className="question-answered-icon">
+                  <BiCheckCircle />
+                </div>
+              )
+            }
+
           </div>
         ))
       }

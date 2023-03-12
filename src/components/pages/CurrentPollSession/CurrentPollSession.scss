@@ -126,3 +126,33 @@
   // background-color: g.$background-gray;
   padding-bottom: 2rem;
 }
+
+.current-poll-qrcode {
+  align-items: center;
+  background-color: rgba(0,0,0,0.75);
+  // display: flex;
+  cursor: pointer;
+  display: none;
+  height: 100vh;
+  justify-content: center;
+  left: 0;
+  position: fixed;
+  top: 0;
+  width: 100vw;
+  z-index: -5;
+  
+  &.active {
+    display: flex;
+    z-index: 100;
+  }
+}
+
+.current-poll-qrcode-wrapper {
+  width: fit-content !important;
+
+  p {
+    text-align: center;
+    margin: 0;
+    margin-top: 1rem;
+  }
+}

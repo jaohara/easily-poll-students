@@ -9,6 +9,9 @@ import {
   // listAnswers,
   listPolls, 
 } from "../../graphql/queries";
+import { 
+  onUpdateGuest
+} from "../../graphql/subscriptions";
 
 import usePollData from "../../hooks/usePollData";
 import useApi from "../../hooks/useApi";
@@ -144,6 +147,38 @@ function AppDataContextProvider(props) {
     submitData();
   }
 
+  const subscribeToGuest = () => {
+    if (!guest) {
+      console.error("AppDataContext: subscribeToGuest: no guest loaded");
+      return;
+    }
+
+    const guestVariablesObject = {
+      variables: {
+        id: guest.id,
+      }
+    }
+
+    return API.graphql({
+      query: onUpdateGuest,
+      ...guestVariablesObject,
+    }).subscribe({
+      next: (response) => {
+        const newGuestData = response.value.data.onUpdateGuest;
+        console.log("guestData receved from subscription:", newGuestData);
+
+        if (newGuestData !== null) {
+          setGuest(newGuestData);
+        }
+        else {
+          const responseErrors = response.value.errors;
+          console.error("Error with data received from subscription:", responseErrors);
+        }
+      },
+      error: (err) => console.warn(err),
+    });
+  };
+
   // generates and returns a pollReport
   const generatePollReport = async () => {
     if (!pollData) {
@@ -264,6 +299,14 @@ function AppDataContextProvider(props) {
   useEffect(() => {
     fetchAndSetAllUserPollsData();
   }, [user]);
+
+  // set subscription for a new guest 
+  useEffect(() => {
+    if (guest) {
+      const pollGuestSubscription = subscribeToGuest();
+      return () => pollGuestSubscription.unsubscribe();
+    }
+  }, [guestIsLoaded])
 
   // Debug function to dump all app state values
   const dumpCurrentAppData = () => ({
