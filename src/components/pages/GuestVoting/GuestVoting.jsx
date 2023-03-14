@@ -194,6 +194,14 @@ function GuestVotingBallot ({
     setCurrentQuestionId(questionIds[currentIdIndex + 1]);
   };
 
+  const [chart, setChart] = useState("pie");
+  const handlePie = () => {
+    setChart('pie');
+  }
+  const handleBar = () => {
+    setChart('bar');
+  }
+
   return (
     <>
       <h1>{pollData.title}</h1>
@@ -234,11 +242,6 @@ function GuestVotingBallot ({
           />
           <div className="guest-voting-ballot-question">
             <h1>{currentQuestionData.prompt}</h1>
-            <EpChart 
-              chartType="pie"
-              data={currentAnswerTally.data}
-              labels={currentAnswerTally.labels}
-            />
             {
               //TODO: we should check to see if answerOptions exists and is not empty
               currentQuestionData.answerOptions.map((answer, index) => (
@@ -263,6 +266,13 @@ function GuestVotingBallot ({
               )
               )
             }
+            <EpChart 
+              chartType={chart}
+              data={currentAnswerTally.data}
+              labels={currentAnswerTally.labels}
+            />
+            <h1><EpButton onClick={handlePie}>pie chart</EpButton>
+            <EpButton onClick={handleBar}>bar chart</EpButton></h1>
           </div>
         </div>
       </EpContainer>
