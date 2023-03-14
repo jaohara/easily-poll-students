@@ -1,7 +1,15 @@
-import { React, useContext, useEffect, useState } from 'react'
-import { useNavigate, useParams } from 'react-router-dom'
+import {
+  React,
+  useContext,
+  useEffect,
+  useState,
+} from 'react';
+import { 
+  useNavigate,
+  useParams, 
+} from 'react-router-dom';
 
-import QRCode from 'react-qr-code'
+import QRCode from "react-qr-code";
 
 import {
   BiCheckCircle,
@@ -16,31 +24,31 @@ import {
   BiUser,
   BiUserPlus,
   BiUserX,
-} from 'react-icons/bi'
+}  from 'react-icons/bi';
 
-import './CurrentPollSession.scss'
+import "./CurrentPollSession.scss";
 
-import { AppDataContext } from '../../../contexts/AppDataContext/AppDataContext'
-import { AuthContext } from '../../../contexts/AuthContext/AuthContext'
+import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
+import { AuthContext } from '../../../contexts/AuthContext/AuthContext';
 
-import EpButton from '../../UI/EpButton/EpButton'
-import EpContainer from '../../UI/EpContainer/EpContainer'
-import EpChart from '../../UI/EpChart/EpChart'
-import EpLoading from '../../UI/EpLoading/EpLoading'
-import EpPill from '../../UI/EpPill/EpPill'
-import EpPollQuestionsList from '../../UI/EpPollQuestionsList/EpPollQuestionsList'
-import EpTextInput from '../../UI/EpTextInput/EpTextInput'
+import EpButton from '../../UI/EpButton/EpButton';
+import EpContainer from '../../UI/EpContainer/EpContainer';
+import EpChart from '../../UI/EpChart/EpChart';
+import EpLoading from '../../UI/EpLoading/EpLoading';
+import EpPill from '../../UI/EpPill/EpPill';
+import EpPollQuestionsList from "../../UI/EpPollQuestionsList/EpPollQuestionsList";
+import EpTextInput from '../../UI/EpTextInput/EpTextInput';
 
 const CurrentPollSession = () => {
-  const [guestFilter, setGuestFilter] = useState('')
-  const [guestListIsVisible, setGuestListIsVisible] = useState(true)
-  const [pollIsLoading, setPollIsLoading] = useState(true)
-  const [qrcodeIsVisible, setQrcodeIsVisible] = useState(false)
+  const [ guestFilter, setGuestFilter ] = useState("")
+  const [ guestListIsVisible, setGuestListIsVisible ] = useState(true);
+  const [ pollIsLoading, setPollIsLoading ] = useState(true);
+  const [ qrcodeIsVisible, setQrcodeIsVisible ] = useState(false);
 
-  const navigate = useNavigate()
-  const { targetPollId } = useParams()
+  const navigate = useNavigate();
+  const { targetPollId } = useParams();
 
-  const { user } = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   const {
     currentAnswerData,
@@ -55,166 +63,161 @@ const CurrentPollSession = () => {
     selectPollById,
     setCurrentQuestionId,
     togglePollLock,
-  } = useContext(AppDataContext)
+  } = useContext(AppDataContext);
 
-  const getFilteredGuests = () =>
-    guestFilter !== ''
-      ? pollGuestsData.filter((guest) =>
-          guest.name.toLowerCase().includes(guestFilter.toLowerCase())
-        )
-      : pollGuestsData
+  const getFilteredGuests = () => guestFilter !== "" ? 
+    pollGuestsData.filter(guest => guest.name.toLowerCase().includes(guestFilter.toLowerCase())) :
+    pollGuestsData;
 
-  const excludedGuestCount = !pollGuestsData
-    ? 0
-    : pollGuestsData.length -
-      pollGuestsData.filter((guest) => guest.canVote).length
+  const excludedGuestCount = !pollGuestsData ? 0 :
+    pollGuestsData.length - pollGuestsData.filter(guest => guest.canVote).length;
 
   // page load effects
   useEffect(() => {
     if (!user) {
-      console.error(
-        'CurrentPollSession: user must be authenticated to view page'
-      )
-      navigate('/')
+      console.error("CurrentPollSession: user must be authenticated to view page");
+      navigate("/");
     }
 
     if (!targetPollId) {
-      console.error(
-        'CurrentPollSession: no targetPollId set, redirecting to home...'
-      )
-      navigate('/')
+      console.error("CurrentPollSession: no targetPollId set, redirecting to home...");
+      navigate("/")
     }
 
-    selectPollById(targetPollId)
-  }, [])
+    selectPollById(targetPollId);
+  }, []);
 
   useEffect(() => {
-    setPollIsLoading(false)
-  }, [pollIsLoaded])
+    setPollIsLoading(false);
+  }, [pollIsLoaded]);
 
   // TODO: navigate away if user doesn't own this poll
   // useEffect(() => {
-
+    
   // }, [pollData]);
 
-  const getInviteLink = () => location.href.replace('/poll/', '/vote/')
+  const getInviteLink = () => location.href.replace("/poll/", "/vote/");
 
-  const pollIsReady =
-    !pollIsLoading &&
-    pollIsLoaded &&
-    pollData &&
-    user &&
-    pollData.id === targetPollId &&
-    pollData.userPollsId === user.id &&
-    currentQuestionData &&
-    currentQuestionData.pollQuestionsId === targetPollId
-
+  const pollIsReady = !pollIsLoading && pollIsLoaded && pollData && user &&
+    pollData.id === targetPollId && pollData.userPollsId === user.id &&
+    currentQuestionData && currentQuestionData.pollQuestionsId === targetPollId;
+  
   const copyInviteLinkHandler = () => {
     const addToClipboard = async () => {
       try {
         // TODO: make sure this works properly when deployed
-        await navigator.clipboard.writeText(getInviteLink())
-      } catch (err) {
-        console.error('copyInviteLinkHandler: failed to copy:', err)
+        await navigator.clipboard.writeText(getInviteLink());
       }
-    }
+      catch (err) {
+        console.error("copyInviteLinkHandler: failed to copy:", err)
+      }
+    };
 
-    addToClipboard()
-  }
+    addToClipboard();
+  };
 
-  return (
+  return ( 
     <div className="current-poll-session">
-      {!pollIsReady ? (
-        <EpLoading />
-      ) : (
-        <>
-          <h1>{pollData.title}</h1>
+      {
+        !pollIsReady ? (
+          <EpLoading />
+        ) : (
+          <>
+            <h1>{pollData.title}</h1>
 
-          <CurrentPollControls
-            copyInviteLinkHandler={copyInviteLinkHandler}
-            pollIsLocked={pollData.isLocked}
-            togglePollLock={togglePollLock}
-            showQrCodeHandler={() => setQrcodeIsVisible(true)}
-          />
+            <CurrentPollControls 
+              copyInviteLinkHandler={copyInviteLinkHandler}
+              pollIsLocked={pollData.isLocked}
+              togglePollLock={togglePollLock}
+              showQrCodeHandler={() => setQrcodeIsVisible(true)}
+            />
 
-          <div
-            className={`
+            <div 
+              className={`
                 current-poll-qrcode
-                ${qrcodeIsVisible ? 'active' : ''}
+                ${qrcodeIsVisible ? "active" : ""}
               `}
-            onClick={() => setQrcodeIsVisible(false)}
-          >
-            <EpContainer className="current-poll-qrcode-wrapper">
-              <QRCode value={getInviteLink()} />
+              onClick={() => setQrcodeIsVisible(false)}
+            >
+              <EpContainer className="current-poll-qrcode-wrapper">
+                <QRCode 
+                  value={getInviteLink()}
+                />
               <p>Click anywhere to hide.</p>
+              </EpContainer>
+            </div>
+
+            <EpContainer
+              className="current-poll-guests-container"
+            >
+              <h1 className="current-poll-guests-header">Guests</h1>
+
+              <CurrentPollGuestControls
+                guestFilter={guestFilter}
+                guestListIsVisible={guestListIsVisible}
+                setGuestFilter={setGuestFilter}
+                setGuestListIsVisible={setGuestListIsVisible}
+              />
+
+              <CurrentPollGuestStats
+                excludedGuestCount={excludedGuestCount}
+                pollGuestsData={pollGuestsData}
+              />
+
+              <div className="current-poll-guests-scroll-container">
+                {
+                  pollGuestsData && pollGuestsData.length > 0 ? (
+                    guestListIsVisible ? (
+                      getFilteredGuests().map((guest, index) => (
+                        <CurrentPollGuest 
+                          key={`guest-${index}`}
+                          guest={guest}
+                          togglePollGuestLock={togglePollGuestLock}
+                        />
+                      ))
+                    ) : (
+                      <></>
+                    )
+                    // pollGuestsData.map((guest, index) => (
+                  ) : (
+                    <div className="current-poll-no-guests">
+                      No guests have joined the current poll. Invite people with the invite link. 
+                    </div>
+                  )
+                }
+              </div>
             </EpContainer>
-          </div>
 
-          <EpContainer className="current-poll-guests-container">
-            <h1 className="current-poll-guests-header">Guests</h1>
+            <EpContainer>
+              <div className="current-poll-questions-wrapper">
+                <EpPollQuestionsList
+                  className="current-poll-questions-list"
+                  currentQuestionId={currentQuestionData.id}
+                  hideIcon
+                  setCurrentQuestionId={setCurrentQuestionId}
+                  pollQuestions={pollQuestionsData}
+                />
 
-            <CurrentPollGuestControls
-              guestFilter={guestFilter}
-              guestListIsVisible={guestListIsVisible}
-              setGuestFilter={setGuestFilter}
-              setGuestListIsVisible={setGuestListIsVisible}
-            />
-
-            <CurrentPollGuestStats
-              excludedGuestCount={excludedGuestCount}
-              pollGuestsData={pollGuestsData}
-            />
-
-            <div className="current-poll-guests-scroll-container">
-              {pollGuestsData && pollGuestsData.length > 0 ? (
-                guestListIsVisible ? (
-                  getFilteredGuests().map((guest, index) => (
-                    <CurrentPollGuest
-                      key={`guest-${index}`}
-                      guest={guest}
-                      togglePollGuestLock={togglePollGuestLock}
-                    />
-                  ))
-                ) : (
-                  <></>
-                )
-              ) : (
-                // pollGuestsData.map((guest, index) => (
-                <div className="current-poll-no-guests">
-                  No guests have joined the current poll. Invite people with the
-                  invite link.
-                </div>
-              )}
-            </div>
-          </EpContainer>
-
-          <EpContainer>
-            <div className="current-poll-questions-wrapper">
-              <EpPollQuestionsList
-                className="current-poll-questions-list"
-                currentQuestionId={currentQuestionData.id}
-                hideIcon
-                setCurrentQuestionId={setCurrentQuestionId}
-                pollQuestions={pollQuestionsData}
-              />
-
-              <CurrentPollQuestionAnswers
-                answerData={currentAnswerData}
-                answerTally={currentAnswerTally}
-                guestCount={pollGuestsData.length - excludedGuestCount}
-              />
-            </div>
-          </EpContainer>
-        </>
-      )}
+                <CurrentPollQuestionAnswers
+                  answerData={currentAnswerData}
+                  answerTally={currentAnswerTally}
+                  guestCount={pollGuestsData.length - excludedGuestCount}
+                />
+              </div>
+            </EpContainer>
+          </>
+        )
+      }
     </div>
-  )
-}
+  );
+};
 
-function CurrentPollQuestionAnswers({ answerData, answerTally, guestCount }) {
-  const uniqueAnswers = [
-    ...new Set(answerData.map((answer) => answer.guestAnswersId)),
-  ].length
+function CurrentPollQuestionAnswers ({
+  answerData,
+  answerTally,
+  guestCount,
+}) {
+  const uniqueAnswers = [...new Set(answerData.map(answer => answer.guestAnswersId))].length;
 
   return (
     <div className="current-poll-question-answers">
@@ -224,18 +227,23 @@ function CurrentPollQuestionAnswers({ answerData, answerTally, guestCount }) {
           {uniqueAnswers} / {guestCount} Guest Votes Recorded
         </EpPill>
       </div>
-      {answerTally ? (
-        <EpChart data={answerTally.data} labels={answerTally.labels} />
-      ) : (
-        <div className="current-poll-question-answers-no-answers">
-          No answers have been recorded for this poll.
-        </div>
-      )}
+      {
+        answerTally ? (
+          <EpChart
+            data={answerTally.data}
+            labels={answerTally.labels}
+          />
+        ) : (
+          <div className="current-poll-question-answers-no-answers">
+            No answers have been recorded for this poll.
+          </div>
+        )
+      }
     </div>
   )
 }
 
-function CurrentPollControls({
+function CurrentPollControls ({
   copyInviteLinkHandler,
   togglePollLock,
   pollIsLocked,
@@ -243,24 +251,33 @@ function CurrentPollControls({
 }) {
   return (
     <EpContainer className="current-poll-controls">
-      <EpButton onClick={copyInviteLinkHandler}>
-        <BiClipboard />
-        &nbsp; Copy Invite Link
+      <EpButton
+        onClick={(copyInviteLinkHandler)}
+      >
+        <BiClipboard />&nbsp;
+        Copy Invite Link
       </EpButton>
-      <EpButton onClick={showQrCodeHandler}>
-        <BiQr />
-        &nbsp; Show QR Code
+      <EpButton
+        onClick={showQrCodeHandler}
+      >
+        <BiQr />&nbsp;
+        Show QR Code
       </EpButton>
-      <PollControlsLock onClick={togglePollLock} isLocked={pollIsLocked} />
-      <EpButton key="poll-controls-finish">
-        <BiCheckCircle />
-        &nbsp; Finish Poll
+      <PollControlsLock
+        onClick={togglePollLock}
+        isLocked={pollIsLocked}
+      />
+      <EpButton
+        key="poll-controls-finish"
+      >
+        <BiCheckCircle />&nbsp;
+        Finish Poll
       </EpButton>
     </EpContainer>
-  )
+  );
 }
 
-function CurrentPollGuestControls({
+function CurrentPollGuestControls ({
   guestFilter,
   guestListIsVisible,
   setGuestFilter,
@@ -272,53 +289,62 @@ function CurrentPollGuestControls({
         key={`current-poll-guest-controls-toggle-list-visible`}
         onClick={() => setGuestListIsVisible(!guestListIsVisible)}
       >
-        {guestListIsVisible ? (
-          <>
-            <BiCollapseVertical />
-            &nbsp;Collapse
-          </>
-        ) : (
-          <>
-            <BiExpandVertical />
-            &nbsp;Expand
-          </>
-        )}
+        { 
+          guestListIsVisible ? (
+            <>
+              <BiCollapseVertical />&nbsp;Collapse
+            </>
+          ) : (
+            <>
+              <BiExpandVertical />&nbsp;Expand
+            </>
+          ) 
+        }
         &nbsp;Guest List
       </EpButton>
 
       {/* <BiSearchAlt2  */}
-      <BiFilterAlt className="current-poll-guests-filter-icon" />
+      <BiFilterAlt
+        className='current-poll-guests-filter-icon'
+      />
       <EpTextInput
         className=""
         InputProps={{ sx: { height: 36 } }}
-        onChange={(e) => setGuestFilter(e.target.value)}
+        onChange={e => setGuestFilter(e.target.value)}
         value={guestFilter}
       />
     </div>
   )
 }
 
-function CurrentPollGuestStats({ excludedGuestCount, pollGuestsData }) {
+function CurrentPollGuestStats ({
+  excludedGuestCount,
+  pollGuestsData,
+}) {
   return (
     <div className="current-poll-guets-stats">
-      <EpPill key="poll-guests-count">
-        {pollGuestsData.length} guest
-        {`${pollGuestsData.length !== 1 ? 's' : ''}`} in Poll
-      </EpPill>
-      <EpPill key="poll-guests-ban-count">
-        {excludedGuestCount} guest{`${excludedGuestCount !== 1 ? 's' : ''}`}{' '}
-        banned
-      </EpPill>
+
+    <EpPill
+      key="poll-guests-count"
+    >
+      {pollGuestsData.length} guest{`${pollGuestsData.length !== 1 ? "s" : ""}`} in Poll
+    </EpPill>
+    <EpPill
+      key="poll-guests-ban-count"
+    >
+      {excludedGuestCount} guest{`${excludedGuestCount !== 1 ? "s" : ""}`} banned
+    </EpPill>
+
     </div>
-  )
+  );
 }
 
-function CurrentPollGuest({ guest, togglePollGuestLock }) {
+function CurrentPollGuest ({guest, togglePollGuestLock}) {
   return (
-    <div
+    <div 
       className={`
         current-poll-guest
-        ${guest.canVote ? '' : 'banned'}
+        ${guest.canVote ? "" : "banned"}
       `}
     >
       <div className="guest-icon-wrapper">
@@ -326,36 +352,47 @@ function CurrentPollGuest({ guest, togglePollGuestLock }) {
           <BiUser />
         </div>
       </div>
-      <div className="guest-info">{guest.name}</div>
+      <div className="guest-info">
+        {guest.name}
+      </div>
       <div className="guest-lock-wrapper">
         <EpButton
           className="guest-lock-button"
           onClick={() => togglePollGuestLock(guest.id)}
         >
-          {guest.canVote ? <BiUserX /> : <BiUserPlus />}
+          {
+            guest.canVote ? (
+              <BiUserX />
+            ) : (
+              <BiUserPlus />
+            )
+          }
         </EpButton>
       </div>
     </div>
   )
 }
 
-function PollControlsLock({ onClick, isLocked }) {
+function PollControlsLock ({onClick, isLocked}) {
   return (
-    <EpButton key="poll-controls-lock" onClick={onClick}>
-      {isLocked ? (
-        <>
-          <BiLockOpenAlt />
-          &nbsp;Unl
-        </>
-      ) : (
-        <>
-          <BiLockAlt />
-          &nbsp;L
-        </>
-      )}
+    <EpButton
+      key="poll-controls-lock"
+      onClick={onClick}
+    >
+      {
+        isLocked ? (
+          <>
+            <BiLockOpenAlt />&nbsp;Unl
+          </>
+        ) : (
+          <>
+            <BiLockAlt />&nbsp;L
+          </>
+        )
+      }
       ock Poll
     </EpButton>
-  )
-}
-
-export default CurrentPollSession
+  );
+} 
+ 
+export default CurrentPollSession;

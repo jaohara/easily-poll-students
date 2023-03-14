@@ -1,16 +1,22 @@
-import React, { createContext, useContext, useEffect, useState } from 'react'
+import React, { 
+  createContext,
+  useContext, 
+  useEffect, 
+  useState 
+} from "react";
 
-import {
-  // listAnswers,
-  listPolls,
-} from '../../graphql/queries'
-import { onUpdateGuest } from '../../graphql/subscriptions'
+import { 
+  listPolls, 
+} from "../../graphql/queries";
+import { 
+  onUpdateGuest
+} from "../../graphql/subscriptions";
 
-import usePollData from '../../hooks/usePollData'
-import useApi from '../../hooks/useApi'
-import { AuthContext } from '../AuthContext/AuthContext'
+import usePollData from "../../hooks/usePollData";
+import useApi from "../../hooks/useApi";
+import { AuthContext } from "./AuthContext";
 
-const AppDataContext = createContext(undefined)
+const AppDataContext = createContext(undefined);
 
 export const listAnswersWithOwner = /* GraphQL */ `
   query ListAnswers(
@@ -33,34 +39,34 @@ export const listAnswersWithOwner = /* GraphQL */ `
       nextToken
     }
   }
-`
+`;
 
 function AppDataContextProvider(props) {
-  const API = useApi()
+  const API = useApi();
 
-  const [allUserPollsData, setAllUserPollsData] = useState()
-  const [allUserPollsLoading, setAllUserPollsLoading] = useState(false)
-  const [currentPollId, setCurrentPollId] = useState()
-  const [guest, setGuest] = useState()
-  const [guestIsLoaded, setGuestIsLoaded] = useState(false)
+  const [ allUserPollsData, setAllUserPollsData ] = useState();
+  const [ allUserPollsLoading, setAllUserPollsLoading ] = useState(false);
+  const [ currentPollId, setCurrentPollId ] = useState();
+  const [ guest, setGuest ] = useState();
+  const [ guestIsLoaded, setGuestIsLoaded ] = useState(false);
 
-  const { user } = useContext(AuthContext)
+  const { user } = useContext(AuthContext);
 
   const selectPollById = (pollId) => {
-    setCurrentPollId(pollId)
-    setGuest(null)
-    setGuestIsLoaded(false)
-  }
+    setCurrentPollId(pollId);
+    setGuest(null);
+    setGuestIsLoaded(false);
+  };
 
   const {
     addGuestAnswerToCurrentQuestion,
     addNewPollGuest,
     // calculateAnswerTallyFromAnswerData,
-    createNewPoll,
+    createNewPoll, 
     currentAnswerData,
-    currentAnswerTally,
+    currentAnswerTally, 
     currentQuestionData,
-    currentQuestionId,
+    currentQuestionId, 
     currentQuestionIsLoaded,
     pollData,
     pollGuestsData,
@@ -70,28 +76,26 @@ function AppDataContextProvider(props) {
     togglePollActive,
     togglePollGuestLock,
     togglePollLock,
-    updateCurrentQuestionData,
+    updateCurrentQuestionData, 
     updatePollData,
   } = usePollData({
-    subscribeToChanges: true,
+    subscribeToChanges: true, 
     pollId: currentPollId,
-    user: user ? user : null,
-  })
+    user: user ? user : null, 
+  });
 
   // gets a list of all polls for the given user
   const fetchAndSetAllUserPollsData = async () => {
     if (!user) {
-      console.error(
-        'fetchAndSetAllUserPollsData: Cannot fetch user polls, user is not logged in'
-      )
-      return
+      console.error("fetchAndSetAllUserPollsData: Cannot fetch user polls, user is not logged in");
+      return;
     }
 
     if (allUserPollsLoading) {
-      return
+      return;
     }
 
-    setAllUserPollsLoading(true)
+    setAllUserPollsLoading(true);
 
     try {
       const pollsResponse = await API.graphql({
@@ -100,59 +104,58 @@ function AppDataContextProvider(props) {
           filter: {
             userPollsId: {
               eq: user.id,
-            },
-          },
+            }
+          }
         },
-      })
+      });
 
-      console.log('All user polls: ', pollsResponse.data.listPolls.items)
+      console.log("All user polls: ", pollsResponse.data.listPolls.items);
       //sort by date
-      setAllUserPollsData(pollsResponse.data.listPolls.items)
-    } catch (err) {
-      console.error('fetchAndSetAllUserPollsData: ', err)
+      setAllUserPollsData(pollsResponse.data.listPolls.items);
+    }
+    catch (err) {
+      console.error("fetchAndSetAllUserPollsData: ", err);
     }
 
-    setAllUserPollsLoading(false)
+    setAllUserPollsLoading(false);
   }
 
   // wraps createNewPoll from usePollData so that the list of polls is updated when
   const addPoll = (paramsObject) => {
     if (!user) {
-      console.error(
-        'AppDataContext: addPoll: cannot create poll, user is not logged in.'
-      )
+      console.error("AppDataContext: addPoll: cannot create poll, user is not logged in.");
       return
     }
 
     return createNewPoll(paramsObject, async () => {
-      await fetchAndSetAllUserPollsData()
-    })
-  }
+      await fetchAndSetAllUserPollsData();
+    });
+  };
 
   // TODO: We'll need to reimplement how this works when the actual guest creation stuff
   //  is finished
   // wraps addNewPollGuest from usePollData so that the new guest becomes the current guest
   const joinPollAsGuest = (paramsObject) => {
     const submitData = async () => {
-      const newGuestResponse = await addNewPollGuest(paramsObject)
-      const newGuest = newGuestResponse.data.createGuest
-      setGuest(newGuest)
-      setGuestIsLoaded(true)
-    }
+      const newGuestResponse = await addNewPollGuest(paramsObject);
+      const newGuest = newGuestResponse.data.createGuest;
+      setGuest(newGuest);
+      setGuestIsLoaded(true);
+    };
 
-    submitData()
+    submitData();
   }
 
   const subscribeToGuest = () => {
     if (!guest) {
-      console.error('AppDataContext: subscribeToGuest: no guest loaded')
-      return
+      console.error("AppDataContext: subscribeToGuest: no guest loaded");
+      return;
     }
 
     const guestVariablesObject = {
       variables: {
         id: guest.id,
-      },
+      }
     }
 
     return API.graphql({
@@ -160,43 +163,37 @@ function AppDataContextProvider(props) {
       ...guestVariablesObject,
     }).subscribe({
       next: (response) => {
-        const newGuestData = response.value.data.onUpdateGuest
-        console.log('guestData receved from subscription:', newGuestData)
+        const newGuestData = response.value.data.onUpdateGuest;
+        console.log("guestData receved from subscription:", newGuestData);
 
         if (newGuestData !== null) {
-          setGuest(newGuestData)
-        } else {
-          const responseErrors = response.value.errors
-          console.error(
-            'Error with data received from subscription:',
-            responseErrors
-          )
+          setGuest(newGuestData);
+        }
+        else {
+          const responseErrors = response.value.errors;
+          console.error("Error with data received from subscription:", responseErrors);
         }
       },
       error: (err) => console.warn(err),
-    })
-  }
+    });
+  };
 
   // generates and returns a pollReport
   const generatePollReport = async () => {
     if (!pollData) {
-      console.error(
-        "generatePollReport: Cannot generate pollReport, pollData isn't set."
-      )
-      return
+      console.error("generatePollReport: Cannot generate pollReport, pollData isn't set.");
+      return;
     }
 
     if (!pollQuestionsData) {
-      console.error(
-        "generatePollReport: Cannot generate pollReport, pollQuestionsData isn't set."
-      )
-      return
+      console.error("generatePollReport: Cannot generate pollReport, pollQuestionsData isn't set.");
+      return;
     }
 
     // TODO: uncomment so generatePollReport can't be called on an active poll
     // if (pollData.isActive) {
-    //   console.error("generatePollReport: Cannot create pollReport on an active poll.");
-    //   return;
+      //   console.error("generatePollReport: Cannot create pollReport on an active poll.");
+      //   return;
     // }
 
     // custom query for getting data for pollreport
@@ -232,10 +229,10 @@ function AppDataContextProvider(props) {
           nextToken
         }
       }
-    `
-
+    `;
+    
     const getData = async () => {
-      const result = []
+      const result = [];
 
       try {
         const answersResponse = await API.graphql({
@@ -243,28 +240,26 @@ function AppDataContextProvider(props) {
           variables: {
             filter: {
               pollQuestionsId: {
-                eq: pollData.id,
-              },
-            },
-          },
-        })
+                eq: pollData.id
+              }
+            }
+          }
+        });
 
-        const questionData = answersResponse.data.listQuestions.items
+        const questionData = answersResponse.data.listQuestions.items;
+        
+        questionData.forEach(question => {
+          const answerCount = {};
 
-        questionData.forEach((question) => {
-          const answerCount = {}
-
-          question.answers.items.forEach((answerObject) => {
+          question.answers.items.forEach(answerObject => {
             if (answerObject.owner.canVote) {
               // getting a little gross here, but this is how we account multiple-answer
               //  q's
-              answerObject.answer.forEach((answer) => {
-                answerCount[answer] = !answerCount[answer]
-                  ? 1
-                  : answerCount[answer] + 1
-              })
+              answerObject.answer.forEach(answer => {
+                answerCount[answer] = !answerCount[answer] ? 1 : answerCount[answer] + 1;
+              });
             }
-          })
+          });
 
           const questionObject = {
             answerTally: {
@@ -273,40 +268,40 @@ function AppDataContextProvider(props) {
             },
             id: question.id,
             prompt: question.prompt,
-          }
+          };
 
-          result.push(questionObject)
-        })
-      } catch (err) {
-        console.error('Error fetching all questions with answers: ', err)
+          result.push(questionObject);
+        });
+
       }
-      return result
-    }
-
-    const questions = await getData()
+      catch(err) {
+        console.error("Error fetching all questions with answers: ", err);
+      }
+      return result;
+    };
+    
+    const questions = await getData();
 
     const pollReport = {
       createdAt: pollData.createdAt,
       id: pollData.id,
       title: pollData.title,
       questions: questions,
-    }
+    };
 
-    // console.log("generatePollReport: generated poll report: ", pollReport);
-
-    return pollReport
-  }
+    return pollReport;
+  };
 
   // updates the userPollsData when the user changes
   useEffect(() => {
-    fetchAndSetAllUserPollsData()
-  }, [user])
+    fetchAndSetAllUserPollsData();
+  }, [user]);
 
-  // set subscription for a new guest
+  // set subscription for a new guest 
   useEffect(() => {
     if (guest) {
-      const pollGuestSubscription = subscribeToGuest()
-      return () => pollGuestSubscription.unsubscribe()
+      const pollGuestSubscription = subscribeToGuest();
+      return () => pollGuestSubscription.unsubscribe();
     }
   }, [guestIsLoaded])
 
@@ -323,7 +318,7 @@ function AppDataContextProvider(props) {
     pollGuestsData: pollGuestsData,
     pollIsLoaded: pollIsLoaded,
     pollQuestionsData: pollQuestionsData,
-  })
+  }); 
 
   return (
     <AppDataContext.Provider
@@ -333,12 +328,12 @@ function AppDataContextProvider(props) {
         addPoll,
         allUserPollsData,
         currentAnswerData,
-        currentAnswerTally,
+        currentAnswerTally, 
         currentQuestionData,
-        currentQuestionId,
+        currentQuestionId, 
         currentQuestionIsLoaded,
         dumpCurrentAppData,
-        generatePollReport,
+        generatePollReport, 
         guest,
         guestIsLoaded,
         joinPollAsGuest,
@@ -351,7 +346,7 @@ function AppDataContextProvider(props) {
         togglePollActive,
         togglePollGuestLock,
         togglePollLock,
-        updateCurrentQuestionData,
+        updateCurrentQuestionData, 
         updatePollData,
       }}
     >
@@ -360,4 +355,4 @@ function AppDataContextProvider(props) {
   )
 }
 
-export { AppDataContext, AppDataContextProvider }
+export { AppDataContext, AppDataContextProvider };

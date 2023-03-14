@@ -71,43 +71,51 @@ const GuestContextProvider = (props) => {
 
   // current question changes, load and subscribe to the new question data
   useEffect(() => {
-    typeof questionSubscription === 'function' ? questionSubscription() : null
-    typeof answerCreateSubscription === 'function'
-      ? answerCreateSubscription()
-      : null
-    typeof answerUpdateSubscription === 'function'
-      ? answerUpdateSubscription()
-      : null
-    if (currentQuestionId !== '') {
-      API.graphql({
-        query: getQuestionWithAnswers,
-        variables: {
-          id: currentQuestionId,
-        },
-      }).then((res) => {
+    // typeof questionSubscription === 'function' ? questionSubscription() : null
+    // (typeof questionSubscription === 'function') && questionSubscription();
+    // typeof answerCreateSubscription === 'function'
+    //   ? answerCreateSubscription()
+    //   : null
+    // typeof answerUpdateSubscription === 'function'
+    //   ? answerUpdateSubscription()
+    //   : null
+
+    [questionSubscription, answerCreateSubscription, answerUpdateSubscription].forEach(
+      subscriptionFunction => typeof subscriptionFunction === "function" && subscriptionFunction()
+    );
+
+    if (currentQuestionId === '') {
+      return;
+    }
+
+    API.graphql({
+      query: getQuestionWithAnswers,
+      variables: {
+        id: currentQuestionId,
+    }})
+      .then((res) => {
         setCurrentQuestion(res.data.getQuestion)
         setAnswers(res.data.getQuestion.answers.items)
-      })
-      setQuestionSubscription(
-        API.graphql({
-          query: onUpdateQuestion,
-          variables: {
-            id: currentQuestionId,
-          },
-        }).subscribe({
-          next: (res) => {
-            setCurrentQuestion(res.value.data.onUpdateQuestion)
-          },
+      });
+
+    setQuestionSubscription(
+      API.graphql({
+        query: onUpdateQuestion,
+        variables: {
+          id: currentQuestionId,
+      }})
+        .subscribe({
+          next: (res) => setCurrentQuestion(res.value.data.onUpdateQuestion),
           error: (err) => console.warn(err),
-        })
-      )
-      setAnswerCreateSubscription(
-        API.graphql({
-          query: onCreateAnswerForQuestion,
-          variables: {
-            questionAnswersId: currentQuestionId,
-          },
-        }).subscribe({
+      }));
+
+    setAnswerCreateSubscription(
+      API.graphql({
+        query: onCreateAnswerForQuestion,
+        variables: {
+          questionAnswersId: currentQuestionId,
+      }})
+        .subscribe({
           next: (res) => {
             setAnswers((oldAnswers) => [
               ...oldAnswers,
@@ -115,15 +123,15 @@ const GuestContextProvider = (props) => {
             ])
           },
           error: (err) => console.warn(err),
-        })
-      )
-      setAnswerUpdateSubscription(
-        API.graphql({
-          query: onUpdateAnswerForQuestion,
-          variables: {
-            questionAnswersId: currentQuestionId,
-          },
-        }).subscribe({
+      }));
+
+    setAnswerUpdateSubscription(
+      API.graphql({
+        query: onUpdateAnswerForQuestion,
+        variables: {
+          questionAnswersId: currentQuestionId,
+      }})
+        .subscribe({
           next: (res) => {
             const updatedAnswer = res.value.data.onUpdateAnswerForQuestion
             setAnswers((oldAnswers) =>
@@ -133,22 +141,24 @@ const GuestContextProvider = (props) => {
             )
           },
           error: (err) => console.warn(err),
-        })
-      )
-    }
+      }));
+  
   }, [currentQuestionId])
 
   const register = (name, pollId) => {
+    const key = sha256(name + Date.now())
+    const id = sha256(key)
+
     setPollId(pollId)
     setName(name)
-    const key = sha256(name + Date.now())
     setKey(key)
-    const id = sha256(key)
     setId(id)
+
     window.sessionStorage.setItem('pollId', pollId)
     window.sessionStorage.setItem('name', name)
     window.sessionStorage.setItem('key', key)
     window.sessionStorage.setItem('id', id)
+
     const init = {
       body: {
         pollId,
@@ -157,10 +167,11 @@ const GuestContextProvider = (props) => {
         id,
       },
       headers: {},
-    }
+    };
+
     API.post('guest', '/guest', init)
       .then((res) => console.log(res))
-      .catch((err) => console.log(err))
+      .catch((err) => console.log(err));
   }
 
   const submitAnswer = (answer) => {
@@ -174,7 +185,7 @@ const GuestContextProvider = (props) => {
         answer,
       },
       headers: {},
-    }
+    };
 
     API.post('guest', '/answer', init)
       .then((res) => {
