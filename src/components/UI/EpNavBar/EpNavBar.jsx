@@ -15,7 +15,7 @@ import {
 import EpButton from '../EpButton/EpButton';
 import EpLogo from '../EpLogo/EpLogo';
 
-import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
+import { AppDataContext } from '../../../contexts/AppDataContext/AppDataContext';
 import { AuthContext } from '../../../contexts/AuthContext/AuthContext';
 
 import { routes } from '../../../routes';

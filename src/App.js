@@ -23,7 +23,7 @@ import {
 
 import { AuthContextProvider } from "./contexts/AuthContext/AuthContext";
 import { AppDataContextProvider } from './contexts/AppDataContext/AppDataContext';
-import { GuestContextProvider } from './contexts/GuestContext/GuestContext';
+// import { GuestContextProvider } from './contexts/GuestContext/GuestContext';
 
 import EpCopyright from './components/UI/EpCopyright/EpCopyright';
 import EpNavBar from './components/UI/EpNavBar/EpNavBar';
@@ -34,7 +34,7 @@ function App() {
       <ThemeProvider theme={theme}>
         <AuthContextProvider>
           <AppDataContextProvider>
-            <GuestContextProvider>
+            {/* <GuestContextProvider> */}
               <div className="App">
                 <div className="app-wrapper">
                   <div className="content-wrapper">
@@ -54,7 +54,7 @@ function App() {
                   <EpCopyright />
                 </div>
               </div>
-            </GuestContextProvider>
+            {/* </GuestContextProvider> */}
           </AppDataContextProvider>
         </AuthContextProvider>
       </ThemeProvider>

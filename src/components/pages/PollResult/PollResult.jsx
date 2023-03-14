@@ -9,7 +9,7 @@ import {
   useParams,  
 } from 'react-router-dom';
 
-import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
+import { AppDataContext } from '../../../contexts/AppDataContext/AppDataContext';
 
 import EpChart from "../../UI/EpChart/EpChart";
 import EpContainer from '../../UI/EpContainer/EpContainer';

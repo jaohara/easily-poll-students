@@ -13,7 +13,7 @@ import {
   BiLock
 } from "react-icons/bi";
 
-import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
+import { AppDataContext } from '../../../contexts/AppDataContext/AppDataContext';
 
 import "./GuestVoting.scss";
 
@@ -66,17 +66,23 @@ const GuestVoting = () => {
     setPollIsLoading(false);
   }, [pollIsLoaded]);
 
+  
+  // TODO: Add a check that guest.id is in pollGuestsData
+  // const guestIsReady = guest && guestIsLoaded;
+  const guestIsReady = guest && guestIsLoaded;
+  
   const votingIsReady = pollIsLoaded && !pollIsLoading && pollData 
     && pollData.id === targetPollId && pollQuestionsData;
-
-  // TODO: Add a check that guest.id is in pollGuestsData
-  const guestIsReady = guest && guestIsLoaded;
 
   return ( 
     <div className="guest-voting">
       {
         !votingIsReady ? (
-          <EpLoading />
+          <EpLoading
+            centered
+            narrow 
+            message={"Loading Poll..."}
+          />
         ) : (
           !guestIsReady ? (
             pollData.isLocked ? (
@@ -131,39 +137,54 @@ function GuestVotingCreateGuest ({
   pollGuestsData,
 }) {
   const [ newGuestName, setNewGuestName ] = useState("");
+  const [ formSubmitted, setFormSubmitted ] = useState(false);
+
   return (
-    <EpContainer 
-      centered
-      className="guest-voting-create-guest-container"
-      narrow 
-    >
-      <div className="guest-voting-create-guest-metadata">
-        <h1>{pollData.title}</h1>
-        <h2>Shared by {`${pollData.user.firstName} ${pollData.user.lastName}`}</h2>
-        <EpPill>
-          {pollGuestsData.length} guest{pollGuestsData.length !== 1 ? "s" : ""} in poll
-        </EpPill>
-      </div>
-      <div className="guest-voting-create-guest-input-wrapper">
-        <EpTextInput
-          fullWidth
-          label="New guest name"
-          onChange={e => setNewGuestName(e.target.value)}
-          value={newGuestName}
-        />
-      </div>
-      <EpButton
-        fullWidth
-        onClick={()=>{
-          joinPollAsGuest({
-            name: newGuestName,
-            key: `guest-key-${Date.now()}`,
-          })
-        }}
-      >
-        Join Poll
-      </EpButton>
-    </EpContainer>
+    <>
+      {
+        formSubmitted ? (
+          <EpLoading
+            centered
+            narrow
+            message={`Joining as ${newGuestName}...`}
+          />
+        ) : (
+          <EpContainer 
+            centered
+            className="guest-voting-create-guest-container"
+            narrow 
+          >
+            <div className="guest-voting-create-guest-metadata">
+              <h1>{pollData.title}</h1>
+              <h2>Shared by {`${pollData.user.firstName} ${pollData.user.lastName}`}</h2>
+              <EpPill>
+                {pollGuestsData.length} guest{pollGuestsData.length !== 1 ? "s" : ""} in poll
+              </EpPill>
+            </div>
+            <div className="guest-voting-create-guest-input-wrapper">
+              <EpTextInput
+                fullWidth
+                label="New guest name"
+                onChange={e => setNewGuestName(e.target.value)}
+                value={newGuestName}
+              />
+            </div>
+            <EpButton
+              fullWidth
+              onClick={()=>{
+                joinPollAsGuest({
+                  name: newGuestName,
+                  key: `guest-key-${Date.now()}`,
+                });
+                setFormSubmitted(true);
+              }}
+            >
+              Join Poll
+            </EpButton>
+          </EpContainer>
+        )
+      }
+    </>
   );
 }
 
@@ -252,7 +273,8 @@ function GuestVotingBallot ({
                     key={`answerOption-${index}`}
                     //TODO: replace temporary voting implementation in final version
                     onClick={() => {
-                      addGuestAnswerToCurrentQuestion({guestId: guest.id, answerValue: answer});
+                      console.log("GuestVoting: in click handler");
+                      addGuestAnswerToCurrentQuestion(answer);
                       setAnsweredQuestions(previous => [...previous, currentQuestionData.id]);
                       goToNextQuestion();
                     }}

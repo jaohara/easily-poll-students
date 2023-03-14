@@ -1,8 +1,9 @@
 import { useState, useEffect } from "react";
+import sha256 from "sha256";
 import useApi from "./useApi";
 import { graphqlOperation } from "@aws-amplify/api";
 import {
-  createAnswer,
+  // createAnswer,
   // updateAnswer,
   updateQuestion,
 } from "../graphql/mutations";
@@ -246,30 +247,44 @@ function useQuestionData({
 
   // adds a guest answer to this question. Does not check if guest is in poll - 
   //  this function is wrapped in usePollData
-  const addGuestAnswer = ({ guestId, answerValue }) => {
-    const guestAnswerDataObject = {
-      input: {
+  const addAnswer = ({ guest, answerValue }) => {
+    const timeStamp = Date.now();
+    const verify = sha256(guest.key + timeStamp);
+
+    // console.log("attempting to add answer with current guest:", guest);
+
+    const guestAnswerRequestObject = {
+      body: {
         answer: answerValue,
-        guestAnswersId: guestId,
-        questionAnswersId: questionId,
-      }
+        id: guest.id,
+        questionId: questionId,
+        timeStamp: timeStamp,
+        verify: verify,
+      },
+      headers: {},
     };
 
-    console.log("addGuestAnswer with guestAnswerDataObject:", guestAnswerDataObject);
+    // console.log("about to post guestAnswerRequestObject: ", guestAnswerRequestObject);
 
-    const submitData = async () => {
-      await API.graphql(graphqlOperation(createAnswer, guestAnswerDataObject));
-    };
+    API.post('guest', '/answer', guestAnswerRequestObject)
+      .then((res) => console.log("addAnswer: success: ", res))
+      .catch((err) => console.error("addAnswer: failure: ", err));
 
-    submitData();
-  };
+    // const guestAnswerDataObject = {
+    //   input: {
+    //     answer: answerValue,
+    //     guestAnswersId: guest.id,
+    //     questionAnswersId: questionId,
+    //   }
+    // };
 
-  // TODO: Implement
-  // Idea for this - maybe make the "addGuestAnswer" function check to see
-  // if the guest has already answered for this question, then either have it
-  // add a new answer if they haven't or update if they already have.
-  const updateGuestAnswer = ({ guestId, newAnswerValue }) => {
+    // console.log("addGuestAnswer with guestAnswerDataObject:", guestAnswerDataObject);
 
+    // const submitData = async () => {
+    //   await API.graphql(graphqlOperation(createAnswer, guestAnswerDataObject));
+    // };
+
+    // submitData();
   };
 
   // load data on initial render
@@ -300,7 +315,7 @@ function useQuestionData({
 
   // items exported from hook
   return {
-    addGuestAnswer,
+    addAnswer,
     answerData,
     answerTally,
     calculateAnswerTallyFromAnswerData,
