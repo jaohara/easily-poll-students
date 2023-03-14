@@ -1,6 +1,7 @@
 @use "../../../styles/globals.scss" as g;
 
-$hero-description-width: 50%;
+$hero-description-large-width: 50%;
+$hero-description-small-width: 90%;
 $reveal-transition-time: 750ms;
 $reveal-transition: opacity $reveal-transition-time, transform $reveal-transition-time;
 
@@ -42,14 +43,22 @@ $hero-arrow-transform: translateY(-10vh);
   align-items: center;
   display: flex;
   height: 100vh;
+  
+  
 }
 
 .home-hero {
+  align-items: center;
   display: flex;
+  flex-direction: column;
   justify-content: space-between;
   opacity: 0%;
-  transition: $reveal-transition; 
   transform: translateY(-4vh);
+  transition: $reveal-transition; 
+
+  @media (min-width: g.$s-breakpoint) {
+    flex-direction: row;
+  }
   
   &.active {
     opacity: 100%;
@@ -76,8 +85,12 @@ $hero-arrow-transform: translateY(-10vh);
 }
 
 .hero-description-example {
-  font-size: 1.5rem;
+  font-size: 1.25rem;
   height: 13rem;
+  
+  @media (min-width: g.$m-breakpoint) {
+    font-size: 1.5rem;
+  }
 }
 
 .hero-description-example-question {
@@ -85,7 +98,12 @@ $hero-arrow-transform: translateY(-10vh);
   position: absolute;
   user-select: none;
   transition: opacity $reveal-transition-time;
-  width: $hero-description-width;
+  width: $hero-description-small-width;
+  
+  @media (min-width: g.$s-breakpoint) {
+    width: $hero-description-large-width;
+  }
+
 
   &.active {
     animation: example-question-animation 800ms;
@@ -99,7 +117,12 @@ $hero-arrow-transform: translateY(-10vh);
 }
 
 .hero-description-wrapper {
-  width: $hero-description-width;
+  width: $hero-description-small-width;
+  
+  @media (min-width: g.$s-breakpoint) {
+    flex-direction: row;
+    width: $hero-description-large-width;
+  }
 }
 
 .hero-controls-wrapper {

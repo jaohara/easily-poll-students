@@ -30,6 +30,17 @@ export default function GuestVoting() {
   )
 }
 
+function GuestVotingPollIsLocked() {
+  return (
+    <EpContainer centered className="guest-voting-poll-is-locked" narrow>
+      <div className="guest-voting-poll-is-locked-icon-wrapper">
+        <BiLock />
+      </div>
+      <p>Poll is locked and not accepting new guests.</p>
+    </EpContainer>
+  )
+}
+
 // This is the "Join Poll" form that is displayed with no guest
 function GuestVotingCreateGuest({ joinPollAsGuest }) {
   const { targetPollId } = useParams()

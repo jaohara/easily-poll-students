@@ -1,9 +1,10 @@
 import React from 'react'
 import { createBrowserRouter } from 'react-router-dom';
 
-import Home from './components/pages/Home/Home';
 import CreatePoll from './components/pages/CreatePoll/CreatePoll';
+import CurrentPollSession from './components/pages/CurrentPollSession/CurrentPollSession';
 import GuestVoting from './components/pages/GuestVoting/GuestVoting';
+import Home from './components/pages/Home/Home';
 import UserDashboard from './components/pages/UserDashboard/UserDashboard';
 
 // demo-related pages
@@ -23,6 +24,8 @@ import VerifyEmail from './components/pages/Auth/VerifyEmail/VerifyEmail';
 //poll result test
 import PollResult from './components/pages/PollResult/PollResult';
 
+import { AuthRequired } from "./AuthRequired";
+
 // name is display name on button/link
 export const routes = [
   {
@@ -36,7 +39,7 @@ export const routes = [
     path: '/polls',
     name: 'User Dashboard',
     disableWhenUnauthorized: true,
-    element: <UserDashboard />,
+    element: <AuthRequired> <UserDashboard /> </AuthRequired>,
     // hideInNavBar: true,
   },
   {
@@ -44,15 +47,21 @@ export const routes = [
     //  "PollReport" if the poll is not active (or the room is locked?)
     // TODO: This should also forward to "CurrentPollSession" if User is authorized
     //  - should this all be conditional rendering within the overall poll page?
-    path: '/poll/:targetPollId',
+    path: '/vote/:targetPollId',
     name: 'Poll Voting',
     element: <GuestVoting />,
     hideInNavBar: true,
   },
   {
+    path: '/poll/:targetPollId',
+    name: 'Manage Poll',
+    element: <CurrentPollSession />,
+    hideInNavBar: true,
+  },
+  {
     path: '/create-poll',
     name: 'Create Poll',
-    element: <CreatePoll />,
+    element: <AuthRequired> <CreatePoll /> </AuthRequired>,
     // TODO: Hide when app workflow is finalized (only available if logged in)
     hideInNavBar: true,
   },

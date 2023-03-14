@@ -12,6 +12,8 @@ import theme from './styles/theme'
 // router-related imports
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { routes } from './routes'
+import { BrowserRouter, Route, Routes } from 'react-router-dom'
+import { routes } from './routes'
 
 import { AuthContextProvider } from './contexts/AuthContext/AuthContext'
 import { AppDataContextProvider } from './contexts/AppDataContext/AppDataContext'
@@ -32,6 +34,13 @@ function App() {
                   <div className="content-wrapper">
                     <EpNavBar />
                     <Routes>
+                      {routes.map((route, index) => (
+                        <Route
+                          path={route.path}
+                          element={route.element}
+                          key={`route-${index}`}
+                        />
+                      ))}
                       {routes.map((route, index) => (
                         <Route
                           path={route.path}

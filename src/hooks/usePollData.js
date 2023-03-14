@@ -46,6 +46,7 @@ query GetPoll($id: ID!) {
         id
         name
         key
+        canVote
         createdAt
         updatedAt
         pollGuestsId
@@ -209,7 +210,7 @@ function usePollData({
     }
 
     if (pollId === null) {
-      console.warn("updatePollData: Cannot update poll data, poll has not been created.");
+      console.warn("updatePollData: Cannot update poll data, no poll selected.");
       return;
     }
 
@@ -264,7 +265,7 @@ function usePollData({
     // first ensure guest exists
     let guestData = null;
 
-    for (let i = 0; i < pollGuestsData; i++){
+    for (let i = 0; i < pollGuestsData.length; i++){
       if (pollGuestsData[i].id === guestId) {
         guestData = pollGuestsData[i];
       }
@@ -291,8 +292,44 @@ function usePollData({
     submitData();
   };
 
+  // I mean, I'm Polish, but this name seems racist
+  const togglePollLock = () => {
+    if (!pollData) {
+      console.error("usePollData: togglePollLock: cannot change lock status, no poll selected");
+      return;
+    }
+
+    updatePollData({isLocked: !pollData.isLocked});
+    // setPollData(oldPollData => ({
+    //   ...oldPollData,
+    //   isLocked: oldPollData.isLocked,
+    // }))
+  };
+
+  const togglePollActive = () => {
+    if (!pollData) {
+      console.error("usePollData: togglePollActive: cannot change active status, no poll selected");
+      return
+    }
+
+    updatePollData({isActive: !pollData.isActive});
+  }
+
   // wraps "addGuestAnswer" and checks if guest is in current poll
   const addGuestAnswerToCurrentQuestion = ({ guestId, answerValue }) => {
+    const signature = "usePollData: addGuestAnswerToCurrentQuestion:";
+
+    if (!pollData) {
+      console.error(`${signature} cannot add answer, no poll selected`);
+      return;
+    }
+
+    if (!pollData.isActive) {
+      console.error(`${signature} cannot add answer, poll is not active`);
+      return;
+    }
+
+
     addGuestAnswer({ guestId, answerValue });
   };
 
@@ -366,7 +403,7 @@ function usePollData({
         const updatedGuestData = response.value.data.onUpdateGuestForPoll;
         console.log("updatedGuestData received from subscription:", updatedGuestData);
 
-        if (newGuestData !== null) {
+        if (updatedGuestData !== null) {
           setPollGuestsData(oldGuestsData => oldGuestsData.map(guest => 
             guest.id === updatedGuestData.id ? updatedGuestData : guest
           ));
@@ -439,7 +476,9 @@ function usePollData({
     pollIsLoaded,
     pollQuestionsData,
     setCurrentQuestionId,
+    togglePollActive,
     togglePollGuestLock,
+    togglePollLock,
     updateCurrentQuestionData, 
     updatePollData,
   };

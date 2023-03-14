@@ -1,5 +1,10 @@
 /*eslint-disable */
-import React, { createContext, useEffect, useState } from 'react'
+import React, { 
+  createContext, 
+  useEffect,
+  useRef, 
+  useState, 
+} from 'react'
 import { API, Hub } from 'aws-amplify'
 import { Auth } from 'aws-amplify'
 import * as mutations from '../../graphql/mutations'
@@ -9,6 +14,9 @@ import { useNavigate } from 'react-router'
 const AuthContext = createContext(undefined)
 
 function AuthContextProvider(props) {
+  // prevents bug where you need to press logout button twice
+  const isLoggingOut = useRef(false);
+
   const navigate = useNavigate()
 
   const [user, setUser] = useState(null)
@@ -17,7 +25,7 @@ function AuthContextProvider(props) {
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!user) {
+    if (!user && !isLoggingOut) {
       Auth.currentAuthenticatedUser().then((res) => {
         API.graphql({
           query: queries.getUser,
@@ -34,6 +42,13 @@ function AuthContextProvider(props) {
       })
     }
   })
+
+  // resets isLoggingOut ref
+  useEffect(() => {
+    if (!user) {
+      isLoggingOut.current = false;
+    }
+  }, [user])
 
   const register = (email, password, firstName, lastName) => {
     setRegisterUserData({ email, firstName, lastName })
@@ -57,7 +72,9 @@ function AuthContextProvider(props) {
       })
   }
 
-  const login = (email, password) => {
+  const login = (email, password, from = null) => {
+    const destinationRoute = from ? from : "/";
+
     Auth.signIn(email, password)
       .then((res) => {
         setUserCognito(res)
@@ -69,7 +86,7 @@ function AuthContextProvider(props) {
         })
           .then((res) => {
             setUser(res.data.getUser)
-            navigate('/')
+            navigate(destinationRoute);
           })
           .catch((err) => {
             console.log(err)
@@ -113,8 +130,9 @@ function AuthContextProvider(props) {
   }
 
   const logout = () => {
-    setUser(null)
+    isLoggingOut.current = true;
     Auth.signOut()
+    setUser(null)
   }
 
   return (
