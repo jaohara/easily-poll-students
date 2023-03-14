@@ -7,6 +7,7 @@ import {
 import './EpNavBar.scss';
 
 import {
+  BiLogOut,
   BiPoll,
   BiPulse,
   BiUser,
@@ -149,6 +150,7 @@ const EpNavBar = () => {
             <EpButton
               onClick={logout}
             >
+              <BiLogOut />&nbsp;
               Logout
             </EpButton>
           )

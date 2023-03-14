@@ -1,0 +1,14 @@
+@use "../../../styles/globals.scss" as g;
+
+.ep-poll-does-not-exist {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.1rem;
+  justify-content: space-between;
+  padding: 4rem 0rem;
+}
+
+.ep-poll-does-not-exist-icon-wrapper {
+  font-size: 5rem;
+}

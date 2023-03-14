@@ -7,16 +7,9 @@ import GuestVoting from './components/pages/GuestVoting/GuestVoting';
 import Home from './components/pages/Home/Home';
 import UserDashboard from './components/pages/UserDashboard/UserDashboard';
 
-// demo-related pages
-import EpChartDemo from './components/Demo/EpChartDemo/EpChartDemo';
-import LoadingTest from './components/Demo/LoadingTest';
-
 // testing login stuff
 import Login from './components/pages/Auth/Login/Login';
 import Register from './components/pages/Auth/Register/Register';
-
-// testing hook stuff
-import HooksPreview from './components/pages/HooksPreview/HooksPreview';
 
 // can be removed in the future
 import VerifyEmail from './components/pages/Auth/VerifyEmail/VerifyEmail';
@@ -35,7 +28,6 @@ export const routes = [
     hideInNavBar: true,
   },
   {
-    // TODO: Make this redirected from "Home" on auth, hide in navbar when auth on home page works
     path: '/polls',
     name: 'User Dashboard',
     disableWhenUnauthorized: true,
@@ -62,14 +54,6 @@ export const routes = [
     path: '/create-poll',
     name: 'Create Poll',
     element: <AuthRequired> <CreatePoll /> </AuthRequired>,
-    // TODO: Hide when app workflow is finalized (only available if logged in)
-    hideInNavBar: true,
-  },
-  {
-    // TODO: Remove this when gutting demo code
-    path: '/epchart-demo',
-    name: 'Chart Demo',
-    element: <EpChartDemo />,
     hideInNavBar: true,
   },
   {
@@ -87,20 +71,6 @@ export const routes = [
     element: <Register />,
   },
   {
-    // TODO: ultimately remove this when gutting demo code
-    path: '/hooks',
-    name: 'Hooks Preview',
-    element: <HooksPreview />,
-    hideInNavBar: true,
-  },
-  {
-    // and this, I suppose
-    path: '/hooks/:targetPollId',
-    name: 'Hooks Preview',
-    element: <HooksPreview />,
-    hideInNavBar: true,
-  },
-  {
     path: '/verify',
     name: 'verify',
     element: <VerifyEmail />,
@@ -110,13 +80,6 @@ export const routes = [
     path: '/results/:targetPollId',
     name: 'Poll Result',
     element: <PollResult />,
-    hideInNavBar: true,
-  },
-  //TODO: Remove this temp test route
-  {
-    path: '/loading-test',
-    name: 'Loading Test',
-    element: <LoadingTest />,
     hideInNavBar: true,
   },
 ];

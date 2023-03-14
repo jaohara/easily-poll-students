@@ -1,16 +1,26 @@
 import React, { 
+  useContext,
   useEffect,
   useState,
 } from 'react'
-// import { AuthContext } from '../../../contexts/AuthContext/AuthContext'
+import { useNavigate } from 'react-router-dom';
 
 import {
   BsArrowDownCircleFill
 } from "react-icons/bs";
 
-import { useNavigate } from 'react-router-dom';
+import { 
+  BiLogIn,
+  BiUserPlus,
+} from 'react-icons/bi';
+
+import EpButton from '../../UI/EpButton/EpButton';
 
 import "./Home.scss";
+
+import { AuthContext } from '../../../contexts/AuthContext/AuthContext';
+
+import { getRoutePathByName } from '../../../routes';
 
 import {
   exampleQuestions,
@@ -19,8 +29,6 @@ import {
 } from "./homeContent.js";
 
 import placeholderImage from '../../../img/placeholder.svg';
-
-import EpButton from '../../UI/EpButton/EpButton';
 
 const Home = () => {
   const [ currentExampleQuestionIndex, setCurrentExampleQuestionIndex ] = useState(0);
@@ -31,13 +39,17 @@ const Home = () => {
 
   // const Auth = useContext(AuthContext);
 
-  // const { user } = useContext(AuthContext);
+  const { user } = useContext(AuthContext);
 
   // if user isn't authenticated, stay on this page
   // if they are, redirect to UserDashboard
 
   useEffect(() => {
     setPageIsVisible(true);
+
+    if (user) {
+      navigate(getRoutePathByName("User Dashboard"));
+    }
 
     // question animation effect counter
     setInterval(() => {
@@ -80,13 +92,15 @@ const Home = () => {
             <EpButton
               fullWidth
               onClick={() => navigate("/login")}
-              >
+            >
+              <BiLogIn />&nbsp;
               Login
             </EpButton>
             <EpButton
               fullWidth
               onClick={() => navigate("/register")}
             >
+              <BiUserPlus />&nbsp;
               Register   
             </EpButton>
           </div>

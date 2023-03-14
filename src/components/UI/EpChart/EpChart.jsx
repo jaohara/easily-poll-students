@@ -1,9 +1,21 @@
 import React from 'react';
-import { Chart as ChartJS, ArcElement, Tooltip, Legend, CategoryScale,
+import { 
+  Chart as ChartJS, 
+  ArcElement, 
+  CategoryScale,
+  Tooltip, 
+  Legend, 
   LinearScale,
   BarElement,
-  Title} from 'chart.js';
+  Title,
+} from 'chart.js';
+
 import { Bar, Pie } from "react-chartjs-2";
+
+import {
+  TbChartBarOff,
+  TbChartPieOff,
+} from "react-icons/tb";
 
 import "./EpChart.scss";
 
@@ -37,30 +49,54 @@ function EpChart({
     ]
   };
 
-  return (
-    <div className="ep-chart-wrapper">
-      {
-        chartType === 'pie' && (
-          <Pie
-            data={chartData}
-            options={{
-              aspectRatio: 2,
-            }}
-          />
-        )
-      }
-      {
-        chartType === 'bar' && (
-          <Bar
-            data={chartData}
-            options={{
-              indexAxis: 'y',
-            }}
-          />
-        )
-      }
-    </div>
-  );
+  const renderChart = () => {
+    if (data.length === 0) {
+      return (
+        <div className="ep-chart-wrapper ep-chart-empty">
+          <div className="ep-chart-empty-icon-wrapper">
+            {
+              chartType === 'pie' ? (
+                // <TbChartBarOff />
+                <TbChartPieOff />
+              ) : (
+                <TbChartBarOff />
+              )
+            }
+          </div>
+          <div className="ep-chart-empty-message">
+            There aren&apos;t any submitted votes for this question.
+          </div>
+        </div>
+      );
+    }
+
+    return (
+      <div className="ep-chart-wrapper">
+        {
+          chartType === 'pie' && (
+            <Pie
+              data={chartData}
+              options={{
+                aspectRatio: 2,
+              }}
+            />
+          )
+        }
+        {
+          chartType === 'bar' && (
+            <Bar
+              data={chartData}
+              options={{
+                indexAxis: 'y',
+              }}
+            />
+          )
+        }
+      </div>
+    );
+  }
+
+  return (renderChart());
 }
     
 export default EpChart;

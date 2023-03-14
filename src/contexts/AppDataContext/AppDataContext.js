@@ -80,6 +80,7 @@ function AppDataContextProvider(props) {
     currentQuestionId, 
     currentQuestionIsLoaded,
     pollData,
+    pollDoesNotExist,
     pollGuestsData,
     pollIsLoaded,
     pollQuestionsData,
@@ -322,7 +323,11 @@ function AppDataContextProvider(props) {
 
   // updates the userPollsData when the user changes
   useEffect(() => {
-    fetchAndSetAllUserPollsData();
+    const getPolls = async () => {
+      await fetchAndSetAllUserPollsData();
+    }
+
+    getPolls();
   }, [user]);
 
   // set subscription for a new guest 
@@ -343,6 +348,7 @@ function AppDataContextProvider(props) {
     guest,
     guestIsLoaded,
     pollData: pollData,
+    pollDoesNotExist,
     pollGuestsData: pollGuestsData,
     pollIsLoaded: pollIsLoaded,
     pollQuestionsData: pollQuestionsData,
@@ -366,6 +372,7 @@ function AppDataContextProvider(props) {
         guestIsLoaded,
         joinPollAsGuest,
         pollData,
+        pollDoesNotExist,
         pollGuestsData,
         pollIsLoaded,
         pollQuestionsData,

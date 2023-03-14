@@ -15,40 +15,48 @@ const AuthContext = createContext(undefined)
 
 function AuthContextProvider(props) {
   // prevents bug where you need to press logout button twice
-  const isLoggingOut = useRef(false);
+  // const isLoggingOut = useRef(false);
 
   const navigate = useNavigate()
 
-  const [user, setUser] = useState(null)
+  const [user, setUser] = useState(window.sessionStorage.getItem("currentUser"))
   const [userCognito, setUserCognito] = useState(null)
   const [registerUserData, setRegisterUserData] = useState(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!user && !isLoggingOut) {
-      Auth.currentAuthenticatedUser().then((res) => {
-        API.graphql({
-          query: queries.getUser,
-          variables: {
-            id: res.username,
-          },
-        })
-          .then((res) => {
-            setUser(res.data.getUser)
-          })
-          .catch(() => {
-            // TODO: finish register (enter first name, last name)
-          })
-      })
-    }
-  })
+    console.log("In AuthContext initial page load:")
+    console.log("user:", user);
+    console.log("userCognito: ", userCognito);
+    console.log("Auth.currentAuthenticatedUser(): ", Auth.currentAuthenticatedUser());
+  }, [])
 
-  // resets isLoggingOut ref
-  useEffect(() => {
-    if (!user) {
-      isLoggingOut.current = false;
-    }
-  }, [user])
+  // useEffect(() => {
+  //   if (!user && window.sessionStorage.getItem("currentUser")) {
+  //     console.log("In that useEffect that resets the login")
+  //     Auth.currentAuthenticatedUser().then((res) => {
+  //       API.graphql({
+  //         query: queries.getUser,
+  //         variables: {
+  //           id: res.username,
+  //         },
+  //       })
+  //         .then((res) => {
+  //           setUser(res.data.getUser)
+  //         })
+  //         .catch(() => {
+  //           // TODO: finish register (enter first name, last name)
+  //         })
+  //     })
+  //   }
+  // })
+
+  // // resets isLoggingOut ref
+  // useEffect(() => {
+  //   if (!user) {
+  //     isLoggingOut.current = false;
+  //   }
+  // }, [user])
 
   const register = (email, password, firstName, lastName) => {
     setRegisterUserData({ email, firstName, lastName })
@@ -85,12 +93,13 @@ function AuthContextProvider(props) {
           },
         })
           .then((res) => {
+            window.sessionStorage.setItem("currentUser", res.data.getUser);
             setUser(res.data.getUser)
             navigate(destinationRoute);
           })
           .catch((err) => {
             console.log(err)
-            navigate('/register-step')
+            navigate('/register')
           })
       })
       .catch((err) => {
@@ -130,7 +139,8 @@ function AuthContextProvider(props) {
   }
 
   const logout = () => {
-    isLoggingOut.current = true;
+    // isLoggingOut.current = true;
+    window.sessionStorage.setItem("currentUser", null);
     Auth.signOut()
     setUser(null)
   }
@@ -138,14 +148,14 @@ function AuthContextProvider(props) {
   return (
     <AuthContext.Provider
       value={{
-        user,
-        userCognito,
-        registerUserData,
         error,
-        register,
-        verify,
         login,
         logout,
+        register,
+        registerUserData,
+        user,
+        userCognito,
+        verify,
       }}
     >
       {props.children}
