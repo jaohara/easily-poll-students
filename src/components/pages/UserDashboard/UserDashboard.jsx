@@ -8,6 +8,10 @@ import { useNavigate } from 'react-router-dom';
 
 import "./UserDashboard.scss";
 
+import {
+  BiChart,
+} from "react-icons/bi";
+
 import EpButton from '../../UI/EpButton/EpButton';
 import EpContainer from "../../UI/EpContainer/EpContainer";
 import EpLoading from '../../UI/EpLoading/EpLoading';
@@ -49,7 +53,7 @@ const UserDashboard = () => {
                 // Is hardcoding this the best approach? Maybe...
                 // navHandler={() => {navigate(`/hooks/${poll.id}`)}}
                 navHandler={() => {navigate(`/poll/${poll.id}`)}}
-                guestVotingNavHandler={() => navigate(`/vote/${poll.id}`)}
+                // guestVotingNavHandler={() => navigate(`/vote/${poll.id}`)}
                 pollResultsNavHandler={() => navigate(`/results/${poll.id}`)}
                 isActive={poll.isActive}
                 isLocked={poll.isLocked}
@@ -81,7 +85,7 @@ function UserDashBoardNoPolls () {
 function UserDashBoardPollItem ({ 
   createdAt,
   navHandler,
-  guestVotingNavHandler,
+  // guestVotingNavHandler,
   pollResultsNavHandler,
   isActive,
   isLocked,
@@ -117,17 +121,18 @@ function UserDashBoardPollItem ({
         </EpPill>
       </div>
       <div className="dashboard-item-temp-controls-container">
-        <EpButton
+        {/* <EpButton
           key="vote-button"
           onClick={guestVotingNavHandler}
         >
           Guest Voting Page
-        </EpButton>
+        </EpButton> */}
         <EpButton 
           // TODO: remove this test buttonwhen conditional nav based on isActive works 
           key="results-button"
           onClick={pollResultsNavHandler}
         >
+          <BiChart />&nbsp;
           Poll Results
         </EpButton>
       </div>

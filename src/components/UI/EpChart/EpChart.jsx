@@ -52,10 +52,11 @@ function EpChart({
   const renderChart = () => {
     if (data.length === 0) {
       return (
-        <div className="ep-chart-empty">
+        <div className="ep-chart-wrapper ep-chart-empty">
           <div className="ep-chart-empty-icon-wrapper">
             {
               chartType === 'pie' ? (
+                // <TbChartBarOff />
                 <TbChartPieOff />
               ) : (
                 <TbChartBarOff />
@@ -71,7 +72,6 @@ function EpChart({
 
     return (
       <div className="ep-chart-wrapper">
-  
         {
           chartType === 'pie' && (
             <Pie

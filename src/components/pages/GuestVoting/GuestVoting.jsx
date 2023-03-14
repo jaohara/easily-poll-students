@@ -22,6 +22,7 @@ import EpChart from '../../UI/EpChart/EpChart';
 import EpContainer from '../../UI/EpContainer/EpContainer';
 import EpLoading from '../../UI/EpLoading/EpLoading';
 import EpPill from '../../UI/EpPill/EpPill';
+import EpPollDoesNotExist from "../../UI/EpPollDoesNotExist/EpPollDoesNotExist";
 import EpPollQuestionsList from '../../UI/EpPollQuestionsList/EpPollQuestionsList';
 import EpTextInput from '../../UI/EpTextInput/EpTextInput';
 
@@ -42,6 +43,7 @@ const GuestVoting = () => {
     guestIsLoaded,
     joinPollAsGuest,
     pollData,
+    pollDoesNotExist,
     pollGuestsData,
     pollQuestionsData,
     pollIsLoaded,
@@ -78,11 +80,15 @@ const GuestVoting = () => {
     <div className="guest-voting">
       {
         !votingIsReady ? (
-          <EpLoading
-            centered
-            narrow 
-            message={"Loading Poll..."}
-          />
+          pollDoesNotExist ? (
+            <EpPollDoesNotExist />
+          ): (
+            <EpLoading
+              centered
+              narrow 
+              message={"Loading Poll..."}
+            />
+          )
         ) : (
           !guestIsReady ? (
             pollData.isLocked ? (

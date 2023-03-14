@@ -74,6 +74,7 @@ function usePollData({
   const [ currentQuestionId, setCurrentQuestionId ] = useState();
   const [ pollIsLoaded, setPollIsLoaded ] = useState(false);
   const [ pollIsLoading, setPollIsLoading ] = useState(false);
+  const [ pollDoesNotExist, setPollDoesNotExist ] = useState(false);
   const [ pollData, setPollData ] = useState();
   const [ pollQuestionsData, setPollQuestionsData ] = useState();
   const [ pollGuestsData, setPollGuestsData ] = useState();
@@ -135,6 +136,7 @@ function usePollData({
     }
     catch (err) {
       console.error("Error fetching poll data:", err);
+      setPollDoesNotExist(true);
     }
 
     setPollIsLoading(false);
@@ -466,6 +468,7 @@ function usePollData({
     }
 
     setPollData(null);
+    setPollDoesNotExist(false);
     setPollIsLoaded(false);
     fetchAndSetPollData();
 
@@ -500,6 +503,7 @@ function usePollData({
     currentQuestionIsLoaded,
     createNewPoll,
     pollData,
+    pollDoesNotExist,
     pollGuestsData,
     pollIsLoaded,
     pollQuestionsData,
