@@ -53,13 +53,6 @@ query GetPoll($id: ID!) {
         pollGuestsId
       }
     }
-    # linkName {
-    #   name
-    #   id
-    #   createdAt
-    #   updatedAt
-    #   linkNamePollId
-    # }
     id
     title
     isActive
@@ -68,7 +61,6 @@ query GetPoll($id: ID!) {
     createdAt
     updatedAt
     userPollsId
-    # pollLinkNameId
   }
 }
 `;

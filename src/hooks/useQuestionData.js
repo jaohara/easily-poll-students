@@ -18,17 +18,17 @@ import {
 const getQuestionWithAnswers = /* GraphQL */ `
   query GetQuestion($id: ID!) {
     getQuestion(id: $id) {
-      poll {
-        id
-        title
-        isLocked
-        isActive
-        roomSize
-        createdAt
-        updatedAt
-        userPollsId
-        # pollLinkNameId
-      }
+      # poll {
+      #   id
+      #   title
+      #   isLocked
+      #   isActive
+      #   roomSize
+      #   createdAt
+      #   updatedAt
+      #   userPollsId
+      #   # pollLinkNameId
+      # }
       answers {
         nextToken
         items {
