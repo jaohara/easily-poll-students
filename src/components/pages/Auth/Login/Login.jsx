@@ -40,7 +40,11 @@ export default function Login() {
     <div className="login-page">
       {
         loginSubmitted ? (
-          <EpLoading narrow centered/>
+          <EpLoading 
+            centered
+            message="Logging in..."
+            narrow 
+          />
         ) : (
           <EpContainer narrow centered>
             <Box

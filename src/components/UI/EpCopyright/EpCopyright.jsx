@@ -16,7 +16,9 @@ function EpCopyright () {
       <div className="ep-copyright-wrapper">
         <div className="credits">
           <h1>Team 2</h1>
-          Made by John, Vlad, Namuna, Taylor, Lizzie, and Paul in {new Date().getFullYear()}
+          <p>
+            Made by&nbsp;<a href="https://github.com/jaohara">John</a>, <a href="https://github.com/vzwork">Vlad</a>, <a href="https://github.com/nk9487">Namuna</a>, <a href="https://github.com/taylorpapke">Taylor</a>, <a href="https://github.com/Ladybird91">Lizzie</a>, and <a href="https://github.com/PaulTMaack">Paul</a>&nbsp;in {new Date().getFullYear()}
+          </p>
         </div>
 
         <div className="links">

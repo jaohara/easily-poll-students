@@ -40,7 +40,7 @@ export const routes = [
     name: 'User Dashboard',
     disableWhenUnauthorized: true,
     element: <AuthRequired> <UserDashboard /> </AuthRequired>,
-    // hideInNavBar: true,
+    hideInNavBar: true,
   },
   {
     // TODO: Make this go to "GuestVoting", which forwards to

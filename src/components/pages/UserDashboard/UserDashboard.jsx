@@ -10,6 +10,7 @@ import "./UserDashboard.scss";
 
 import EpButton from '../../UI/EpButton/EpButton';
 import EpContainer from "../../UI/EpContainer/EpContainer";
+import EpLoading from '../../UI/EpLoading/EpLoading';
 import EpPill from "../../UI/EpPill/EpPill";
 
 import { AppDataContext } from '../../../contexts/AppDataContext/AppDataContext';
@@ -20,41 +21,13 @@ const UserDashboard = () => {
 
   const {
     // what do we need to take from the context?
+    allUserPollsLoading,
     allUserPollsData,
   } = useContext(AppDataContext);
 
   return ( 
     <div className="user-dashboard">
       <h1>User Dashboard</h1>
-
-      <div className="user-dashboard-description">
-        <p>
-          This is the page that will be displayed in place of the home page when
-          the user is authorized.
-        </p>
-
-        <p>
-          It will display a list of all of the polls that the user has created,
-          and allow for them to be clicked to navigate to either a poll report 
-          if they are complete (isActive is false), or the CurrentPollSession 
-          for the given poll if they are in progress (isActive is true). 
-        </p>
-
-        <p>
-          When a user clicks it a link, it will set the current pollId via the 
-          function exported from the AppDataContext and use the navigate function 
-          to handle the redirect.
-        </p>
-
-        <p>
-          <strong>This is also where the &quot;Create Poll&quot; button will be displayed.</strong>
-        </p>
-
-        <p>
-          The list of polls can be accessed from <strong>allUserPollsData</strong> from the 
-          AppDataContext.
-        </p>
-      </div>
 
       <div className="user-dashboard-controls">
         <EpButton
@@ -82,10 +55,15 @@ const UserDashboard = () => {
                 isLocked={poll.isLocked}
                 title={poll.title}
               />
-            ))
-           : (
-            <UserDashBoardNoPolls />
-          )
+            )) : (
+              allUserPollsLoading ? (
+                <EpLoading 
+                  message="Loading polls..."
+                />
+              ) : (
+                <UserDashBoardNoPolls />
+              )
+            )
         }
       </EpContainer>
     </div>

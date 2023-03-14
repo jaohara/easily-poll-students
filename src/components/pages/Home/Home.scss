@@ -164,9 +164,21 @@ $hero-arrow-transform: translateY(-10vh);
 
 .home-instructions-item-content {
   width: 50%;
+
+  p {
+    font-size: 1.25rem;
+    line-height: 2rem;
+  }
 }
 
 .home-instructions-item-screenshot {
   border-radius: g.$common-border-radius;
   width: 30%;
+}
+
+.home-button-icon-wrapper {
+  align-items: center;
+  display: inline-flex;
+  justify-content: space-between;
+  width: 35%;
 }
