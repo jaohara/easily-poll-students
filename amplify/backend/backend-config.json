@@ -38,6 +38,14 @@
           ],
           "category": "function",
           "resourceName": "guestRegister"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "guestAnswer"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -73,6 +81,22 @@
     }
   },
   "function": {
+    "guestAnswer": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "easilypollstudents"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda"
+    },
     "guestRegister": {
       "build": true,
       "dependsOn": [
@@ -91,6 +115,22 @@
     }
   },
   "parameters": {
+    "AMPLIFY_function_guestAnswer_deploymentBucketName": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "guestAnswer"
+        }
+      ]
+    },
+    "AMPLIFY_function_guestAnswer_s3Key": {
+      "usedBy": [
+        {
+          "category": "function",
+          "resourceName": "guestAnswer"
+        }
+      ]
+    },
     "AMPLIFY_function_guestRegister_deploymentBucketName": {
       "usedBy": [
         {

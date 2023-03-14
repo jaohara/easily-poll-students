@@ -18,7 +18,11 @@
       "function": {
         "guestRegister": {
           "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
-          "s3Key": "amplify-builds/guestRegister-45473167525569682f61-build.zip"
+          "s3Key": "amplify-builds/guestRegister-393137664d546b436767-build.zip"
+        },
+        "guestAnswer": {
+          "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
+          "s3Key": "amplify-builds/guestAnswer-57346d7937392f496a35-build.zip"
         }
       },
       "api": {

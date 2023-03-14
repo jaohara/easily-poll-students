@@ -3,7 +3,7 @@
 # input AMPLIFY {
 #   globalAuthRule: AuthRule = { allow: public }
 # } # FOR TESTING ONLY!
-type User @model @auth(rules: [{ allow: public }, { allow: custom }]) {
+type User @model @auth(rules: [{ allow: public }]) {
   polls: [Poll!]! @hasMany
   id: ID!
   email: String!
@@ -33,14 +33,30 @@ type Question @model @auth(rules: [{ allow: public }]) {
   questionType: String!
 }
 
-type Answer @model @auth(rules: [{ allow: public }]) {
+type Answer
+  @model
+  @auth(
+    rules: [
+      { allow: public }
+      { allow: custom }
+      { allow: private, provider: iam }
+    ]
+  ) {
   question: Question! @belongsTo
   # maybe ambiguous - change from "owner" to "guest"?
   owner: Guest! @belongsTo
   answer: [String!]!
 }
 
-type Guest @model @auth(rules: [{ allow: public }]) {
+type Guest
+  @model
+  @auth(
+    rules: [
+      { allow: public }
+      { allow: custom }
+      { allow: private, provider: iam }
+    ]
+  ) {
   #pollsIncluded: [Poll!]! @manyToMany(relationName: "PollGuestIn")
   #pollsExcluded: [Poll!]! @manyToMany(relationName: "PollGuestExcluded")
   poll: Poll! @belongsTo

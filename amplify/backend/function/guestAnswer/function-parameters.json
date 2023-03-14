@@ -1,0 +1,11 @@
+{
+  "permissions": {
+    "api": {
+      "easilypollstudents": [
+        "Query",
+        "Mutation"
+      ]
+    }
+  },
+  "lambdaLayers": []
+}

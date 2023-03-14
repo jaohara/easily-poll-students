@@ -44,22 +44,30 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2023-03-03T22:06:24.437Z",
+      "lastPushTimeStamp": "2023-03-14T00:14:14.977Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apieasilypollstudents"
       },
-      "lastPushDirHash": "fSApEipGl13DKDtkiMjXf1mRabk="
+      "lastPushDirHash": "r6/jHIbIp+XeMlj6UoxYsqzU1PU="
     },
     "guest": {
       "dependsOn": [
         {
+          "category": "function",
+          "resourceName": "guestRegister",
           "attributes": [
             "Name",
             "Arn"
-          ],
+          ]
+        },
+        {
           "category": "function",
-          "resourceName": "guestRegister"
+          "resourceName": "guestAnswer",
+          "attributes": [
+            "Name",
+            "Arn"
+          ]
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -69,11 +77,12 @@
         "RootUrl": "https://4lofxuc3fc.execute-api.us-west-2.amazonaws.com/staging",
         "ApiId": "4lofxuc3fc"
       },
-      "lastPushTimeStamp": "2023-03-03T22:06:23.520Z",
+      "lastPushTimeStamp": "2023-03-14T00:14:14.986Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/guest-cloudformation-template.json",
         "logicalId": "apiguest"
-      }
+      },
+      "lastPushDirHash": "4Gqx7Y2DRty4bUCV9mF1Xks0v7A="
     }
   },
   "auth": {
@@ -111,7 +120,7 @@
         "IdentityPoolName": "easilypollstudentsb7118bae_identitypool_b7118bae__staging",
         "UserPoolName": "easilypollstudentsb7118bae_userpool_b7118bae"
       },
-      "lastPushTimeStamp": "2023-03-03T22:06:23.521Z",
+      "lastPushTimeStamp": "2023-03-14T00:14:14.990Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/auth/easilypollstudentsb7118bae-cloudformation-template.json",
         "logicalId": "autheasilypollstudentsb7118bae"
@@ -141,15 +150,57 @@
         "Name": "guestRegister-staging",
         "LambdaExecutionRole": "easilypollstudentsLambdaRole1c988000-staging"
       },
-      "lastPushTimeStamp": "2023-03-03T22:06:23.522Z",
+      "lastPushTimeStamp": "2023-03-14T00:14:14.994Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestRegister-cloudformation-template.json",
         "logicalId": "functionguestRegister"
       },
       "s3Bucket": {
         "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
-        "s3Key": "amplify-builds/guestRegister-45473167525569682f61-build.zip"
-      }
+        "s3Key": "amplify-builds/guestRegister-393137664d546b436767-build.zip"
+      },
+      "lastBuildTimeStamp": "2023-03-12T03:06:23.809Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2023-03-12T03:06:27.918Z",
+      "distZipFilename": "guestRegister-393137664d546b436767-build.zip",
+      "lastPushDirHash": "sFZ0z5AZ7d5SpuyJlixrbcMDvyk="
+    },
+    "guestAnswer": {
+      "build": true,
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "dependsOn": [
+        {
+          "category": "api",
+          "resourceName": "easilypollstudents",
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ]
+        }
+      ],
+      "lastBuildTimeStamp": "2023-03-14T00:12:03.492Z",
+      "lastBuildType": "PROD",
+      "lastPackageTimeStamp": "2023-03-14T00:12:06.132Z",
+      "distZipFilename": "guestAnswer-57346d7937392f496a35-build.zip",
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
+        "s3Key": "amplify-builds/guestAnswer-57346d7937392f496a35-build.zip"
+      },
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestAnswer-cloudformation-template.json",
+        "logicalId": "functionguestAnswer"
+      },
+      "lastPushTimeStamp": "2023-03-14T00:14:15.221Z",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::971359340948:role/easilypollstudentsLambdaRoled59e6e27-staging",
+        "Region": "us-west-2",
+        "Arn": "arn:aws:lambda:us-west-2:971359340948:function:guestAnswer-staging",
+        "Name": "guestAnswer-staging",
+        "LambdaExecutionRole": "easilypollstudentsLambdaRoled59e6e27-staging"
+      },
+      "lastPushDirHash": "+dxluwsa0PdT35HsGZSyo6ZF9eE="
     }
   }
 }
