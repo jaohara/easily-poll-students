@@ -6,7 +6,6 @@ import React, {
 } from "react";
 
 import { 
-  // listAnswers,
   listPolls, 
 } from "../../graphql/queries";
 import { 
@@ -15,7 +14,7 @@ import {
 
 import usePollData from "../../hooks/usePollData";
 import useApi from "../../hooks/useApi";
-import { AuthContext } from "./AuthContext";
+import { AuthContext } from "../AuthContext/AuthContext";
 
 const AppDataContext = createContext(undefined);
 
@@ -55,12 +54,23 @@ function AppDataContextProvider(props) {
 
   const selectPollById = (pollId) => {
     setCurrentPollId(pollId);
+    // JAO - here we want to check to see if the guest in the sessionStorage 
+    //  belongs to this poll, and conditionally set the guest object to that 
+    //  guest or do what we already do here if they don't 
+
+    // TODO: Build out this pseudocode 
+    // if (checkIfGuestIsInSessionStorage) {
+    //   setGuest(guestFromStorage);
+    //   setGuestIsLoaded(true);
+    // }
+
+    // TODO: Hide this behind an else statement
     setGuest(null);
     setGuestIsLoaded(false);
   };
 
   const {
-    addGuestAnswerToCurrentQuestion,
+    addAnswerToCurrentQuestion,
     addNewPollGuest,
     // calculateAnswerTallyFromAnswerData,
     createNewPoll, 
@@ -145,7 +155,12 @@ function AppDataContextProvider(props) {
     };
 
     submitData();
-  }
+  };
+
+  const addGuestAnswerToCurrentQuestion = (answerValue) => {
+    console.log("addGuestAnswerToCurrentQuestion: attemping to add answer");
+    addAnswerToCurrentQuestion({ guest, answerValue });
+  }; 
 
   const subscribeToGuest = () => {
     if (!guest) {
@@ -153,11 +168,23 @@ function AppDataContextProvider(props) {
       return;
     }
 
+    // const guestVariablesObject = {
+    //   variables: {
+    //     id: guest.id,
+    //   }
+    // }
+
     const guestVariablesObject = {
       variables: {
-        id: guest.id,
+        filter: {
+          id: {
+            eq: guest.id,
+          }
+        }
       }
-    }
+    };
+
+    console.log("subscribeToGuest with id: ", guest.id);
 
     return API.graphql({
       query: onUpdateGuest,
@@ -165,7 +192,7 @@ function AppDataContextProvider(props) {
     }).subscribe({
       next: (response) => {
         const newGuestData = response.value.data.onUpdateGuest;
-        console.log("guestData receved from subscription:", newGuestData);
+        console.log("guestData received from subscription:", newGuestData);
 
         if (newGuestData !== null) {
           setGuest(newGuestData);
@@ -289,8 +316,6 @@ function AppDataContextProvider(props) {
       title: pollData.title,
       questions: questions,
     };
-
-    // console.log("generatePollReport: generated poll report: ", pollReport);
 
     return pollReport;
   };

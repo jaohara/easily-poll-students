@@ -12,7 +12,7 @@ import EpButton from '../../UI/EpButton/EpButton';
 import EpContainer from "../../UI/EpContainer/EpContainer";
 import EpPill from "../../UI/EpPill/EpPill";
 
-import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
+import { AppDataContext } from '../../../contexts/AppDataContext/AppDataContext';
 import { getRoutePathByName } from '../../../routes';
 
 const UserDashboard = () => {

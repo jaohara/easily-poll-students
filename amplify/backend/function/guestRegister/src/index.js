@@ -18,21 +18,31 @@ const AWS_REGION = process.env.AWS_REGION || 'us-east-1'
 const { Sha256 } = crypto
 
 const query = /* GraphQL */ `
-  query ListUsers(
-    $filter: ModelUserFilterInput
-    $limit: Int
-    $nextToken: String
+  mutation CreateGuest(
+    $input: CreateGuestInput!
+    $condition: ModelGuestConditionInput
   ) {
-    listUsers(filter: $filter, limit: $limit, nextToken: $nextToken) {
-      items {
+    createGuest(input: $input, condition: $condition) {
+      poll {
         id
-        email
-        firstName
-        lastName
+        title
+        isActive
+        isLocked
+        roomSize
         createdAt
         updatedAt
+        userPollsId
       }
-      nextToken
+      canVote
+      answers {
+        nextToken
+      }
+      id
+      name
+      key
+      createdAt
+      updatedAt
+      pollGuestsId
     }
   }
 `
@@ -43,6 +53,18 @@ const query = /* GraphQL */ `
 
 export const handler = async (event) => {
   console.log(`EVENT: ${JSON.stringify(event)}`)
+
+  const user = JSON.parse(event.body)
+
+  const variables = {
+    input: {
+      canVote: true,
+      id: user.id,
+      pollGuestsId: user.pollId,
+      name: user.name,
+      key: user.key,
+    },
+  }
 
   const endpoint = new URL(GRAPHQL_ENDPOINT)
 
@@ -60,7 +82,7 @@ export const handler = async (event) => {
       host: endpoint.host,
     },
     hostname: endpoint.host,
-    body: JSON.stringify({ query }),
+    body: JSON.stringify({ query, variables }),
     path: endpoint.pathname,
   })
 

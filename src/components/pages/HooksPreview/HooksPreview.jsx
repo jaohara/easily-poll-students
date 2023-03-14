@@ -6,7 +6,7 @@ import "./HooksPreview.scss";
 import { React, useState, useEffect, useContext } from 'react';
 import { useParams } from "react-router-dom"; 
 
-import { AppDataContext } from "../../../contexts/AuthContext/AppDataContext";
+import { AppDataContext } from '../../../contexts/AppDataContext/AppDataContext';
 
 import EpButton from "../../UI/EpButton/EpButton";
 import EpChart from "../../UI/EpChart/EpChart";

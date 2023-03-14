@@ -7,6 +7,7 @@ import EpContainer from "../EpContainer/EpContainer";
 const EpLoading = ({
   centered = false,
   narrow = false,
+  message = null,
 }) => {
   return ( 
     <EpContainer
@@ -17,6 +18,14 @@ const EpLoading = ({
       <div className="ep-loading-spinner">
         
       </div>
+
+      {
+        message && (
+          <div className="ep-loading-message">
+            {message}
+          </div>
+        )
+      }
     </EpContainer>
   );
 }

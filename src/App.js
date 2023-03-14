@@ -22,20 +22,19 @@ import {
 
 
 import { AuthContextProvider } from "./contexts/AuthContext/AuthContext";
-import { AppDataContextProvider } from './contexts/AuthContext/AppDataContext';
+import { AppDataContextProvider } from './contexts/AppDataContext/AppDataContext';
+// import { GuestContextProvider } from './contexts/GuestContext/GuestContext';
 
 import EpCopyright from './components/UI/EpCopyright/EpCopyright';
 import EpNavBar from './components/UI/EpNavBar/EpNavBar';
 
-// import { Authenticator } from "@aws-amplify/ui-react";
-
 function App() {
   return (
-    // <Authenticator.Provider>
-      <BrowserRouter>
-        <ThemeProvider theme={theme}>
-          <AuthContextProvider>
-            <AppDataContextProvider>
+    <BrowserRouter>
+      <ThemeProvider theme={theme}>
+        <AuthContextProvider>
+          <AppDataContextProvider>
+            {/* <GuestContextProvider> */}
               <div className="App">
                 <div className="app-wrapper">
                   <div className="content-wrapper">
@@ -55,11 +54,11 @@ function App() {
                   <EpCopyright />
                 </div>
               </div>
-            </AppDataContextProvider>
-          </AuthContextProvider>
-        </ThemeProvider>
-      </BrowserRouter>
-    // </Authenticator.Provider>
+            {/* </GuestContextProvider> */}
+          </AppDataContextProvider>
+        </AuthContextProvider>
+      </ThemeProvider>
+    </BrowserRouter>
   );
 }
 

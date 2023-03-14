@@ -1,7 +1,8 @@
 import { useState, useEffect } from "react";
 import { graphqlOperation } from "@aws-amplify/api";
+import sha256 from "sha256";
 import {
-  createGuest,
+  // createGuest,
   createPoll,
   createQuestion,
   updateGuest,
@@ -52,13 +53,6 @@ query GetPoll($id: ID!) {
         pollGuestsId
       }
     }
-    # linkName {
-    #   name
-    #   id
-    #   createdAt
-    #   updatedAt
-    #   linkNamePollId
-    # }
     id
     title
     isActive
@@ -67,7 +61,6 @@ query GetPoll($id: ID!) {
     createdAt
     updatedAt
     userPollsId
-    # pollLinkNameId
   }
 }
 `;
@@ -86,8 +79,7 @@ function usePollData({
   const [ pollGuestsData, setPollGuestsData ] = useState();
 
   const {
-    // addGuestAnswer: addGuestAnswerToCurrentQuestion,
-    addGuestAnswer,
+    addAnswer,
     answerData: currentAnswerData,
     answerTally: currentAnswerTally,
     calculateAnswerTallyFromAnswerData, 
@@ -106,20 +98,13 @@ function usePollData({
   };
 
   // common vars for guest queries and subs
-  const guestsVariablesObject = {
+  const guestsSubscriptionVariablesObject = {
     variables: {
       pollGuestsId: pollId,
     }
   };
 
-  // common vars for question queries and subs
-  // const questionsVariablesObject = {
-  //   variables: {
-  //     pollQuestionsId: pollId, 
-  //   }
-  // };
-
-  // gets poll data for 
+  // gets poll data for the set pollId
   const fetchAndSetPollData = async () => {
     if (!pollId || pollIsLoading) {
       return;
@@ -231,28 +216,55 @@ function usePollData({
   };
 
   // TODO: test
-  const addNewPollGuest = ({name, key}) => {
+  // const addNewPollGuest = ({name, key}) => {
+  const addNewPollGuest = ({name}) => {
     if (pollId === null) {
       console.log("usePollData: addNewPollGuest: pollId is null, cannot create guest.");
       return;
     }
 
-    const newGuestDataObject = {
-      input: {
-        canVote: true,
-        key: key,
+    const guestKey = sha256(name + Date.now());
+    const guestId = sha256(guestKey);
+
+    const newGuestRequest = {
+      body: {
         name: name,
-        pollGuestsId: pollId,
-      }
+        id: guestId,
+        key: guestKey,
+        pollId: pollId,
+      },
+      headers: {},
     };
 
-    // console.log("addNewPollGuest with newGuestDataObject:", newGuestDataObject);
+    const newGuest = 
+      API.post('guest', '/guest', newGuestRequest)
+        .then((newGuestResponse) => {
+          console.log("Response returned:", newGuestResponse);
+          return newGuestResponse;
+        })
+        .catch((err) => console.error("Error from response:", err));
 
-    const submitData = async () => {
-      return await API.graphql(graphqlOperation(createGuest, newGuestDataObject));
-    };
+    return newGuest;
 
-    return submitData();
+    // JAO - Here is where we will save the guest object to sessionStorage
+
+
+    // const newGuestDataObject = {
+    //   input: {
+    //     canVote: true,
+    //     key: key,
+    //     name: name,
+    //     pollGuestsId: pollId,
+    //   }
+    // };
+
+    // // console.log("addNewPollGuest with newGuestDataObject:", newGuestDataObject);
+
+    // const submitData = async () => {
+    //   return await API.graphql(graphqlOperation(createGuest, newGuestDataObject));
+    // };
+
+    // return submitData();
   };
 
   // TODO: Test
@@ -316,8 +328,8 @@ function usePollData({
   }
 
   // wraps "addGuestAnswer" and checks if guest is in current poll
-  const addGuestAnswerToCurrentQuestion = ({ guestId, answerValue }) => {
-    const signature = "usePollData: addGuestAnswerToCurrentQuestion:";
+  const addAnswerToCurrentQuestion = ({ guest, answerValue }) => {
+    const signature = "usePollData: addAnswerToCurrentQuestion:";
 
     if (!pollData) {
       console.error(`${signature} cannot add answer, no poll selected`);
@@ -329,8 +341,13 @@ function usePollData({
       return;
     }
 
+    if (!guest) {
+      console.error(`${signature} cannot add answer, no guest is loaded`);
+    }
 
-    addGuestAnswer({ guestId, answerValue });
+    console.log(`${signature} attempting to add answer...`)
+
+    addAnswer({ guest, answerValue });
   };
 
   // =============
@@ -342,9 +359,20 @@ function usePollData({
       return;
     }
 
+    const pollSubscriptionObject = {
+      variables: {
+        filter: {
+          id: {
+            eq: pollId,
+          }
+        }
+      }
+    };
+
     return API.graphql({
       query: onUpdatePoll,
-      ...pollVariablesObject,
+      // ...pollVariablesObject,
+      ...pollSubscriptionObject,
     }).subscribe({
       next: (response) => {
         const newPollData = response.value.data.onUpdatePoll;
@@ -370,7 +398,7 @@ function usePollData({
 
     return API.graphql({
       query: onCreateGuestForPoll,
-      ...guestsVariablesObject,
+      ...guestsSubscriptionVariablesObject,
     }).subscribe({
       next: (response) => {
         const newGuestData = response.value.data.onCreateGuestForPoll;
@@ -397,7 +425,7 @@ function usePollData({
 
     return API.graphql({
       query: onUpdateGuestForPoll,
-      ...guestsVariablesObject,
+      ...guestsSubscriptionVariablesObject,
     }).subscribe({
       next: (response) => {
         const updatedGuestData = response.value.data.onUpdateGuestForPoll;
@@ -462,7 +490,7 @@ function usePollData({
 
   return {
     //...(condition && { objKey: objValue }), // <- conditionally add an object property
-    addGuestAnswerToCurrentQuestion,
+    addAnswerToCurrentQuestion,
     addNewPollGuest,
     calculateAnswerTallyFromAnswerData,
     currentAnswerData,

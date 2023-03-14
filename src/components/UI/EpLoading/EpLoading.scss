@@ -19,6 +19,14 @@
   height: 100px;
 }
 
+.ep-loading-message {
+  display: flex;
+  font-size: 1.2rem;
+  justify-content: center;
+  margin-top: 2rem;
+  // text-align: center;
+}
+
 @keyframes loading {
   to {
     transform: rotate(360deg);
