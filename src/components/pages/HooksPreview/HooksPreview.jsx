@@ -1,5 +1,3 @@
-/*eslint-disable*/
-
 //TODO: Remove eslint-disable!  ... or not, this isn't a real page.
 
 import './HooksPreview.scss'
@@ -66,7 +64,6 @@ const HooksPreview = () => {
     pollQuestionsData,
     selectPollById,
     setCurrentQuestionId, // Do I need this?
-    updateCurrentQuestionData,
     updatePollData,
   } = useContext(AppDataContext)
 
@@ -344,7 +341,7 @@ const HooksPreview = () => {
               )}
               <ul className="answer-data-list">
                 {currentAnswerData.length > 0 ? (
-                  currentAnswerData.map((answer, i) => (
+                  currentAnswerData.map((answer) => (
                     <DataListItem
                       dataKey={`${formatIdString(answer.id)}`}
                       dataValue={answer.answer[0]}
