@@ -1,8 +1,6 @@
-/* eslint-disable */
 import { React, useContext, useEffect, useState } from 'react'
 import { useParams } from 'react-router-dom'
 
-import { useNavigate } from 'react-router-dom'
 import './GuestVoting.scss'
 
 import EpButton from '../../UI/EpButton/EpButton'
@@ -15,7 +13,6 @@ import EpTextInput from '../../UI/EpTextInput/EpTextInput'
 import { GuestContext } from '../../../contexts/GuestContext/GuestContext'
 
 export default function GuestVoting() {
-  const navigate = useNavigate()
   const { targetPollId } = useParams()
   const Guest = useContext(GuestContext)
 
@@ -30,19 +27,19 @@ export default function GuestVoting() {
   )
 }
 
-function GuestVotingPollIsLocked() {
-  return (
-    <EpContainer centered className="guest-voting-poll-is-locked" narrow>
-      <div className="guest-voting-poll-is-locked-icon-wrapper">
-        <BiLock />
-      </div>
-      <p>Poll is locked and not accepting new guests.</p>
-    </EpContainer>
-  )
-}
+// function GuestVotingPollIsLocked() {
+//   return (
+//     <EpContainer centered className="guest-voting-poll-is-locked" narrow>
+//       <div className="guest-voting-poll-is-locked-icon-wrapper">
+//         <BiLock />
+//       </div>
+//       <p>Poll is locked and not accepting new guests.</p>
+//     </EpContainer>
+//   )
+// }
 
 // This is the "Join Poll" form that is displayed with no guest
-function GuestVotingCreateGuest({ joinPollAsGuest }) {
+function GuestVotingCreateGuest() {
   const { targetPollId } = useParams()
   const Guest = useContext(GuestContext)
   const [newGuestName, setNewGuestName] = useState('')
@@ -73,7 +70,7 @@ function GuestVotingBallot() {
   useEffect(() => {
     const counting = new Map()
     Guest.answers.map((answer) => {
-      answer.answer.forEach((v, i) => {
+      answer.answer.forEach((v) => {
         if (counting.has(v)) {
           counting.set(v, counting.get(v) + 1)
         } else {

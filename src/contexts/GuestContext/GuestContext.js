@@ -1,11 +1,8 @@
-/* eslint-disable */
 import React, { createContext, useEffect, useState } from 'react'
 import sha256 from 'sha256'
 import { API } from 'aws-amplify'
-import * as queries from '../../graphql/queries'
 import {
   onUpdatePoll,
-  onUpdateAnswer,
   onCreateAnswerForQuestion,
   onUpdateAnswerForQuestion,
   onUpdateQuestion,

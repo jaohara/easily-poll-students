@@ -12,8 +12,6 @@ import theme from './styles/theme'
 // router-related imports
 import { BrowserRouter, Route, Routes } from 'react-router-dom'
 import { routes } from './routes'
-import { BrowserRouter, Route, Routes } from 'react-router-dom'
-import { routes } from './routes'
 
 import { AuthContextProvider } from './contexts/AuthContext/AuthContext'
 import { AppDataContextProvider } from './contexts/AppDataContext/AppDataContext'
