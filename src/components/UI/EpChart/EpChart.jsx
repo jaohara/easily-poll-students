@@ -19,10 +19,10 @@ import {
 
 import "./EpChart.scss";
 
-ChartJS.register(CategoryScale,
-  LinearScale,
-  BarElement,
-  Title, ArcElement, Tooltip, Legend);
+// ChartJS.register(CategoryScale,
+//   LinearScale,
+//   BarElement,
+//   Title, ArcElement, Tooltip, Legend);
 
 function EpChart({ 
   chartType = "pie",
@@ -48,6 +48,15 @@ function EpChart({
       }
     ]
   };
+
+  ChartJS.register(
+    CategoryScale,
+    LinearScale,
+    chartType === "pie" ? ArcElement : BarElement,
+    Legend,
+    Title,
+    Tooltip
+  );
 
   const renderChart = () => {
     if (data.length === 0) {
@@ -88,6 +97,11 @@ function EpChart({
               data={chartData}
               options={{
                 indexAxis: 'y',
+                plugins: {
+                  legend: {
+                    display: false,
+                  }
+                }
               }}
             />
           )
