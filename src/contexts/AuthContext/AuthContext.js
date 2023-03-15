@@ -17,15 +17,36 @@ function AuthContextProvider(props) {
   // prevents bug where you need to press logout button twice
   // const isLoggingOut = useRef(false);
 
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const [user, setUser] = useState(window.sessionStorage.getItem("currentUser"))
+  const parseSessionUser = () => {
+    try {
+      const currentUser = JSON.parse(window.sessionStorage.getItem("currentUser"));
+      return currentUser;
+    }
+    catch(e) {
+      return null;
+    }
+  };
+
+  const saveSessionUser = (userObject) => {
+    if (!userObject) {
+      return;
+    }
+
+    const stringifiedUser = JSON.stringify(userObject)
+    window.sessionStorage.setItem("currentUser", stringifiedUser);
+  }
+
+  const [user, setUser] = useState(parseSessionUser())
+  // const [userIsLoading, setUserIsLoading] = useState(true);
   const [userCognito, setUserCognito] = useState(null)
   const [registerUserData, setRegisterUserData] = useState(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
     console.log("In AuthContext initial page load:")
+    console.log("storageSession currentUser: ", window.sessionStorage.getItem("currentUser"));
     console.log("user:", user);
     console.log("userCognito: ", userCognito);
     console.log("Auth.currentAuthenticatedUser(): ", Auth.currentAuthenticatedUser());
@@ -93,7 +114,10 @@ function AuthContextProvider(props) {
           },
         })
           .then((res) => {
-            window.sessionStorage.setItem("currentUser", res.data.getUser);
+            console.log("setting session storage to res.data.getUser:", res.data.getUser);
+            // const stringifiedUser = JSON.stringify(res.data.getUser)
+            // window.sessionStorage.setItem("currentUser", stringifiedUser);
+            saveSessionUser(res.data.getUser);
             setUser(res.data.getUser)
             navigate(destinationRoute);
           })

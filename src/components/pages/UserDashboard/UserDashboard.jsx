@@ -1,8 +1,8 @@
 import {
   React,
   useContext,
-  // useEffect,
-  // useState,
+  useEffect,
+  useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 
@@ -21,13 +21,19 @@ import { AppDataContext } from '../../../contexts/AppDataContext/AppDataContext'
 import { getRoutePathByName } from '../../../routes';
 
 const UserDashboard = () => {
+  const [ userPollsLoading, setUserPollsLoading ] = useState(true);
+
   const navigate = useNavigate();
 
   const {
-    // what do we need to take from the context?
-    allUserPollsLoading,
     allUserPollsData,
+    refreshPollData,
   } = useContext(AppDataContext);
+
+  useEffect(() => {
+    refreshPollData();
+    setUserPollsLoading(false);
+  }, []);
 
   return ( 
     <div className="user-dashboard">
@@ -44,27 +50,28 @@ const UserDashboard = () => {
       <EpContainer>
         <h1>Polls</h1>
         {
-          allUserPollsData ? 
-            allUserPollsData.map((poll, index) => (
-              <UserDashBoardPollItem
-                createdAt={poll.createdAt}
-                key={`poll-${index}`}
-                // TODO: Update route from HooksPreview to CurrentPollSession when page is finished
-                // Is hardcoding this the best approach? Maybe...
-                // navHandler={() => {navigate(`/hooks/${poll.id}`)}}
-                navHandler={() => {navigate(`/poll/${poll.id}`)}}
-                // guestVotingNavHandler={() => navigate(`/vote/${poll.id}`)}
-                pollResultsNavHandler={() => navigate(`/results/${poll.id}`)}
-                isActive={poll.isActive}
-                isLocked={poll.isLocked}
-                title={poll.title}
-              />
-            )) : (
-              allUserPollsLoading ? (
-                <EpLoading 
-                  message="Loading polls..."
-                />
-              ) : (
+          userPollsLoading ? (
+            <EpLoading 
+              message="Loading polls..."
+            />
+          ): (
+            allUserPollsData ? 
+              allUserPollsData.map((poll, index) => (
+                <UserDashBoardPollItem
+                  createdAt={poll.createdAt}
+                  key={`poll-${index}`}
+                  // TODO: Update route from HooksPreview to CurrentPollSession when page is finished
+                  // Is hardcoding this the best approach? Maybe...
+                  // navHandler={() => {navigate(`/hooks/${poll.id}`)}}
+                  navHandler={() => {navigate(`/poll/${poll.id}`)}}
+                  // guestVotingNavHandler={() => navigate(`/vote/${poll.id}`)}
+                  pollResultsNavHandler={() => navigate(`/results/${poll.id}`)}
+                  isActive={poll.isActive}
+                  isLocked={poll.isLocked}
+                  votingIsLive={poll.votingIsLive}
+                  title={poll.title}
+                />)) : 
+              (
                 <UserDashBoardNoPolls />
               )
             )
@@ -89,6 +96,7 @@ function UserDashBoardPollItem ({
   pollResultsNavHandler,
   isActive,
   isLocked,
+  votingIsLive,
   title,
 }) {
   return (
@@ -114,11 +122,24 @@ function UserDashBoardPollItem ({
         {
           // TODO: Is this info relevant here?
         }
-        <EpPill key="is-locked">
-          {
-            isLocked ? ("Locked") : ("Unlocked")
-          }
-        </EpPill>
+
+        {
+          isActive && (
+            <EpPill key="is-locked">
+              {
+                isLocked  ? ("Locked") : ("Unlocked")
+              }
+            </EpPill>
+          )
+        }
+
+        {
+          isActive && votingIsLive && (
+            <EpPill key="voting-is-live">
+              Voting is Live
+            </EpPill>
+          )
+        }
       </div>
       <div className="dashboard-item-temp-controls-container">
         {/* <EpButton
