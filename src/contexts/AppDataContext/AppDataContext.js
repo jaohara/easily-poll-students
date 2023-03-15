@@ -47,6 +47,7 @@ function AppDataContextProvider(props) {
   const [ allUserPollsData, setAllUserPollsData ] = useState();
   const [ allUserPollsLoading, setAllUserPollsLoading ] = useState(false);
   const [ currentPollId, setCurrentPollId ] = useState();
+  // TODO: Load and parse this from sessionStorage (similar to User in AuthContext)
   const [ guest, setGuest ] = useState();
   const [ guestIsLoaded, setGuestIsLoaded ] = useState(false);
 
@@ -88,6 +89,7 @@ function AppDataContextProvider(props) {
     togglePollActive,
     togglePollGuestLock,
     togglePollLock,
+    togglePollVoting,
     updateCurrentQuestionData, 
     updatePollData,
   } = usePollData({
@@ -110,8 +112,7 @@ function AppDataContextProvider(props) {
     setAllUserPollsLoading(true);
 
     try {
-      const pollsResponse = await API.graphql({
-        query: listPolls,
+      const listPollsVariablesObject = {
         variables: {
           filter: {
             userPollsId: {
@@ -119,6 +120,14 @@ function AppDataContextProvider(props) {
             }
           }
         },
+      };
+
+      console.log("Fetching user polls with the following user object: ", user);
+      console.log("Fetching user polls with the following filter: ", listPollsVariablesObject);
+
+      const pollsResponse = await API.graphql({
+        query: listPolls,
+        ...listPollsVariablesObject,
       });
 
       console.log("All user polls: ", pollsResponse.data.listPolls.items);
@@ -321,13 +330,19 @@ function AppDataContextProvider(props) {
     return pollReport;
   };
 
-  // updates the userPollsData when the user changes
-  useEffect(() => {
+  const refreshPollData = () => {
     const getPolls = async () => {
       await fetchAndSetAllUserPollsData();
     }
 
     getPolls();
+  };
+
+  // updates the userPollsData when the user changes
+  useEffect(() => {
+    console.log("in AppDataContext effect for user changing, getting polls...");
+    // TODO: Could this maybe only trigger when the UserDashboard loads?
+    refreshPollData();
   }, [user]);
 
   // set subscription for a new guest 
@@ -376,11 +391,13 @@ function AppDataContextProvider(props) {
         pollGuestsData,
         pollIsLoaded,
         pollQuestionsData,
+        refreshPollData,
         selectPollById,
         setCurrentQuestionId, // Do I need this?
         togglePollActive,
         togglePollGuestLock,
         togglePollLock,
+        togglePollVoting,
         updateCurrentQuestionData, 
         updatePollData,
       }}

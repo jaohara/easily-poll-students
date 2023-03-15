@@ -14,12 +14,16 @@ type User @model @auth(rules: [{ allow: public }]) {
 type Poll @model @auth(rules: [{ allow: public }]) {
   user: User! @belongsTo
   questions: [Question!]! @hasMany
+  #guestsIn: [Guest!]! @manyToMany(relationName: "PollGuestIn")
+  #guestsExcluded: [Guest!] @manyToMany(relationName: "PollGuestExcluded")
   guests: [Guest!]! @hasMany
   id: ID!
   title: String!
   isActive: Boolean!
   isLocked: Boolean!
   roomSize: Int!
+  # temporary fix?
+  votingIsLive: Boolean
 }
 
 type Question @model @auth(rules: [{ allow: public }]) {
@@ -55,6 +59,8 @@ type Guest
       { allow: private, provider: iam }
     ]
   ) {
+  #pollsIncluded: [Poll!]! @manyToMany(relationName: "PollGuestIn")
+  #pollsExcluded: [Poll!]! @manyToMany(relationName: "PollGuestExcluded")
   poll: Poll! @belongsTo
   canVote: Boolean!
   answers: [Answer!]! @hasMany

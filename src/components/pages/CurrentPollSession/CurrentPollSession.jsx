@@ -12,6 +12,7 @@ import {
 import QRCode from "react-qr-code";
 
 import {
+  BiChart,
   BiCheckCircle,
   BiClipboard,
   BiCollapseVertical,
@@ -25,6 +26,10 @@ import {
   BiUserPlus,
   BiUserX,
 }  from 'react-icons/bi';
+
+import { 
+  MdHowToVote,
+} from 'react-icons/md';
 
 import "./CurrentPollSession.scss";
 
@@ -58,11 +63,12 @@ const CurrentPollSession = () => {
     pollData,
     pollIsLoaded,
     pollQuestionsData,
-    // togglePollActive,
+    togglePollActive,
     togglePollGuestLock,
+    togglePollLock,
+    togglePollVoting,
     selectPollById,
     setCurrentQuestionId,
-    togglePollLock,
   } = useContext(AppDataContext);
 
   const getFilteredGuests = () => guestFilter !== "" ? 
@@ -127,9 +133,14 @@ const CurrentPollSession = () => {
 
             <CurrentPollControls 
               copyInviteLinkHandler={copyInviteLinkHandler}
+              pollIsActive={pollData.isActive}
               pollIsLocked={pollData.isLocked}
+              pollResultsNavHandler={() => navigate(`/results/${pollData.id}`)}
+              togglePollActive={togglePollActive}
               togglePollLock={togglePollLock}
+              togglePollVoting={togglePollVoting}
               showQrCodeHandler={() => setQrcodeIsVisible(true)}
+              votingIsLive={pollData.votingIsLive}
             />
 
             <div 
@@ -245,10 +256,19 @@ function CurrentPollQuestionAnswers ({
 
 function CurrentPollControls ({
   copyInviteLinkHandler,
-  togglePollLock,
   pollIsLocked,
+  pollIsActive,
+  pollResultsNavHandler,
   showQrCodeHandler,
+  togglePollActive,
+  togglePollLock,
+  togglePollVoting,
+  votingIsLive,
 }) {
+  const finishButtonVisible = pollIsActive && pollIsLocked && votingIsLive;
+  const lockButtonVisible = !votingIsLive && pollIsActive;
+  const startButtonVisible = pollIsActive && pollIsLocked && !finishButtonVisible;
+
   return (
     <EpContainer className="current-poll-controls">
       <EpButton
@@ -263,16 +283,52 @@ function CurrentPollControls ({
         <BiQr />&nbsp;
         Show QR Code
       </EpButton>
-      <PollControlsLock
-        onClick={togglePollLock}
-        isLocked={pollIsLocked}
-      />
-      <EpButton
-        key="poll-controls-finish"
-      >
-        <BiCheckCircle />&nbsp;
-        Finish Poll
-      </EpButton>
+
+      {
+        lockButtonVisible && (
+          <PollControlsLock
+            onClick={togglePollLock}
+            isLocked={pollIsLocked}
+          />
+        )
+      }
+
+      {
+        startButtonVisible && (
+          <EpButton
+            key="poll-controls-start"
+            onClick={togglePollVoting}
+          >
+            <MdHowToVote />&nbsp;
+            Start Voting
+          </EpButton>
+        )
+      }
+
+      {
+        finishButtonVisible && (
+          <EpButton
+            key="poll-controls-finish"
+            onClick={togglePollActive}
+          >
+            <BiCheckCircle />&nbsp;
+            Finish Poll
+          </EpButton>
+        )
+      }
+
+      {
+        !pollIsActive && (
+          <EpButton 
+            // TODO: remove this test buttonwhen conditional nav based on isActive works 
+            key="results-button"
+            onClick={pollResultsNavHandler}
+          >
+            <BiChart />&nbsp;
+            Poll Results
+          </EpButton>
+        )
+      }
     </EpContainer>
   );
 }

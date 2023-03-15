@@ -40,6 +40,7 @@ export const onCreateGuestForPoll = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -66,6 +67,7 @@ export const onCreateQuestionForPoll = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -122,6 +124,7 @@ export const onUpdateGuestForPoll = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -148,6 +151,7 @@ export const onUpdateQuestionForPoll = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -232,6 +236,7 @@ export const onCreatePoll = /* GraphQL */ `
       isActive
       isLocked
       roomSize
+      votingIsLive
       createdAt
       updatedAt
       userPollsId
@@ -260,6 +265,7 @@ export const onUpdatePoll = /* GraphQL */ `
       isActive
       isLocked
       roomSize
+      votingIsLive
       createdAt
       updatedAt
       userPollsId
@@ -288,6 +294,7 @@ export const onDeletePoll = /* GraphQL */ `
       isActive
       isLocked
       roomSize
+      votingIsLive
       createdAt
       updatedAt
       userPollsId
@@ -303,6 +310,7 @@ export const onCreateQuestion = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -329,6 +337,7 @@ export const onUpdateQuestion = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -355,6 +364,7 @@ export const onDeleteQuestion = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -471,6 +481,7 @@ export const onCreateGuest = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -497,6 +508,7 @@ export const onUpdateGuest = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -523,6 +535,7 @@ export const onDeleteGuest = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId

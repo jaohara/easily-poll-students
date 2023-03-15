@@ -61,6 +61,7 @@ query GetPoll($id: ID!) {
     createdAt
     updatedAt
     userPollsId
+    votingIsLive
   }
 }
 `;
@@ -157,6 +158,7 @@ function usePollData({
         roomSize: roomSize,
         title: title,
         userPollsId: user.id,
+        votingIsLive: false,
       }
     };
 
@@ -320,13 +322,24 @@ function usePollData({
     // }))
   };
 
+  // toggles whether the poll is active or completed
   const togglePollActive = () => {
     if (!pollData) {
       console.error("usePollData: togglePollActive: cannot change active status, no poll selected");
-      return
+      return;
     }
 
     updatePollData({isActive: !pollData.isActive});
+  }
+
+  // toggles whether users can vote on the poll
+  const togglePollVoting = () => {
+    if (!pollData) {
+      console.error("usePollData: togglePollVoting: cannot change voting status, no poll selected");
+      return;
+    }
+
+    updatePollData({votingIsLive: !pollData.votingIsLive});
   }
 
   // wraps "addGuestAnswer" and checks if guest is in current poll
@@ -404,6 +417,7 @@ function usePollData({
     }).subscribe({
       next: (response) => {
         const newGuestData = response.value.data.onCreateGuestForPoll;
+        console.log("response:", response);
         console.log("newGuestData received from subscription:", newGuestData);
 
         if (newGuestData !== null) {
@@ -511,6 +525,7 @@ function usePollData({
     togglePollActive,
     togglePollGuestLock,
     togglePollLock,
+    togglePollVoting,
     updateCurrentQuestionData, 
     updatePollData,
   };

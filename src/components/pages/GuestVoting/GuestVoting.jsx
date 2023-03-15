@@ -24,6 +24,7 @@ import EpLoading from '../../UI/EpLoading/EpLoading';
 import EpPill from '../../UI/EpPill/EpPill';
 import EpPollDoesNotExist from "../../UI/EpPollDoesNotExist/EpPollDoesNotExist";
 import EpPollQuestionsList from '../../UI/EpPollQuestionsList/EpPollQuestionsList';
+import EpPollVotingIsNotLive from "../../UI/EpPollVotingIsNotLive/EpPollVotingIsNotLive";
 import EpTextInput from '../../UI/EpTextInput/EpTextInput';
 
 const GuestVoting = () => {
@@ -68,18 +69,28 @@ const GuestVoting = () => {
     setPollIsLoading(false);
   }, [pollIsLoaded]);
 
+  useEffect(() => {
+    if (!pollData) {
+      return;
+    }
+    
+    if (!pollData.isActive) {
+      navigate(`/results/${pollData.id}`)
+    }
+  }, [pollData]);
+
   
   // TODO: Add a check that guest.id is in pollGuestsData
   // const guestIsReady = guest && guestIsLoaded;
   const guestIsReady = guest && guestIsLoaded;
   
-  const votingIsReady = pollIsLoaded && !pollIsLoading && pollData 
+  const pollIsReady = pollIsLoaded && !pollIsLoading && pollData 
     && pollData.id === targetPollId && pollQuestionsData;
 
   return ( 
     <div className="guest-voting">
       {
-        !votingIsReady ? (
+        !pollIsReady ? (
           pollDoesNotExist ? (
             <EpPollDoesNotExist />
           ): (
@@ -101,17 +112,24 @@ const GuestVoting = () => {
               />
             )
           ) : (
-            <GuestVotingBallot
-              addGuestAnswerToCurrentQuestion={addGuestAnswerToCurrentQuestion}
-              answeredQuestions={answeredQuestions}
-              currentAnswerTally={currentAnswerTally}
-              currentQuestionData={currentQuestionData}
-              guest={guest}
-              pollData={pollData}
-              pollQuestionsData={pollQuestionsData}
-              setAnsweredQuestions={setAnsweredQuestions}
-              setCurrentQuestionId={setCurrentQuestionId}
-            />
+            !pollData.votingIsLive ? (
+              <EpPollVotingIsNotLive 
+                guest={guest}
+                pollTitle={pollData.title}
+              />
+            ) : (
+              <GuestVotingBallot
+                addGuestAnswerToCurrentQuestion={addGuestAnswerToCurrentQuestion}
+                answeredQuestions={answeredQuestions}
+                currentAnswerTally={currentAnswerTally}
+                currentQuestionData={currentQuestionData}
+                guest={guest}
+                pollData={pollData}
+                pollQuestionsData={pollQuestionsData}
+                setAnsweredQuestions={setAnsweredQuestions}
+                setCurrentQuestionId={setCurrentQuestionId}
+              />
+            )
           )
         )
       }
