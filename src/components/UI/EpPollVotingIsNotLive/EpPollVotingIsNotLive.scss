@@ -1,0 +1,14 @@
+@use "../../../styles/globals.scss" as g;
+
+.ep-poll-voting-is-not-live-icon-wrapper {
+  align-items: center;
+  display: flex;
+  font-size: 4rem;
+  justify-content: center;
+  min-height: 4rem;
+}
+
+.ep-poll-voting-is-not-live-message {
+  font-size: 1.1rem;
+  text-align: center;
+}

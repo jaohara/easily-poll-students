@@ -417,6 +417,7 @@ function usePollData({
     }).subscribe({
       next: (response) => {
         const newGuestData = response.value.data.onCreateGuestForPoll;
+        console.log("response:", response);
         console.log("newGuestData received from subscription:", newGuestData);
 
         if (newGuestData !== null) {

@@ -167,6 +167,7 @@ function AuthContextProvider(props) {
     window.sessionStorage.setItem("currentUser", null);
     Auth.signOut()
     setUser(null)
+    navigate('/');
   }
 
   return (

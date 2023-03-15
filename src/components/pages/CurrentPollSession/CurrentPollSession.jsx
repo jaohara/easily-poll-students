@@ -12,6 +12,7 @@ import {
 import QRCode from "react-qr-code";
 
 import {
+  BiChart,
   BiCheckCircle,
   BiClipboard,
   BiCollapseVertical,
@@ -134,6 +135,7 @@ const CurrentPollSession = () => {
               copyInviteLinkHandler={copyInviteLinkHandler}
               pollIsActive={pollData.isActive}
               pollIsLocked={pollData.isLocked}
+              pollResultsNavHandler={() => navigate(`/results/${pollData.id}`)}
               togglePollActive={togglePollActive}
               togglePollLock={togglePollLock}
               togglePollVoting={togglePollVoting}
@@ -256,6 +258,7 @@ function CurrentPollControls ({
   copyInviteLinkHandler,
   pollIsLocked,
   pollIsActive,
+  pollResultsNavHandler,
   showQrCodeHandler,
   togglePollActive,
   togglePollLock,
@@ -310,6 +313,19 @@ function CurrentPollControls ({
           >
             <BiCheckCircle />&nbsp;
             Finish Poll
+          </EpButton>
+        )
+      }
+
+      {
+        !pollIsActive && (
+          <EpButton 
+            // TODO: remove this test buttonwhen conditional nav based on isActive works 
+            key="results-button"
+            onClick={pollResultsNavHandler}
+          >
+            <BiChart />&nbsp;
+            Poll Results
           </EpButton>
         )
       }

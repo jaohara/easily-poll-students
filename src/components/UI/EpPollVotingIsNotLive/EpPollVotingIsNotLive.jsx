@@ -1,5 +1,7 @@
 import React from 'react';
 
+import "./EpPollVotingIsNotLive.scss";
+
 import { 
   BiCoffee,
 } from "react-icons/bi";
@@ -15,13 +17,13 @@ const EpPollVotingIsNotLive = ({ guest, pollTitle }) => {
       narrow
     >
       <h1>{pollTitle}</h1>
+      <p>
+        <EpPill>{guest.name}</EpPill> 
+      </p>
       <div className="ep-poll-voting-is-not-live-icon-wrapper">
         <BiCoffee />
       </div>
-      <p>
-        Successfully joined as <EpPill>{guest.name}</EpPill> 
-      </p>
-      <p>
+      <p className='ep-poll-voting-is-not-live-message'>
         Waiting for poll to start...
       </p>
     </EpContainer>
