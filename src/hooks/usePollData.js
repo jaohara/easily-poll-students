@@ -1,11 +1,8 @@
-/*eslint-disable*/
-
-//TODO: Remove eslint-disable!
-
 import { useState, useEffect } from "react";
 import { graphqlOperation } from "@aws-amplify/api";
+import sha256 from "sha256";
 import {
-  createGuest,
+  // createGuest,
   createPoll,
   createQuestion,
   updateGuest,
@@ -13,21 +10,9 @@ import {
 } from "../graphql/mutations";
 import {
   onCreateGuestForPoll,
-  // onCreateQuestionForPoll, // see note below
   onUpdateGuestForPoll,
   onUpdatePoll,
-  // onUpdateQuestionForPoll, // see note below
 } from "../graphql/subscriptions";
-
-/*
-  Do we need to subsribe to "onCreateQuestionForPoll" and "onUpdateQuestionForPoll"? 
-  Potentially not - I'm not sure if either of these entities will change during the
-  lifecycle of a poll. It's more likely that the questions will be created when the 
-  poll is created via the "addNewPoll" function. I wrote more thoughts in the comment
-  above commented-out "subscribeToQuestions" function stub.
-
-  We can return to this later if this is something we want to do.
-*/
 
 import useApi from "./useApi";
 import useQuestionData from "./useQuestionData";
@@ -62,18 +47,12 @@ query GetPoll($id: ID!) {
         id
         name
         key
+        canVote
         createdAt
         updatedAt
         pollGuestsId
       }
     }
-    # linkName {
-    #   name
-    #   id
-    #   createdAt
-    #   updatedAt
-    #   linkNamePollId
-    # }
     id
     title
     isActive
@@ -82,31 +61,27 @@ query GetPoll($id: ID!) {
     createdAt
     updatedAt
     userPollsId
-    # pollLinkNameId
+    votingIsLive
   }
 }
 `;
 
-
-/*
-  TODO: The idea is that this hook should be able to both pull exising poll data 
-  when fed a pollId and facilitate creating a poll before a poll 
-*/
 function usePollData({
   pollId = null, // null before poll has been created
   questionId = null,
   subscribeToChanges = false,
-  userId = null,
+  user = null,
 }) {
   const [ currentQuestionId, setCurrentQuestionId ] = useState();
   const [ pollIsLoaded, setPollIsLoaded ] = useState(false);
   const [ pollIsLoading, setPollIsLoading ] = useState(false);
+  const [ pollDoesNotExist, setPollDoesNotExist ] = useState(false);
   const [ pollData, setPollData ] = useState();
   const [ pollQuestionsData, setPollQuestionsData ] = useState();
   const [ pollGuestsData, setPollGuestsData ] = useState();
 
   const {
-    addGuestAnswer: addGuestAnswerToCurrentQuestion,
+    addAnswer,
     answerData: currentAnswerData,
     answerTally: currentAnswerTally,
     calculateAnswerTallyFromAnswerData, 
@@ -124,23 +99,15 @@ function usePollData({
     }
   };
 
-
   // common vars for guest queries and subs
-  const guestsVariablesObject = {
+  const guestsSubscriptionVariablesObject = {
     variables: {
       pollGuestsId: pollId,
     }
   };
 
-  // common vars for question queries and subs
-  const questionsVariablesObject = {
-    variables: {
-      pollQuestionsId: pollId, 
-    }
-  };
-
+  // gets poll data for the set pollId
   const fetchAndSetPollData = async () => {
-    // if (!pollId === null || pollIsLoading) {
     if (!pollId || pollIsLoading) {
       return;
     }
@@ -170,14 +137,16 @@ function usePollData({
     }
     catch (err) {
       console.error("Error fetching poll data:", err);
+      setPollDoesNotExist(true);
     }
 
     setPollIsLoading(false);
   };
 
-  // TODO: Finish implementing question adding portion and test
+  // creates a new poll based on options passed in by default
+  // optionally takes an async callback to be run after the poll is created
   const createNewPoll = ({ roomSize = 10, title, questions }, callback = async () => {}) => {
-    if (!userId) {
+    if (!user.id) {
       console.error("createNewPoll: Cannot create poll - user isn't logged in");
       return;
     }
@@ -188,11 +157,12 @@ function usePollData({
         isLocked: false,
         roomSize: roomSize,
         title: title,
-        userPollsId: userId,
+        userPollsId: user.id,
+        votingIsLive: false,
       }
     };
 
-    console.log("addNewPoll with newPollDataObject:", newPollDataObject);
+    // console.log("addNewPoll with newPollDataObject:", newPollDataObject);
 
     const submitData = async () => {
       const newPollResponse = await API.graphql(graphqlOperation(createPoll, newPollDataObject));
@@ -224,12 +194,12 @@ function usePollData({
   };
 
   const updatePollData = (newData) => {
-    if (!userId) {
+    if (!user.id) {
       console.error("updatePollData: Cannot update poll data, user is not logged in");
     }
 
     if (pollId === null) {
-      console.warn("updatePollData: Cannot update poll data, poll has not been created.");
+      console.warn("updatePollData: Cannot update poll data, no poll selected.");
       return;
     }
 
@@ -250,33 +220,60 @@ function usePollData({
   };
 
   // TODO: test
-  const addNewPollGuest = ({name, key}) => {
+  // const addNewPollGuest = ({name, key}) => {
+  const addNewPollGuest = ({name}) => {
     if (pollId === null) {
-      console.log("pollId is null, not creating guest.");
+      console.log("usePollData: addNewPollGuest: pollId is null, cannot create guest.");
       return;
     }
 
-    const newGuestDataObject = {
-      input: {
-        canVote: true,
-        key: key,
+    const guestKey = sha256(name + Date.now());
+    const guestId = sha256(guestKey);
+
+    const newGuestRequest = {
+      body: {
         name: name,
-        pollGuestsId: pollId,
-      }
+        id: guestId,
+        key: guestKey,
+        pollId: pollId,
+      },
+      headers: {},
     };
 
-    console.log("addNewPollGuest with newGuestDataObject:", newGuestDataObject);
+    const newGuest = 
+      API.post('guest', '/guest', newGuestRequest)
+        .then((newGuestResponse) => {
+          console.log("Response returned:", newGuestResponse);
+          return newGuestResponse;
+        })
+        .catch((err) => console.error("Error from response:", err));
 
-    const submitData = async () => {
-      return await API.graphql(graphqlOperation(createGuest, newGuestDataObject));
-    };
+    return newGuest;
 
-    return submitData();
+    // JAO - Here is where we will save the guest object to sessionStorage
+
+
+    // const newGuestDataObject = {
+    //   input: {
+    //     canVote: true,
+    //     key: key,
+    //     name: name,
+    //     pollGuestsId: pollId,
+    //   }
+    // };
+
+    // // console.log("addNewPollGuest with newGuestDataObject:", newGuestDataObject);
+
+    // const submitData = async () => {
+    //   return await API.graphql(graphqlOperation(createGuest, newGuestDataObject));
+    // };
+
+    // return submitData();
   };
 
   // TODO: Test
   const togglePollGuestLock = (guestId) => {
-    if (!userId) {
+    if (!user.id) {
       console.error("togglePollGuestLock: Cannot toggle guest, user is not logged in.");
       return;
     }
@@ -284,7 +281,7 @@ function usePollData({
     // first ensure guest exists
     let guestData = null;
 
-    for (let i = 0; i < pollGuestsData; i++){
+    for (let i = 0; i < pollGuestsData.length; i++){
       if (pollGuestsData[i].id === guestId) {
         guestData = pollGuestsData[i];
       }
@@ -311,15 +308,86 @@ function usePollData({
     submitData();
   };
 
+  // I mean, I'm Polish, but this name seems racist
+  const togglePollLock = () => {
+    if (!pollData) {
+      console.error("usePollData: togglePollLock: cannot change lock status, no poll selected");
+      return;
+    }
+
+    updatePollData({isLocked: !pollData.isLocked});
+    // setPollData(oldPollData => ({
+    //   ...oldPollData,
+    //   isLocked: oldPollData.isLocked,
+    // }))
+  };
+
+  // toggles whether the poll is active or completed
+  const togglePollActive = () => {
+    if (!pollData) {
+      console.error("usePollData: togglePollActive: cannot change active status, no poll selected");
+      return;
+    }
+
+    updatePollData({isActive: !pollData.isActive});
+  }
+
+  // toggles whether users can vote on the poll
+  const togglePollVoting = () => {
+    if (!pollData) {
+      console.error("usePollData: togglePollVoting: cannot change voting status, no poll selected");
+      return;
+    }
+
+    updatePollData({votingIsLive: !pollData.votingIsLive});
+  }
+
+  // wraps "addGuestAnswer" and checks if guest is in current poll
+  const addAnswerToCurrentQuestion = ({ guest, answerValue }) => {
+    const signature = "usePollData: addAnswerToCurrentQuestion:";
+
+    if (!pollData) {
+      console.error(`${signature} cannot add answer, no poll selected`);
+      return;
+    }
+
+    if (!pollData.isActive) {
+      console.error(`${signature} cannot add answer, poll is not active`);
+      return;
+    }
+
+    if (!guest) {
+      console.error(`${signature} cannot add answer, no guest is loaded`);
+    }
+
+    console.log(`${signature} attempting to add answer...`)
+
+    addAnswer({ guest, answerValue });
+  };
+
+  // =============
   // subscriptions
+  // =============
+
   const subscribeToPoll = () => {
     if (pollId === null || subscribeToChanges === false) {
       return;
     }
 
+    const pollSubscriptionObject = {
+      variables: {
+        filter: {
+          id: {
+            eq: pollId,
+          }
+        }
+      }
+    };
+
     return API.graphql({
       query: onUpdatePoll,
-      ...pollVariablesObject,
+      // ...pollVariablesObject,
+      ...pollSubscriptionObject,
     }).subscribe({
       next: (response) => {
         const newPollData = response.value.data.onUpdatePoll;
@@ -345,10 +413,11 @@ function usePollData({
 
     return API.graphql({
       query: onCreateGuestForPoll,
-      ...guestsVariablesObject,
+      ...guestsSubscriptionVariablesObject,
     }).subscribe({
       next: (response) => {
         const newGuestData = response.value.data.onCreateGuestForPoll;
+        console.log("response:", response);
         console.log("newGuestData received from subscription:", newGuestData);
 
         if (newGuestData !== null) {
@@ -372,13 +441,13 @@ function usePollData({
 
     return API.graphql({
       query: onUpdateGuestForPoll,
-      ...guestsVariablesObject,
+      ...guestsSubscriptionVariablesObject,
     }).subscribe({
       next: (response) => {
         const updatedGuestData = response.value.data.onUpdateGuestForPoll;
         console.log("updatedGuestData received from subscription:", updatedGuestData);
 
-        if (newGuestData !== null) {
+        if (updatedGuestData !== null) {
           setPollGuestsData(oldGuestsData => oldGuestsData.map(guest => 
             guest.id === updatedGuestData.id ? updatedGuestData : guest
           ));
@@ -412,9 +481,8 @@ function usePollData({
       return;
     }
 
-    console.log("in useEffect for pollId changing:", pollId);
-
     setPollData(null);
+    setPollDoesNotExist(false);
     setPollIsLoaded(false);
     fetchAndSetPollData();
 
@@ -439,7 +507,7 @@ function usePollData({
 
   return {
     //...(condition && { objKey: objValue }), // <- conditionally add an object property
-    addGuestAnswerToCurrentQuestion,
+    addAnswerToCurrentQuestion,
     addNewPollGuest,
     calculateAnswerTallyFromAnswerData,
     currentAnswerData,
@@ -449,11 +517,15 @@ function usePollData({
     currentQuestionIsLoaded,
     createNewPoll,
     pollData,
+    pollDoesNotExist,
     pollGuestsData,
     pollIsLoaded,
     pollQuestionsData,
     setCurrentQuestionId,
+    togglePollActive,
     togglePollGuestLock,
+    togglePollLock,
+    togglePollVoting,
     updateCurrentQuestionData, 
     updatePollData,
   };

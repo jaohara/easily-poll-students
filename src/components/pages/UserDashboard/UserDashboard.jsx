@@ -1,60 +1,43 @@
 import {
   React,
   useContext,
-  // useEffect,
-  // useState,
+  useEffect,
+  useState,
 } from 'react';
 import { useNavigate } from 'react-router-dom';
 
 import "./UserDashboard.scss";
 
+import {
+  BiChart,
+} from "react-icons/bi";
+
 import EpButton from '../../UI/EpButton/EpButton';
 import EpContainer from "../../UI/EpContainer/EpContainer";
+import EpLoading from '../../UI/EpLoading/EpLoading';
 import EpPill from "../../UI/EpPill/EpPill";
 
-import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
+import { AppDataContext } from '../../../contexts/AppDataContext/AppDataContext';
 import { getRoutePathByName } from '../../../routes';
 
 const UserDashboard = () => {
+  const [ userPollsLoading, setUserPollsLoading ] = useState(true);
+
   const navigate = useNavigate();
 
   const {
-    // what do we need to take from the context?
     allUserPollsData,
+    refreshPollData,
   } = useContext(AppDataContext);
+
+  useEffect(() => {
+    refreshPollData();
+    setUserPollsLoading(false);
+  }, []);
 
   return ( 
     <div className="user-dashboard">
       <h1>User Dashboard</h1>
-
-      <div className="user-dashboard-description">
-        <p>
-          This is the page that will be displayed in place of the home page when
-          the user is authorized.
-        </p>
-
-        <p>
-          It will display a list of all of the polls that the user has created,
-          and allow for them to be clicked to navigate to either a poll report 
-          if they are complete (isActive is false), or the CurrentPollSession 
-          for the given poll if they are in progress (isActive is true). 
-        </p>
-
-        <p>
-          When a user clicks it a link, it will set the current pollId via the 
-          function exported from the AppDataContext and use the navigate function 
-          to handle the redirect.
-        </p>
-
-        <p>
-          <strong>This is also where the &quot;Create Poll&quot; button will be displayed.</strong>
-        </p>
-
-        <p>
-          The list of polls can be accessed from <strong>allUserPollsData</strong> from the 
-          AppDataContext.
-        </p>
-      </div>
 
       <div className="user-dashboard-controls">
         <EpButton
@@ -67,24 +50,31 @@ const UserDashboard = () => {
       <EpContainer>
         <h1>Polls</h1>
         {
-          allUserPollsData ? 
-            allUserPollsData.map((poll, index) => (
-              <UserDashBoardPollItem
-                createdAt={poll.createdAt}
-                key={`poll-${index}`}
-                // TODO: Update route from HooksPreview to CurrentPollSession when page is finished
-                // Is hardcoding this the best approach? Maybe...
-                navHandler={() => {navigate(`/hooks/${poll.id}`)}}
-                guestVotingNavHandler={() => navigate(`/poll/${poll.id}`)}
-                pollResultsNavHandler={() => navigate(`/results/${poll.id}`)}
-                isActive={poll.isActive}
-                isLocked={poll.isLocked}
-                title={poll.title}
-              />
-            ))
-           : (
-            <UserDashBoardNoPolls />
-          )
+          userPollsLoading ? (
+            <EpLoading 
+              message="Loading polls..."
+            />
+          ): (
+            allUserPollsData ? 
+              allUserPollsData.map((poll, index) => (
+                <UserDashBoardPollItem
+                  createdAt={poll.createdAt}
+                  key={`poll-${index}`}
+                  // TODO: Update route from HooksPreview to CurrentPollSession when page is finished
+                  // Is hardcoding this the best approach? Maybe...
+                  // navHandler={() => {navigate(`/hooks/${poll.id}`)}}
+                  navHandler={() => {navigate(`/poll/${poll.id}`)}}
+                  // guestVotingNavHandler={() => navigate(`/vote/${poll.id}`)}
+                  pollResultsNavHandler={() => navigate(`/results/${poll.id}`)}
+                  isActive={poll.isActive}
+                  isLocked={poll.isLocked}
+                  votingIsLive={poll.votingIsLive}
+                  title={poll.title}
+                />)) : 
+              (
+                <UserDashBoardNoPolls />
+              )
+            )
         }
       </EpContainer>
     </div>
@@ -102,10 +92,11 @@ function UserDashBoardNoPolls () {
 function UserDashBoardPollItem ({ 
   createdAt,
   navHandler,
-  guestVotingNavHandler,
+  // guestVotingNavHandler,
   pollResultsNavHandler,
   isActive,
   isLocked,
+  votingIsLive,
   title,
 }) {
   return (
@@ -131,24 +122,38 @@ function UserDashBoardPollItem ({
         {
           // TODO: Is this info relevant here?
         }
-        <EpPill key="is-locked">
-          {
-            isLocked ? ("Locked") : ("Unlocked")
-          }
-        </EpPill>
+
+        {
+          isActive && (
+            <EpPill key="is-locked">
+              {
+                isLocked  ? ("Locked") : ("Unlocked")
+              }
+            </EpPill>
+          )
+        }
+
+        {
+          isActive && votingIsLive && (
+            <EpPill key="voting-is-live">
+              Voting is Live
+            </EpPill>
+          )
+        }
       </div>
       <div className="dashboard-item-temp-controls-container">
-        <EpButton
+        {/* <EpButton
           key="vote-button"
           onClick={guestVotingNavHandler}
         >
           Guest Voting Page
-        </EpButton>
+        </EpButton> */}
         <EpButton 
           // TODO: remove this test buttonwhen conditional nav based on isActive works 
           key="results-button"
           onClick={pollResultsNavHandler}
         >
+          <BiChart />&nbsp;
           Poll Results
         </EpButton>
       </div>

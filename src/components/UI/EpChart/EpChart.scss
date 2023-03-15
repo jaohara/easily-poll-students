@@ -1,0 +1,20 @@
+@use "../../../styles/globals.scss" as g;
+
+.ep-chart-wrapper {
+  min-height: 128px;
+  margin-bottom: 1rem;
+}
+
+.ep-chart-empty {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  font-size: 1.1rem;
+  justify-content: center;
+  padding: 2rem 0rem;
+}
+
+.ep-chart-empty-icon-wrapper {
+  // color: g.$dark-gray;
+  font-size: 5rem;
+}

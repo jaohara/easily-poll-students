@@ -6,6 +6,7 @@
   display: flex;
   justify-content: space-between;
   margin-bottom: 2rem;
+  margin-top: 1rem;
   // position: fixed;
 
   & button {
@@ -35,6 +36,7 @@
   transition: transform 300ms;
   transform: translateX(110%);
   width: 50%;
+  z-index: 100;
 
   &.active {
     transform: translateX(0px);

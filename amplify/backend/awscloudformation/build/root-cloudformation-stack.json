@@ -167,7 +167,7 @@
             "Ref": "UnauthRoleName"
           },
           "S3DeploymentBucket": "amplify-amplify6042e93342d44-staging-222909-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/0e379c1dd5dcad05c14a67b60e9191d38c9e8250",
+          "S3DeploymentRootKey": "amplify-appsync-files/af5975bd48212e8f5a621cb58d4a666cada37cc2",
           "env": "staging"
         }
       }
@@ -186,6 +186,18 @@
           "functionguestRegisterArn": {
             "Fn::GetAtt": [
               "functionguestRegister",
+              "Outputs.Arn"
+            ]
+          },
+          "functionguestAnswerName": {
+            "Fn::GetAtt": [
+              "functionguestAnswer",
+              "Outputs.Name"
+            ]
+          },
+          "functionguestAnswerArn": {
+            "Fn::GetAtt": [
+              "functionguestAnswer",
               "Outputs.Arn"
             ]
           },
@@ -247,13 +259,42 @@
         }
       }
     },
+    "functionguestAnswer": {
+      "Type": "AWS::CloudFormation::Stack",
+      "Properties": {
+        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestAnswer-cloudformation-template.json",
+        "Parameters": {
+          "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
+          "s3Key": "amplify-builds/guestAnswer-57346d7937392f496a35-build.zip",
+          "apieasilypollstudentsGraphQLAPIIdOutput": {
+            "Fn::GetAtt": [
+              "apieasilypollstudents",
+              "Outputs.GraphQLAPIIdOutput"
+            ]
+          },
+          "apieasilypollstudentsGraphQLAPIEndpointOutput": {
+            "Fn::GetAtt": [
+              "apieasilypollstudents",
+              "Outputs.GraphQLAPIEndpointOutput"
+            ]
+          },
+          "apieasilypollstudentsGraphQLAPIKeyOutput": {
+            "Fn::GetAtt": [
+              "apieasilypollstudents",
+              "Outputs.GraphQLAPIKeyOutput"
+            ]
+          },
+          "env": "staging"
+        }
+      }
+    },
     "functionguestRegister": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
         "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestRegister-cloudformation-template.json",
         "Parameters": {
           "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
-          "s3Key": "amplify-builds/guestRegister-45473167525569682f61-build.zip",
+          "s3Key": "amplify-builds/guestRegister-393137664d546b436767-build.zip",
           "apieasilypollstudentsGraphQLAPIIdOutput": {
             "Fn::GetAtt": [
               "apieasilypollstudents",
@@ -351,7 +392,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs16.x",
         "Timeout": 300,
         "Role": {
           "Fn::GetAtt": [

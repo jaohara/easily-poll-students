@@ -1,15 +1,10 @@
-/*eslint-disable*/
-
-//TODO: Remove eslint-disable!
-
-
 import { useState, useEffect } from "react";
+import sha256 from "sha256";
 import useApi from "./useApi";
 import { graphqlOperation } from "@aws-amplify/api";
-import { listAnswers } from "../graphql/queries";
 import {
-  createAnswer,
-  updateAnswer,
+  // createAnswer,
+  // updateAnswer,
   updateQuestion,
 } from "../graphql/mutations";
 import {
@@ -23,23 +18,26 @@ import {
 const getQuestionWithAnswers = /* GraphQL */ `
   query GetQuestion($id: ID!) {
     getQuestion(id: $id) {
-      poll {
-        id
-        title
-        isLocked
-        isActive
-        roomSize
-        createdAt
-        updatedAt
-        userPollsId
-        # pollLinkNameId
-      }
+      # poll {
+      #   id
+      #   title
+      #   isLocked
+      #   isActive
+      #   roomSize
+      #   createdAt
+      #   updatedAt
+      #   userPollsId
+      #   # pollLinkNameId
+      # }
       answers {
         nextToken
         items {
           answer
           id
           createdAt
+          owner {
+            canVote
+          }
           updatedAt
           questionAnswersId
           guestAnswersId
@@ -61,6 +59,7 @@ function useQuestionData({
 }) {
   const [ answerData, setAnswerData ] = useState();
   const [ answerTally, setAnswerTally ] = useState();
+  // const [ calculatingAnswerTally, setCalculatingAnswerTally ] = useState(false);
   const [ questionIsLoaded, setQuestionIsLoaded ] = useState(false);
   const [ questionIsLoading, setQuestionIsLoading ] = useState(false);
   const [ questionData, setQuestionData ] = useState();
@@ -82,7 +81,9 @@ function useQuestionData({
     }
   };
 
+  // ================
   // Helper functions
+  // ================
   
   // parses answer options if array was stored as string
   const parseAnswerOptions = (answerOptionsData) => Array.isArray(answerOptionsData) ?
@@ -92,22 +93,25 @@ function useQuestionData({
   //  the object. answerData is an array of the Objects returned by the getAnswer query.
   const calculateAnswerTallyFromAnswerData = (data = answerData) => {
     if (!data) {
+      console.log("calculateAnswerTallyFromAnswerData: no data provided")
       return;
     }
 
     const answerCount = {};
 
     for (let i = 0; i < data.length; i++) {
-      //TODO: we will need to rework this for multiple choice questions
-      //  gross, but nested for loop to iterate through the internal array?
-      const currentAnswer = data[i].answer[0];
-  
-      if (!answerCount[currentAnswer]) {
-        // does not exist in answerCount object, so create it
-        answerCount[currentAnswer] = 1;
-      }
-      else {
-        answerCount[currentAnswer]++;
+      if (data[i].owner.canVote) {
+        //TODO: we will need to rework this for multiple choice questions
+        //  gross, but nested for loop to iterate through the internal array?
+        const currentAnswer = data[i].answer[0];
+
+        if (!answerCount[currentAnswer]) {
+          // does not exist in answerCount object, so create it
+          answerCount[currentAnswer] = 1;
+        }
+        else {
+          answerCount[currentAnswer]++;
+        }
       }
     }
 
@@ -118,11 +122,11 @@ function useQuestionData({
   };
   
   // calculates answer tally in a form for charts and saves it in state
-  const calculateAndSetAnswerTally = () => setAnswerTally(calculateAnswerTallyFromAnswerData());
+  const calculateAndSetAnswerTally = () => {
+    setAnswerTally(calculateAnswerTallyFromAnswerData())
+  };
 
-
-  // JSON.parse(questionResponseData.answerOptions);
-
+  // gets question data from server and saves it in client state
   const fetchAndSetQuestionData = async () => {
     if (questionId === null || questionIsLoading) {
       return;
@@ -177,7 +181,11 @@ function useQuestionData({
     submitData();
   }
 
-  // logic for subscription - is this as useful as the answers subscription?
+  // =============
+  // Subscriptions
+  // =============
+
+  // is this as useful as the answers subscription?
   const subscribeToQuestion = () => {
     return API.graphql({
       query: onUpdateQuestion,
@@ -237,30 +245,46 @@ function useQuestionData({
     });
   };
 
-  const addGuestAnswer = ({ guestId, answerValue }) => {
-    const guestAnswerDataObject = {
-      input: {
+  // adds a guest answer to this question. Does not check if guest is in poll - 
+  //  this function is wrapped in usePollData
+  const addAnswer = ({ guest, answerValue }) => {
+    const timeStamp = Date.now();
+    const verify = sha256(guest.key + timeStamp);
+
+    // console.log("attempting to add answer with current guest:", guest);
+
+    const guestAnswerRequestObject = {
+      body: {
         answer: answerValue,
-        guestAnswersId: guestId,
-        questionAnswersId: questionId,
-      }
+        id: guest.id,
+        questionId: questionId,
+        timeStamp: timeStamp,
+        verify: verify,
+      },
+      headers: {},
     };
 
-    console.log("addGuestAnswer with guestAnswerDataObject:", guestAnswerDataObject);
+    // console.log("about to post guestAnswerRequestObject: ", guestAnswerRequestObject);
 
-    const submitData = async () => {
-      await API.graphql(graphqlOperation(createAnswer, guestAnswerDataObject));
-    };
+    API.post('guest', '/answer', guestAnswerRequestObject)
+      .then((res) => console.log("addAnswer: success: ", res))
+      .catch((err) => console.error("addAnswer: failure: ", err));
 
-    submitData();
-  };
+    // const guestAnswerDataObject = {
+    //   input: {
+    //     answer: answerValue,
+    //     guestAnswersId: guest.id,
+    //     questionAnswersId: questionId,
+    //   }
+    // };
 
-  // TODO: Implement
-  // Idea for this - maybe make the "addGuestAnswer" function check to see
-  // if the guest has already answered for this question, then either have it
-  // add a new answer if they haven't or update if they already have.
-  const updateGuestAnswer = ({ guestId, newAnswerValue }) => {
+    // console.log("addGuestAnswer with guestAnswerDataObject:", guestAnswerDataObject);
 
+    // const submitData = async () => {
+    //   await API.graphql(graphqlOperation(createAnswer, guestAnswerDataObject));
+    // };
+
+    // submitData();
   };
 
   // load data on initial render
@@ -291,7 +315,7 @@ function useQuestionData({
 
   // items exported from hook
   return {
-    addGuestAnswer,
+    addAnswer,
     answerData,
     answerTally,
     calculateAnswerTallyFromAnswerData,

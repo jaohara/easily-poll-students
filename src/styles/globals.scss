@@ -12,6 +12,7 @@ $common-transition-time: 150ms;
 $background-gray: #fafafa;
 $bright-yellow: #F4B942;
 $deep-space-sparkle: #476A6F;
+$dark-gray: #666;
 $dark-green-gray: #2a383a;
 $emerald-green: #45CB85;
 $pastel-blue: #6A7FDB;
@@ -20,4 +21,31 @@ $red-crayola: #EC0B43;
 $shallow-space-sparkle: #519e8a;
 $soft-orange: #FF785A;
 $simple-gray: #eee;
+
+
+// responsive breakpoints
+$xs-breakpoint: 375px;
+$s-breakpoint: 768px;
+$m-breakpoint: 1280px;
+$l-breakpoint: 1920px;
+
+// mixins
+@mixin responsive-widths {
+  //375px
+  width: 100%;
+
+  //768px
+  @media (min-width: $s-breakpoint) {
+    // margin: 0 auto;
+    width: 768px;
+  }
+  //1280px
+  @media (min-width: $m-breakpoint) {
+    width: 1024px;
+  }
+  //1920px
+  @media (min-width: $l-breakpoint) {
+    width: 1440px;
+  }
+}
 

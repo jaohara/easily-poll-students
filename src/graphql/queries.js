@@ -57,6 +57,7 @@ export const getPoll = /* GraphQL */ `
       isActive
       isLocked
       roomSize
+      votingIsLive
       createdAt
       updatedAt
       userPollsId
@@ -76,6 +77,7 @@ export const listPolls = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -93,6 +95,7 @@ export const getQuestion = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -188,6 +191,7 @@ export const getGuest = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId

@@ -44,12 +44,12 @@
       },
       "providerPlugin": "awscloudformation",
       "service": "AppSync",
-      "lastPushTimeStamp": "2023-03-03T22:06:24.437Z",
+      "lastPushTimeStamp": "2023-03-15T19:36:37.408Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/cloudformation-template.json",
         "logicalId": "apieasilypollstudents"
       },
-      "lastPushDirHash": "fSApEipGl13DKDtkiMjXf1mRabk="
+      "lastPushDirHash": "Tg+6TdTWnZxLlVST6kxAe9BaRsY="
     },
     "guest": {
       "dependsOn": [
@@ -60,6 +60,14 @@
           ],
           "category": "function",
           "resourceName": "guestRegister"
+        },
+        {
+          "attributes": [
+            "Name",
+            "Arn"
+          ],
+          "category": "function",
+          "resourceName": "guestAnswer"
         }
       ],
       "providerPlugin": "awscloudformation",
@@ -69,7 +77,7 @@
         "RootUrl": "https://4lofxuc3fc.execute-api.us-west-2.amazonaws.com/staging",
         "ApiId": "4lofxuc3fc"
       },
-      "lastPushTimeStamp": "2023-03-03T22:06:23.520Z",
+      "lastPushTimeStamp": "2023-03-15T19:36:36.730Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/api/guest-cloudformation-template.json",
         "logicalId": "apiguest"
@@ -111,7 +119,7 @@
         "IdentityPoolName": "easilypollstudentsb7118bae_identitypool_b7118bae__staging",
         "UserPoolName": "easilypollstudentsb7118bae_userpool_b7118bae"
       },
-      "lastPushTimeStamp": "2023-03-03T22:06:23.521Z",
+      "lastPushTimeStamp": "2023-03-15T19:36:36.732Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/auth/easilypollstudentsb7118bae-cloudformation-template.json",
         "logicalId": "autheasilypollstudentsb7118bae"
@@ -119,6 +127,38 @@
     }
   },
   "function": {
+    "guestAnswer": {
+      "build": true,
+      "dependsOn": [
+        {
+          "attributes": [
+            "GraphQLAPIIdOutput",
+            "GraphQLAPIEndpointOutput",
+            "GraphQLAPIKeyOutput"
+          ],
+          "category": "api",
+          "resourceName": "easilypollstudents"
+        }
+      ],
+      "providerPlugin": "awscloudformation",
+      "service": "Lambda",
+      "output": {
+        "LambdaExecutionRoleArn": "arn:aws:iam::971359340948:role/easilypollstudentsLambdaRoled59e6e27-staging",
+        "Region": "us-west-2",
+        "Arn": "arn:aws:lambda:us-west-2:971359340948:function:guestAnswer-staging",
+        "Name": "guestAnswer-staging",
+        "LambdaExecutionRole": "easilypollstudentsLambdaRoled59e6e27-staging"
+      },
+      "lastPushTimeStamp": "2023-03-15T19:36:36.734Z",
+      "providerMetadata": {
+        "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestAnswer-cloudformation-template.json",
+        "logicalId": "functionguestAnswer"
+      },
+      "s3Bucket": {
+        "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
+        "s3Key": "amplify-builds/guestAnswer-57346d7937392f496a35-build.zip"
+      }
+    },
     "guestRegister": {
       "build": true,
       "dependsOn": [
@@ -141,14 +181,14 @@
         "Name": "guestRegister-staging",
         "LambdaExecutionRole": "easilypollstudentsLambdaRole1c988000-staging"
       },
-      "lastPushTimeStamp": "2023-03-03T22:06:23.522Z",
+      "lastPushTimeStamp": "2023-03-15T19:36:36.735Z",
       "providerMetadata": {
         "s3TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestRegister-cloudformation-template.json",
         "logicalId": "functionguestRegister"
       },
       "s3Bucket": {
         "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
-        "s3Key": "amplify-builds/guestRegister-45473167525569682f61-build.zip"
+        "s3Key": "amplify-builds/guestRegister-393137664d546b436767-build.zip"
       }
     }
   }

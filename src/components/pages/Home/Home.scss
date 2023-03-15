@@ -1,0 +1,184 @@
+@use "../../../styles/globals.scss" as g;
+
+$hero-description-large-width: 50%;
+$hero-description-small-width: 90%;
+$reveal-transition-time: 750ms;
+$reveal-transition: opacity $reveal-transition-time, transform $reveal-transition-time;
+
+$hero-arrow-delay: 3000ms;
+$hero-arrow-transform: translateY(-10vh);
+
+@keyframes example-question-animation {
+  0% {
+    opacity: 0%;
+  }
+  
+  50% {
+    opacity: 0%;
+  }
+
+  100% {
+    opacity: 100%;
+  }
+}
+
+@keyframes hero-arrow-animation {
+  0% {
+    opacity: 0%;
+    transform: translateY(0vh);
+  }
+  
+  66% {
+    opacity: 0%;
+    transform: translateY(0vh);
+  }
+
+  100% {
+    opacity: 100%;
+    transform: $hero-arrow-transform;
+  }
+}
+
+.home-hero-wrapper {
+  align-items: center;
+  display: flex;
+  height: 100vh;
+  
+  
+}
+
+.home-hero {
+  align-items: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  opacity: 0%;
+  transform: translateY(-4vh);
+  transition: $reveal-transition; 
+
+  @media (min-width: g.$s-breakpoint) {
+    flex-direction: row;
+  }
+  
+  &.active {
+    opacity: 100%;
+    transform: translateY(-8vh);
+  }
+}
+
+.home-hero-arrow {
+  animation: hero-arrow-animation $hero-arrow-delay;
+  align-self: flex-end;
+  font-size: 1.5rem;
+  bottom: 20;
+  left: 0;
+  position: absolute;
+  text-align: center;
+  transform: $hero-arrow-transform;
+  user-select: none;
+  width: 100vw;
+}
+
+.home-hero-arrow-icon {
+  color: g.$shallow-space-sparkle;
+  font-size: 3rem;
+}
+
+.hero-description-example {
+  font-size: 1.25rem;
+  height: 13rem;
+  
+  @media (min-width: g.$m-breakpoint) {
+    font-size: 1.5rem;
+  }
+}
+
+.hero-description-example-question {
+  opacity: 0%;
+  position: absolute;
+  user-select: none;
+  transition: opacity $reveal-transition-time;
+  width: $hero-description-small-width;
+  
+  @media (min-width: g.$s-breakpoint) {
+    width: $hero-description-large-width;
+  }
+
+
+  &.active {
+    animation: example-question-animation 800ms;
+    opacity: 100%;
+  }
+}
+
+.hero-description-body {
+  font-size: 1.2rem;
+  line-height: 2rem;
+}
+
+.hero-description-wrapper {
+  width: $hero-description-small-width;
+  
+  @media (min-width: g.$s-breakpoint) {
+    flex-direction: row;
+    width: $hero-description-large-width;
+  }
+}
+
+.hero-controls-wrapper {
+  width: 40%;
+}
+
+.hero-controls-wrapper {
+  align-items: center;
+  flex-direction: column;
+  justify-content: center;
+  display: flex;
+
+  button {
+    font-size: 1.1rem;
+    height: 3rem;
+    margin-bottom: 2rem;
+  }
+}
+
+.home-instructions-title {
+  font-size: 3rem;
+}
+
+.home-instructions-item {
+  // color: red;
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 3rem;
+  min-height: 33vh;
+  padding: 4rem 0rem;
+}
+
+.home-instructions-item:nth-of-type(even) {
+  flex-direction: row-reverse;
+}
+
+// .home-instructions-item:o
+
+.home-instructions-item-content {
+  width: 50%;
+
+  p {
+    font-size: 1.25rem;
+    line-height: 2rem;
+  }
+}
+
+.home-instructions-item-screenshot {
+  border-radius: g.$common-border-radius;
+  width: 30%;
+}
+
+.home-button-icon-wrapper {
+  align-items: center;
+  display: inline-flex;
+  justify-content: space-between;
+  width: 35%;
+}

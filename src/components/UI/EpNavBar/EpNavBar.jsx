@@ -6,40 +6,49 @@ import {
 } from 'react';
 import './EpNavBar.scss';
 
-/*
-  John, 2/2/23:
-
-  This is a very basic stub to demonstrate routing functionality, layout and behavior
-  are not yet finalized.
-*/
 import {
-  BiPulse
+  BiLogOut,
+  BiPoll,
+  BiPulse,
+  BiUser,
 } from "react-icons/bi";
 
-// import Button from '@mui/material/Button';
 import EpButton from '../EpButton/EpButton';
 import EpLogo from '../EpLogo/EpLogo';
 
-import { AppDataContext } from '../../../contexts/AuthContext/AppDataContext';
-// import { AuthContext } from '../../../contexts/AuthContext/AuthContext';
+import { AppDataContext } from '../../../contexts/AppDataContext/AppDataContext';
+import { AuthContext } from '../../../contexts/AuthContext/AuthContext';
 
 import { routes } from '../../../routes';
 import { useNavigate } from "react-router-dom";
 
-const EpNavButton = ({route, navHandler}) => (
-  <EpButton
-    onClick={() => navHandler()}
-  >
-    {route.name}
-  </EpButton>
-);
+// kind of an ugly idea, but it works
+const routeIcons = {
+  "Login/Register": <BiUser />,
+  "User Dashboard": <BiPoll />,
+};
+
+const EpNavButton = ({disabled, route, navHandler}) => {
+  const routeIcon = routeIcons[route.name];
+  
+  return (
+    <EpButton
+      disabled={disabled}
+      onClick={() => navHandler()}
+    >
+      {
+        routeIcon && (
+          <>
+            {routeIcon} &nbsp;
+          </>
+        )
+      }
+      {route.name}
+    </EpButton>
+    );
+};
 
 const EpDiagnosticButton = ({ clickHandler }) => {
-  // return (
-  //   <div className="ep-diagnostic-wrapper">
-  //     <BiPulse />
-  //   </div>
-  // );
   return (
     <EpButton 
       className="ep-diagnostic-button"
@@ -60,9 +69,10 @@ const EpDiagnosticsWindow = ({diagnosticsData, diagnosticsOpen}) => {
     >
       <span className="ep-diagnostics-key">{dataKey}:&nbsp;</span>
       {
-        typeof dataValue !== "object" || !dataValue ? (
+        (Array.isArray(dataValue) && dataValue.length === 0) 
+          || typeof dataValue !== "object" || !dataValue ? (
           <span className="ep-diagnostics-value">
-            {`${dataValue}`}
+            {`${Array.isArray(dataValue) && dataValue.length === 0 ? "[]" : dataValue}`}
           </span>
         ) : (
           Object.keys(dataValue).map((subKey, index) => (
@@ -81,24 +91,6 @@ const EpDiagnosticsWindow = ({diagnosticsData, diagnosticsOpen}) => {
     <div 
       className={`ep-diagnostics-window ${diagnosticsOpen ? "active" : ""}`}
     >
-      {/* {
-        diagnosticsKeys.map((diagKey, index) => {
-          const data = typeof diagnosticsData[diagKey] === "object" ? 
-            JSON.stringify(diagnosticsData[diagKey]) : diagnosticsData[diagKey];
-
-          return (
-            <div 
-              className="ep-diagnostics-item"
-              key={`diagnostic-item-${index}`}
-            >
-              <span className="ep-diagnostics-key">{diagKey}:</span>&nbsp;
-              <span className="ep-diagnostics-value">
-                {`${data}`}
-              </span>
-            </div>
-          )
-        })
-      } */}
       {
         diagnosticsKeys.map((diagKey, index) => (
           <EpDiagnosticsItem
@@ -113,6 +105,8 @@ const EpDiagnosticsWindow = ({diagnosticsData, diagnosticsOpen}) => {
 }
 
 const EpNavBar = () => {
+  const { logout, user } = useContext(AuthContext);
+
   const [ diagnosticsOpen, setDiagnosticsOpen ] = useState(false);
   const [ diagnosticsData, setDiagnosticsData ] = useState({});
 
@@ -122,8 +116,6 @@ const EpNavBar = () => {
 
   const diagnosticClickHandler = (e) => {
     e.preventDefault;
-    // temp behavior
-    console.log(dumpCurrentAppData());
     setDiagnosticsOpen(!diagnosticsOpen);
   } 
 
@@ -138,15 +130,31 @@ const EpNavBar = () => {
       <EpLogo />
       <div className="ep-nav-bar-controls">
         {
-          routes.map((route, index) => !route.hideInNavBar && (
-            <EpNavButton 
-              key={`button-${index}`} 
-              navHandler={() => {
-                console.log(`route.path: ${route.path}`);
-                navigate(route.path);
-              }}
-              route={route}
-            />))
+          routes.map((route, index) => 
+            !route.hideInNavBar && 
+            !(route.hideWhenAuthorized && user) &&
+            (
+              <EpNavButton 
+                disabled={route.disableWhenUnauthorized === true && !user}
+                key={`button-${index}`} 
+                navHandler={() => {
+                  console.log(`route.path: ${route.path}`);
+                  navigate(route.path);
+                }}
+                route={route}
+              />
+            ))
+        }
+        {
+          user && (
+            <EpButton
+              onClick={logout}
+            >
+              <BiLogOut />&nbsp;
+              Logout
+            </EpButton>
+          )
+
         }
         <EpDiagnosticButton 
           clickHandler={diagnosticClickHandler}

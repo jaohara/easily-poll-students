@@ -1,5 +1,10 @@
 /*eslint-disable */
-import React, { createContext, useEffect, useState } from 'react'
+import React, { 
+  createContext, 
+  useEffect,
+  useRef, 
+  useState, 
+} from 'react'
 import { API, Hub } from 'aws-amplify'
 import { Auth } from 'aws-amplify'
 import * as mutations from '../../graphql/mutations'
@@ -9,19 +14,70 @@ import { useNavigate } from 'react-router'
 const AuthContext = createContext(undefined)
 
 function AuthContextProvider(props) {
-  const navigate = useNavigate()
+  // prevents bug where you need to press logout button twice
+  // const isLoggingOut = useRef(false);
 
-  const [user, setUser] = useState(null)
+  const navigate = useNavigate();
+
+  const parseSessionUser = () => {
+    try {
+      const currentUser = JSON.parse(window.sessionStorage.getItem("currentUser"));
+      return currentUser;
+    }
+    catch(e) {
+      return null;
+    }
+  };
+
+  const saveSessionUser = (userObject) => {
+    if (!userObject) {
+      return;
+    }
+
+    const stringifiedUser = JSON.stringify(userObject)
+    window.sessionStorage.setItem("currentUser", stringifiedUser);
+  }
+
+  const [user, setUser] = useState(parseSessionUser())
+  // const [userIsLoading, setUserIsLoading] = useState(true);
   const [userCognito, setUserCognito] = useState(null)
   const [registerUserData, setRegisterUserData] = useState(null)
   const [error, setError] = useState('')
 
   useEffect(() => {
-    if (!user) {
-      if (userCognito) {
-      }
-    }
-  })
+    console.log("In AuthContext initial page load:")
+    console.log("storageSession currentUser: ", window.sessionStorage.getItem("currentUser"));
+    console.log("user:", user);
+    console.log("userCognito: ", userCognito);
+    console.log("Auth.currentAuthenticatedUser(): ", Auth.currentAuthenticatedUser());
+  }, [])
+
+  // useEffect(() => {
+  //   if (!user && window.sessionStorage.getItem("currentUser")) {
+  //     console.log("In that useEffect that resets the login")
+  //     Auth.currentAuthenticatedUser().then((res) => {
+  //       API.graphql({
+  //         query: queries.getUser,
+  //         variables: {
+  //           id: res.username,
+  //         },
+  //       })
+  //         .then((res) => {
+  //           setUser(res.data.getUser)
+  //         })
+  //         .catch(() => {
+  //           // TODO: finish register (enter first name, last name)
+  //         })
+  //     })
+  //   }
+  // })
+
+  // // resets isLoggingOut ref
+  // useEffect(() => {
+  //   if (!user) {
+  //     isLoggingOut.current = false;
+  //   }
+  // }, [user])
 
   const register = (email, password, firstName, lastName) => {
     setRegisterUserData({ email, firstName, lastName })
@@ -45,7 +101,9 @@ function AuthContextProvider(props) {
       })
   }
 
-  const login = (email, password) => {
+  const login = (email, password, from = null) => {
+    const destinationRoute = from ? from : "/";
+
     Auth.signIn(email, password)
       .then((res) => {
         setUserCognito(res)
@@ -56,12 +114,16 @@ function AuthContextProvider(props) {
           },
         })
           .then((res) => {
+            console.log("setting session storage to res.data.getUser:", res.data.getUser);
+            // const stringifiedUser = JSON.stringify(res.data.getUser)
+            // window.sessionStorage.setItem("currentUser", stringifiedUser);
+            saveSessionUser(res.data.getUser);
             setUser(res.data.getUser)
-            navigate('/')
+            navigate(destinationRoute);
           })
           .catch((err) => {
             console.log(err)
-            navigate('/register-step')
+            navigate('/register')
           })
       })
       .catch((err) => {
@@ -101,21 +163,24 @@ function AuthContextProvider(props) {
   }
 
   const logout = () => {
-    setUser(null)
+    // isLoggingOut.current = true;
+    window.sessionStorage.setItem("currentUser", null);
     Auth.signOut()
+    setUser(null)
+    navigate('/');
   }
 
   return (
     <AuthContext.Provider
       value={{
-        user,
-        userCognito,
-        registerUserData,
         error,
-        register,
-        verify,
         login,
         logout,
+        register,
+        registerUserData,
+        user,
+        userCognito,
+        verify,
       }}
     >
       {props.children}

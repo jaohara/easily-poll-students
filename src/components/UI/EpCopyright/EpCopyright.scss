@@ -1,0 +1,45 @@
+@use "../../../styles/globals.scss" as g;
+
+.ep-copyright {
+  background-color: g.$dark-green-gray;
+  box-shadow: 0px 0px 15px inset rgba(0,0,0,0.5);
+  bottom: 0;
+  color: g.$background-gray;
+  display: flex;
+  height: 200px;
+  justify-content: center;
+  left: 0;
+  padding: 2rem;
+  position: absolute;
+  width: 100vw;
+}
+
+.ep-copyright-wrapper {
+  @include g.responsive-widths(); 
+  display: flex;
+  // flex-direction: column;
+  justify-content: center;
+
+  div {
+    width: 25%;
+  }
+}
+
+.credits, .links {
+  a {
+    text-decoration: none;
+    white-space: pre-wrap;
+  }
+  
+  h1 {
+    font-size: 1.2rem;
+  }
+  ul {
+    list-style-type: none;
+    
+    li::before {
+      content: "";
+      margin-left: -2rem;
+    }
+  }
+}
