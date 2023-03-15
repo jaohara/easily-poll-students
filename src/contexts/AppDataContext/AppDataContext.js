@@ -47,6 +47,7 @@ function AppDataContextProvider(props) {
   const [ allUserPollsData, setAllUserPollsData ] = useState();
   const [ allUserPollsLoading, setAllUserPollsLoading ] = useState(false);
   const [ currentPollId, setCurrentPollId ] = useState();
+  // TODO: Load and parse this from sessionStorage (similar to User in AuthContext)
   const [ guest, setGuest ] = useState();
   const [ guestIsLoaded, setGuestIsLoaded ] = useState(false);
 
