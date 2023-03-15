@@ -167,7 +167,7 @@
             "Ref": "UnauthRoleName"
           },
           "S3DeploymentBucket": "amplify-amplify6042e93342d44-staging-222909-deployment",
-          "S3DeploymentRootKey": "amplify-appsync-files/c8648229d54228f43806c403336c67030cf0e629",
+          "S3DeploymentRootKey": "amplify-appsync-files/4c43968cecc9523e4e67853b386895d50496da96",
           "env": "staging"
         }
       }
@@ -259,13 +259,13 @@
         }
       }
     },
-    "functionguestRegister": {
+    "functionguestAnswer": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestRegister-cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestAnswer-cloudformation-template.json",
         "Parameters": {
           "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
-          "s3Key": "amplify-builds/guestRegister-393137664d546b436767-build.zip",
+          "s3Key": "amplify-builds/guestAnswer-57346d7937392f496a35-build.zip",
           "apieasilypollstudentsGraphQLAPIIdOutput": {
             "Fn::GetAtt": [
               "apieasilypollstudents",
@@ -288,13 +288,13 @@
         }
       }
     },
-    "functionguestAnswer": {
+    "functionguestRegister": {
       "Type": "AWS::CloudFormation::Stack",
       "Properties": {
-        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestAnswer-cloudformation-template.json",
+        "TemplateURL": "https://s3.amazonaws.com/amplify-amplify6042e93342d44-staging-222909-deployment/amplify-cfn-templates/function/guestRegister-cloudformation-template.json",
         "Parameters": {
           "deploymentBucketName": "amplify-amplify6042e93342d44-staging-222909-deployment",
-          "s3Key": "amplify-builds/guestAnswer-57346d7937392f496a35-build.zip",
+          "s3Key": "amplify-builds/guestRegister-393137664d546b436767-build.zip",
           "apieasilypollstudentsGraphQLAPIIdOutput": {
             "Fn::GetAtt": [
               "apieasilypollstudents",
@@ -392,7 +392,7 @@
           }
         },
         "Handler": "index.handler",
-        "Runtime": "nodejs14.x",
+        "Runtime": "nodejs16.x",
         "Timeout": 300,
         "Role": {
           "Fn::GetAtt": [

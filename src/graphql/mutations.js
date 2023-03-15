@@ -80,6 +80,7 @@ export const createPoll = /* GraphQL */ `
       isActive
       isLocked
       roomSize
+      votingIsLive
       createdAt
       updatedAt
       userPollsId
@@ -111,6 +112,7 @@ export const updatePoll = /* GraphQL */ `
       isActive
       isLocked
       roomSize
+      votingIsLive
       createdAt
       updatedAt
       userPollsId
@@ -142,6 +144,7 @@ export const deletePoll = /* GraphQL */ `
       isActive
       isLocked
       roomSize
+      votingIsLive
       createdAt
       updatedAt
       userPollsId
@@ -160,6 +163,7 @@ export const createQuestion = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -189,6 +193,7 @@ export const updateQuestion = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -218,6 +223,7 @@ export const deleteQuestion = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -346,6 +352,7 @@ export const createGuest = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -375,6 +382,7 @@ export const updateGuest = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
@@ -404,6 +412,7 @@ export const deleteGuest = /* GraphQL */ `
         isActive
         isLocked
         roomSize
+        votingIsLive
         createdAt
         updatedAt
         userPollsId
