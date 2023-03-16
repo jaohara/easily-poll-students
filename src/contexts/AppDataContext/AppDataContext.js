@@ -1,8 +1,9 @@
 import React, { 
   createContext,
   useContext, 
-  useEffect, 
-  useState 
+  useEffect,
+  useRef, 
+  useState, 
 } from "react";
 
 import { 
@@ -15,6 +16,8 @@ import {
 import usePollData from "../../hooks/usePollData";
 import useApi from "../../hooks/useApi";
 import { AuthContext } from "../AuthContext/AuthContext";
+
+import sortAndFilterAnswers from "../../lib/sortAndFilterAnswers";
 
 const AppDataContext = createContext(undefined);
 
@@ -42,14 +45,17 @@ export const listAnswersWithOwner = /* GraphQL */ `
 `;
 
 function AppDataContextProvider(props) {
-  const API = useApi();
-
   const [ allUserPollsData, setAllUserPollsData ] = useState();
   const [ allUserPollsLoading, setAllUserPollsLoading ] = useState(false);
   const [ currentPollId, setCurrentPollId ] = useState();
   // TODO: Load and parse this from sessionStorage (similar to User in AuthContext)
   const [ guest, setGuest ] = useState();
   const [ guestIsLoaded, setGuestIsLoaded ] = useState(false);
+  
+  const guestSubmissionTimeout = 750;
+  const lastGuestSubmissionTime = useRef(Date.now())
+
+  const API = useApi();
 
   const { user } = useContext(AuthContext);
 
@@ -168,8 +174,16 @@ function AppDataContextProvider(props) {
   };
 
   const addGuestAnswerToCurrentQuestion = (answerValue) => {
+    // throttle guest submissions to prevent spam
+    if (Date.now() - lastGuestSubmissionTime.current < guestSubmissionTimeout) {
+      console.log("addGuestAnswerToCurrentQuestion: guest answered too quickly, throttling submission")
+      return false;
+    }
+
+    lastGuestSubmissionTime.current = Date.now();
     console.log("addGuestAnswerToCurrentQuestion: attemping to add answer");
     addAnswerToCurrentQuestion({ guest, answerValue });
+    return true;
   }; 
 
   const subscribeToGuest = () => {
@@ -289,7 +303,10 @@ function AppDataContextProvider(props) {
         questionData.forEach(question => {
           const answerCount = {};
 
-          question.answers.items.forEach(answerObject => {
+          const filteredData = sortAndFilterAnswers(question.answers.items);
+
+          // question.answers.items.forEach(answerObject => {
+          filteredData.forEach(answerObject => {
             if (answerObject.owner.canVote) {
               // getting a little gross here, but this is how we account multiple-answer
               //  q's

@@ -65,3 +65,24 @@ ul {
   @include g.responsive-widths();
   flex-direction: column;
 }
+
+.print {
+  visibility: hidden;
+  display: none;
+}
+
+@media print {
+  // html, body {
+  //   height: 99%;
+  // }
+
+  .no-print {
+    display: none;
+    visibility: hidden;
+  }
+
+  .print {
+    display: block;
+    visibility: visible !important;
+  }
+}

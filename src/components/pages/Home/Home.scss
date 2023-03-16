@@ -2,6 +2,7 @@
 
 $hero-description-large-width: 50%;
 $hero-description-small-width: 90%;
+$home-instruction-transition-time: 1000ms;
 $reveal-transition-time: 750ms;
 $reveal-transition: opacity $reveal-transition-time, transform $reveal-transition-time;
 
@@ -153,11 +154,27 @@ $hero-arrow-transform: translateY(-10vh);
   justify-content: space-between;
   margin-bottom: 3rem;
   min-height: 33vh;
+  opacity: 0;
   padding: 4rem 0rem;
+  transform: translateX(10rem);
+  transition: 
+  opacity $home-instruction-transition-time, 
+  transform $home-instruction-transition-time;
+  
+  &.active {
+    opacity: 1;
+    transform: translateX(0rem);
+  }
 }
 
 .home-instructions-item:nth-of-type(even) {
   flex-direction: row-reverse;
+  transform: translateX(-10rem);
+
+  &.active {
+    opacity: 1;
+    transform: translateX(0rem);
+  }
 }
 
 // .home-instructions-item:o
@@ -172,8 +189,13 @@ $hero-arrow-transform: translateY(-10vh);
 }
 
 .home-instructions-item-screenshot {
+  box-shadow: g.$common-box-shadow;
   border-radius: g.$common-border-radius;
-  width: 30%;
+  width: 40%;
+
+  img {
+    width: 100%;
+  }
 }
 
 .home-button-icon-wrapper {

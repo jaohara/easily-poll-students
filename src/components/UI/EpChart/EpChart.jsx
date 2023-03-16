@@ -12,6 +12,8 @@ import {
 
 import { Bar, Pie } from "react-chartjs-2";
 
+import chartColors from "../../../styles/chartColors";
+
 import {
   TbChartBarOff,
   TbChartPieOff,
@@ -26,16 +28,10 @@ import "./EpChart.scss";
 
 function EpChart({ 
   chartType = "pie",
-  colors = [
-    "#519e8a",
-    "#FF785A",
-    "#6A7FDB",
-    "#EC0B43",
-    "#F4B942",
-    "#45CB85",
-  ],
+  colors = chartColors,
   data,
-  labels, 
+  hideLegend = false,
+  labels,
 }) {
   const chartData = {
     labels: labels,
@@ -87,6 +83,11 @@ function EpChart({
               data={chartData}
               options={{
                 aspectRatio: 2,
+                plugins: {
+                  legend: {
+                    display: !hideLegend,
+                  }
+                }
               }}
             />
           )

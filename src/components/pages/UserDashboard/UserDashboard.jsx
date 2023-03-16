@@ -10,6 +10,7 @@ import "./UserDashboard.scss";
 
 import {
   BiChart,
+  BiEdit,
 } from "react-icons/bi";
 
 import EpButton from '../../UI/EpButton/EpButton';
@@ -39,13 +40,14 @@ const UserDashboard = () => {
     <div className="user-dashboard">
       <h1>User Dashboard</h1>
 
-      <div className="user-dashboard-controls">
+      <EpContainer className="user-dashboard-controls">
         <EpButton
           onClick={() => {navigate(getRoutePathByName("Create Poll"))}}
         >
+          <BiEdit />&nbsp;
           Create Poll
         </EpButton>
-      </div>
+      </EpContainer>
 
       <EpContainer>
         <h1>Polls</h1>
