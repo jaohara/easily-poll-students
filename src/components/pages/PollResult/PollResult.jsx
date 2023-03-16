@@ -15,8 +15,8 @@ import EpChart from "../../UI/EpChart/EpChart";
 import EpContainer from '../../UI/EpContainer/EpContainer';
 import EpLoading from '../../UI/EpLoading/EpLoading';
 import Button from '@mui/material/Button';
-// import jsPDF from 'jspdf';
-// import html2canvas from "html2canvas";
+import jsPDF from 'jspdf';
+import html2canvas from "html2canvas";
 
 const PollResult = () => {
   const [ pollReportLoading, setPollReportLoading ] = useState(false);
@@ -37,58 +37,57 @@ const PollResult = () => {
     );
   };
 
-  //Collect all div 
-  // const reportSections = document.querySelectorAll('#REPORT123')
+  // Collect all div 
+  const reportSections = document.querySelectorAll('#REPORT123')
   // const reportSections = document.querySelectorAll('.poll-report-item');
   // const reportSections = document.querySelectorAll('.poll-report-item');
 
-  // console.log('Test Length ' + reportSections.length )
-  // console.log(reportSections)
+  console.log('Test Length ' + reportSections.length )
+  console.log(reportSections)
 
-  // const handleDownloadPDF = async () => {
-  //   const reportSections = pollReport.questions.map((question, index) => (
-  //     <PrintableReportItem
-  //       chartType={chartType}
-  //       index={index}
-  //       key={`printable-report-item-${index}`}
-  //       question={question}
-  //     />
-  //   ));
+  const handleDownloadPDF = async () => {
+    // const reportSections = pollReport.questions.map((question, index) => (
+    //   <PrintableReportItem
+    //     chartType={chartType}
+    //     index={index}
+    //     key={`printable-report-item-${index}`}
+    //     question={question}
+    //   />
+    // ));
 
 
-  //   const options = {
-  //     pagesplit: true
-  //   };
-  //   //save report 
+    const options = {
+      pagesplit: true
+    };
+    //save report 
 
-  //   let report = new jsPDF('portrait','mm','a4',);
-  //   let pageNumber = 0;
-  //   //To Do Add Time Date Stamp to pages
-  //   //const currentDate = new Date();
-  //   //const dateStamp = currentDate.getDay()+'/'+currentDate.getMonth()+'/'+currentDate.getFullYear();
-  //   //console.log( dateStamp)
-  //   //var data = null;
-  //   for(let i=0;i<reportSections.length;i++){
-  //     //let idAll =  '#'+ reportSections[i].id
-  //     pageNumber +=1;
-  //     let page = pageNumber.toString()
-  //     report.text(page,10,20)
+    let report = new jsPDF('portrait','mm','a4',);
+    let pageNumber = 0;
+    //To Do Add Time Date Stamp to pages
+    //const currentDate = new Date();
+    //const dateStamp = currentDate.getDay()+'/'+currentDate.getMonth()+'/'+currentDate.getFullYear();
+    //console.log( dateStamp)
+    //var data = null;
+    for(let i=0;i<reportSections.length;i++){
+      //let idAll =  '#'+ reportSections[i].id
+      pageNumber +=1;
+      let page = pageNumber.toString()
+      report.text(page,10,20)
     
-  //     const chart = reportSections[i];
+      const chart = reportSections[i];
       
-  //     await html2canvas(chart,options).then(function (canvas) { 
-  //         report.addImage(canvas.toDataURL('image/png'), 'JPEG', 10, 100, 180,90);
-  //         report.setPage(i);
-  //         console.log(canvas.children)
-  //         if (i < (reportSections.length - 1)) {
-  //           report.addPage();
-  //         }
-  //       });
-    
-  //   }
+      await html2canvas(chart,options).then(function (canvas) { 
+          report.addImage(canvas.toDataURL('image/png'), 'JPEG', 10, 100, 180,90);
+          report.setPage(i);
+          console.log(canvas.children)
+          if (i < (reportSections.length - 1)) {
+            report.addPage();
+          }
+        });
+    }
 
-  //   report.save("report.pdf")
-  // }
+    report.save("report.pdf")
+  }
 
   const {
     generatePollReport,
@@ -155,15 +154,15 @@ const PollResult = () => {
             {
               // TODO: Fix this
             }
-            {/* <Button onClick={handleDownloadPDF}>
+            <Button onClick={handleDownloadPDF}>
                 Download Result
-            </Button> */}
+            </Button>
 
             <EpContainer>
               {
                 pollReport.questions.map((question, index) => (
-                  // <div id='REPORT123' key={index}>
-                  <div className="poll-report-item" key={index}>
+                  <div id='REPORT123' key={index}>
+                  {/* <div className="poll-report-item" key={index}> */}
                     <h2>{question.prompt}</h2>
                 
                     <EpChart 
