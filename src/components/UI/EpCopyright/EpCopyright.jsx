@@ -12,7 +12,7 @@ import "./EpCopyright.scss";
 
 function EpCopyright () {
   return (
-    <div className="ep-copyright">
+    <div className="ep-copyright no-print">
       <div className="ep-copyright-wrapper">
         <div className="credits">
           <h1>Team 2</h1>

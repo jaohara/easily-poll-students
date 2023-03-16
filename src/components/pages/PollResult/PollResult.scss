@@ -1,0 +1,75 @@
+@use "../../../styles/globals.scss" as g;
+
+@media print {
+  .printable-poll-report-item {
+    display: visible !important;
+  }
+}
+
+.printable-poll-results {
+  background-color: white;
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100vw;
+  transform: translateX(100vw);
+}
+
+.poll-report-item {
+  margin-bottom: 6rem;
+}
+
+.poll-report-item-body {
+  // align-items: center;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+}
+
+.poll-report-item-body-chart {
+  width: 55%;
+}
+
+.poll-report-item-stat {
+  align-items: center;
+  background-color: g.$background-gray;
+  border-radius: g.$common-border-radius;
+  display: flex;
+  margin-bottom: 1rem;
+  padding: 1rem;
+}
+
+.poll-report-item-stat-data {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  width: 100%;
+}
+
+.poll-report-item-stat-data-percentage {
+  font-weight: bold;
+  font-size: 1.2rem;
+}
+
+.poll-report-item-stat-title {
+  font-weight: bold;
+}
+
+.poll-report-item-stat-votes {
+  font-size: .9rem;
+  opacity: .66;
+}
+
+.poll-report-item-stat-color {
+  // background-color: red;
+  border-radius: 1rem;
+  width: 1rem;
+  height: 1rem;
+  margin-right: 1rem;
+}
+
+.poll-report-item-body-stats {
+  font-size: 1.1rem;
+  width: 40%;
+}
+

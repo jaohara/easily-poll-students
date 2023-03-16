@@ -12,3 +12,10 @@ export const instructions = [
   "When all guests are in the poll, lock the room to disable the join link. If anyone unwanted has joined, disable guest accounts to prevent extra answers. When your poll group is all set, click \"Start Poll\" to begin accepting responses!",
   "After your guests have voted, complete the poll and view an aggregate report of the guest reponses.",
 ];
+
+export const instructionTitles = [
+  "1. Create a Poll",
+  "2. Share Link",
+  "3. Lock Room and Start Poll",
+  "4. Finish Poll and See Results",
+];

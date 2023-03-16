@@ -14,6 +14,8 @@ import {
   BiUserPlus,
 } from 'react-icons/bi';
 
+import { useInView } from "react-intersection-observer";
+
 import EpButton from '../../UI/EpButton/EpButton';
 
 import "./Home.scss";
@@ -26,9 +28,33 @@ import {
   exampleQuestions,
   heroBodyCopy,
   instructions,
+  instructionTitles,
 } from "./homeContent.js";
 
-import placeholderImage from '../../../img/placeholder.svg';
+// import placeholderImage from '../../../img/placeholder.svg';
+import createPollImage from '../../../img/create-poll.png';
+import shareLinkImage from '../../../img/share-link.png';
+import lockPollImage from '../../../img/lock-poll.png';
+import seeResultsImage from '../../../img/see-results.png';
+
+const instructionImages = [
+  {
+    image: createPollImage,
+    alt: "Create a Poll Screenshot",
+  },
+  {
+    image: shareLinkImage,
+    alt: "Create a Poll Screenshot",
+  },
+  {
+    image: lockPollImage,
+    alt: "Lock Poll Screenshot",
+  },
+  {
+    image: seeResultsImage,
+    alt: "See Results Screenshot",
+  },
+]
 
 const Home = () => {
   const [ currentExampleQuestionIndex, setCurrentExampleQuestionIndex ] = useState(0);
@@ -115,54 +141,54 @@ const Home = () => {
       </div>
       <div className="home-instructions">
         <h1 className='home-instructions-title'>How Easy Poll Works</h1>
-
-        <div className="home-instructions-item">
-          <div className="home-instructions-item-content">
-            <h1>1. Create a Poll</h1>
-            <p>
-              {instructions[0]}
-            </p>
-          </div>
-          <div className="home-instructions-item-screenshot">
-            <img src={placeholderImage} alt="Placeholder Screenshot" />
-          </div>
-        </div>
-        <div className="home-instructions-item">
-          <div className="home-instructions-item-content">
-            <h1>2. Share Link</h1>
-            <p>
-              {instructions[1]}
-            </p>
-          </div>
-          <div className="home-instructions-item-screenshot">
-            <img src={placeholderImage} alt="Placeholder Screenshot" />
-          </div>
-        </div>
-        <div className="home-instructions-item">
-          <div className="home-instructions-item-content">
-            <h1>3. Lock Room and Start Poll</h1>
-            <p>
-              {instructions[2]}
-            </p>
-          </div>
-          <div className="home-instructions-item-screenshot">
-            <img src={placeholderImage} alt="Placeholder Screenshot" />
-          </div>
-        </div>
-        <div className="home-instructions-item">
-          <div className="home-instructions-item-content">
-            <h1>4. Finish Poll and See Results</h1>
-            <p>
-              {instructions[3]}
-            </p>
-          </div>
-          <div className="home-instructions-item-screenshot">
-            <img src={placeholderImage} alt="Placeholder Screenshot" />
-          </div>
-        </div>
+        
+        {
+          instructions.map((instruction, index) => (
+            <HomeInstruction
+              key={`home-instruction-${index}`}
+              image={instructionImages[index].image}
+              imageAlt={instructionImages[index].alt}
+              instructionBody={instruction}
+              title={instructionTitles[index]}
+            />
+          ))
+        }
       </div>
     </div>
   );
 };
+
+function HomeInstruction({
+  image,
+  imageAlt,
+  instructionBody,
+  title,
+}) {
+  const { ref, inView } = useInView({
+    threshold: 0.6,
+    triggerOnce: true,
+  })
+
+  return (
+    <div 
+      className={`
+        home-instructions-item
+        ${inView ? "active" : ""}
+      `}
+      ref={ref}
+    >
+      <div className="home-instructions-item-content">
+        <h1>{title}</h1>
+        <p>
+          {instructionBody}
+
+        </p>
+      </div>
+      <div className="home-instructions-item-screenshot">
+        <img src={image} alt={imageAlt} />
+      </div>
+    </div>
+  )
+}
 
 export default Home

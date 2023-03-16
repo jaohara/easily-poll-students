@@ -126,7 +126,7 @@ const EpNavBar = () => {
   }, [diagnosticsOpen])
 
   return (
-    <div className='ep-nav-bar'>
+    <div className='ep-nav-bar no-print'>
       <EpLogo />
       <div className="ep-nav-bar-controls">
         {

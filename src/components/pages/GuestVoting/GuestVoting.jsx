@@ -295,12 +295,14 @@ function GuestVotingBallot ({
                     disabled={!ballotActive}
                     fullWidth
                     key={`answerOption-${index}`}
-                    //TODO: replace temporary voting implementation in final version
                     onClick={() => {
                       console.log("GuestVoting: in click handler");
-                      addGuestAnswerToCurrentQuestion(answer);
-                      setAnsweredQuestions(previous => [...previous, currentQuestionData.id]);
-                      goToNextQuestion();
+                      const answerSubmitted = addGuestAnswerToCurrentQuestion(answer);
+
+                      if (answerSubmitted) {
+                        setAnsweredQuestions(previous => [...previous, currentQuestionData.id]);
+                        goToNextQuestion();
+                      }
                     }}
                     >
                     {answer}
