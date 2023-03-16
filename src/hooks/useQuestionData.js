@@ -13,6 +13,16 @@ import {
   onUpdateQuestion,
 } from "../graphql/subscriptions";
 
+import sortAndFilterAnswers from "../lib/sortAndFilterAnswers";
+
+// for throttling answer subscription rates
+import { Subject } from "rxjs";
+import { throttleTime } from "rxjs/operators";
+
+const createdAnswerDataThrottleTime = 750;
+const createdAnswerDataSubject = new Subject();
+
+
 // 3/5/23 - commented out LinkName stuff for updated schema
 // Modified graphQL query to include answer data with the question data
 const getQuestionWithAnswers = /* GraphQL */ `
@@ -97,13 +107,45 @@ function useQuestionData({
       return;
     }
 
-    const answerCount = {};
+    console.log("calculateAnswerTallyFromAnswerData: building with data:", data);
 
-    for (let i = 0; i < data.length; i++) {
-      if (data[i].owner.canVote) {
+    // here we need to filter the answer data
+
+    // it's an array of answer objects - sort by updatedAt, and skip if guestAnswersId
+    //  already exists in the filtered array.
+
+    // data.sort((a, b) => {
+    //   const dateA = new Date(a.updatedAt);
+    //   const dateB = new Date(b.updatedAt);
+    //   return dateB - dateA;
+    // });
+
+    // console.log("calculateAnswerTallyFromAnswerData: sorted data by updatedAt: ", data);
+    
+    // const filteredData = data.reduce((result, currentAnswer) => {
+    //   const guestIndex = result.findIndex(
+    //     answer => answer.guestAnswersId === currentAnswer.guestAnswersId
+    //   );
+      
+    //   // new guest answer, add to array
+    //   if (guestIndex === -1) {
+    //     result.push(currentAnswer);
+    //   }
+
+    //   return result;
+    // }, []);
+
+    const filteredData = sortAndFilterAnswers(data);
+      
+    console.log("calculateAnswerTallyFromAnswerData: filtered data by guestAnswersId: ", filteredData);
+      
+    const answerCount = {};
+  
+    for (let i = 0; i < filteredData.length; i++) {
+      if (filteredData[i].owner.canVote) {
         //TODO: we will need to rework this for multiple choice questions
         //  gross, but nested for loop to iterate through the internal array?
-        const currentAnswer = data[i].answer[0];
+        const currentAnswer = filteredData[i].answer[0];
 
         if (!answerCount[currentAnswer]) {
           // does not exist in answerCount object, so create it
@@ -211,19 +253,40 @@ function useQuestionData({
   };
 
   const subscribeToCreatedAnswers = () => {
-    return API.graphql({
+    // return API.graphql({
+    //   query: onCreateAnswerForQuestion,
+    //   ...questionAnswersVariablesObject,
+    // }).subscribe({
+    //   next: (response) => {
+    //     const newAnswer = response.value.data.onCreateAnswerForQuestion;
+    //     console.log("Received newAnswer:", newAnswer);
+        
+    //     // new Answer data is appended
+    //     setAnswerData(oldAnswerData => [...oldAnswerData, newAnswer]);
+    //   },
+    //   error: (err) => console.warn(err),
+    // });    
+    
+    API.graphql({
       query: onCreateAnswerForQuestion,
       ...questionAnswersVariablesObject,
     }).subscribe({
       next: (response) => {
         const newAnswer = response.value.data.onCreateAnswerForQuestion;
         console.log("Received newAnswer:", newAnswer);
-        
+        createdAnswerDataSubject.next(newAnswer);
         // new Answer data is appended
-        setAnswerData(oldAnswerData => [...oldAnswerData, newAnswer]);
       },
       error: (err) => console.warn(err),
     });
+    
+    const subscription = createdAnswerDataSubject
+      .pipe(throttleTime(createdAnswerDataThrottleTime))
+      .subscribe((newAnswer) => {  
+        setAnswerData(oldAnswerData => [...oldAnswerData, newAnswer]);
+      });
+
+    return subscription;
   };
 
   const subscribeToUpdatedAnswers = () => {
